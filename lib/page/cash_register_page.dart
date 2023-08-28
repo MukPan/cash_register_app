@@ -4,17 +4,17 @@ class CashRegisterPage extends StatefulWidget {
   const CashRegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<CashRegisterPage> createState() => _CashRegisterPageState();
+  CashRegisterPageState createState() => CashRegisterPageState();
 }
 
-class _CashRegisterPageState extends State<CashRegisterPage> {
+class CashRegisterPageState extends State<CashRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("お会計"),
+          title: const Text("お預かり額の入力"),
         ),
-        body: Container()
+      body: Container(),
     );
   }
 }
