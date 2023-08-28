@@ -2,14 +2,21 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-import 'component/order_list_context.dart';
+import 'context/order_list_context.dart';
 import 'provider/order_num_list_notifier.dart';
+import 'provider/selected_order_num_notifier.dart';
 
-//プロバイダー
+/* プロバイダー */
+
+///注文番号リスト
 final orderNumListProvider
-= StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());
+  = StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());
+
+final selectedOrderNumProvider
+  = StateNotifierProvider<SelectedOrderNumNotifier, int>((ref) => SelectedOrderNumNotifier());
+
+//TODO: 選択した注文番号のプロバイダーを作る
 
 ///main関数
 void main() {
@@ -52,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('注文番号の選択'),
       ),
+      //注文番号一覧
       body: const OrderListContext(),
 
       floatingActionButton: Consumer(
