@@ -2,13 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../component/order_num.dart';
+import '../context/selected_no_context.dart';
 import 'cash_register_page.dart';
 
 class ConfirmOrderPage extends StatefulWidget {
-  const ConfirmOrderPage({Key? key, required this.orderNum}) : super(key: key);
-
-  ///注文番号
-  final int orderNum;
+  const ConfirmOrderPage({Key? key}) : super(key: key);
 
   @override
   ConfirmOrderPageState createState() => ConfirmOrderPageState();
@@ -23,6 +21,8 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         builder: (context) => const CashRegisterPage()
     ))
   };
+
+  //TODO: 注文番号とメニューをプロバイダーから受け取る
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +46,8 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
             ),
             Column(
               children: [
-                //1:注文番号
-                const Row(children: [
-                  Text("注文番号 : ", style: TextStyle(fontSize: 20)),
-                  OrderNum(orderNum: 150),
-                ],),
+                //1:注文番号 selected_no_context
+                const SelectedNoContext(),
                 //2:合計金額
                 Container(
                   width: MediaQuery.of(context).size.width/2.0 - 60.0,
