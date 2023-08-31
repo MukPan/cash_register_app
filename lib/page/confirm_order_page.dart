@@ -1,9 +1,12 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../component/order_num.dart';
+import '../context/items_list_context.dart';
 import '../context/selected_no_context.dart';
 import 'cash_register_page.dart';
+import '../context/selected_no_context.dart';
 
 class ConfirmOrderPage extends StatefulWidget {
   const ConfirmOrderPage({Key? key}) : super(key: key);
@@ -32,18 +35,9 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         ),
         body: Row(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width/2.0 - 60.0,
-              color: CupertinoColors.systemGrey3,
-              margin: const EdgeInsets.all(30.0), //できれば比率によって余白を変えたい
-              child: Scrollbar(
-                  child: ListView.separated(
-                    itemBuilder: (BuildContext context, int index) => Text(orderList[index]),
-                    separatorBuilder: (BuildContext context, int index) => Container(),
-                    itemCount: orderList.length,
-                  )
-              ),
-            ),
+            //注文内容
+            const ItemsListContext(),
+
             Column(
               children: [
                 //1:注文番号 selected_no_context

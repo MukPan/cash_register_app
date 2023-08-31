@@ -2,15 +2,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 ///供給されるList
 class OrderNumListNotifier extends StateNotifier<List<int>> {
-  OrderNumListNotifier() : super([...emptyOrderNumList]);
+  OrderNumListNotifier() : super([...emptyItemDetailList]);
 
   //TODO: ここをfirestoreによって獲得する
   ///空の注文番号リスト
-  static const List<int> emptyOrderNumList = <int>[];
+  static const List<int> emptyItemDetailList = <int>[];
+
 
   ///状態を初期化
   void initState() {
-    state = emptyOrderNumList;
+    state = emptyItemDetailList;
   }
 
   ///状態を明示的に更新するメソッド
