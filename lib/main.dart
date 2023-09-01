@@ -3,23 +3,43 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'context/order_list_context.dart';
 import 'provider/order_num_list_notifier.dart';
 import 'provider/selected_order_num_notifier.dart';
+import 'provider/total_amount_notifier.dart';
+
+///Firestoreインスタンス
+final db = FirebaseFirestore.instance;
 
 /* プロバイダー */
-
 ///注文番号リスト
 final orderNumListProvider
   = StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());
 
+///処理中の注文番号
 final selectedOrderNumProvider
   = StateNotifierProvider<SelectedOrderNumNotifier, int>((ref) => SelectedOrderNumNotifier());
+
+///処理中の合計金額
+final totalAmountProvider
+= StateNotifierProvider<TotalAmountNotifier, int>((ref) => TotalAmountNotifier());
+
+
 
 //TODO: 選択した注文番号のプロバイダーを作る
 
 ///main関数
-void main() {
+void main() async {
+  //firebase用の初期化
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
       const ProviderScope(child: MyApp())
   );
@@ -64,15 +84,53 @@ class _MyHomePageState extends State<MyHomePage> {
 
       floatingActionButton: Consumer(
         builder: (context, ref, child) {
+          //更新ボタン
           return FloatingActionButton(
-              onPressed: () => {
-                ref.read(orderNumListProvider.notifier)
-                    .changeState([...ref.watch(orderNumListProvider), math.Random().nextInt(1000)])
+              onPressed: () {
+                //注文番号コレクションを捜索
+                db.collection("orderNumCollection").get().then((querySnapshot) {
+                  //データベースから注文番号の取得
+                  List<int> currentOrderNumList = querySnapshot.docs
+                      .map((doc) => int.parse(doc.id))
+                      .toList(growable: false);
+
+                  //stateを更新
+                  ref.read(orderNumListProvider.notifier)
+                      .changeState([...currentOrderNumList]);
+                  print(currentOrderNumList);
+                });
               },
-              child: const Icon(Icons.add)
-          );
+              child: const Icon(Icons.refresh));
         },
       ),
     );
   }
 }
+
+
+//     .map((docSnapshot) => docSnapshot.id)
+//     .forEach((orderNum) => print(orderNum));
+// });
+//
+// //注文番号が保持するコレクションに直接アクセス
+// db.collection("orderNumCollection").get().then((querySnapshot) {
+// querySnapshot.docs
+//     .map((docSnapshot) {
+// var orderCollection = docSnapshot.data()["orderCollection"];
+//
+// print(orderCollection.runtimeType);
+// // if (orderCollection is Map<String, dynamic>) {
+// //
+// // }
+//
+// return docSnapshot.id;
+// })
+//     .forEach((orderNum) => print(orderNum));
+// });
+//
+// //注文番号から
+// db.collection("orderNumCollection/132/orderCollection").get().then((querySnapshot) {
+// querySnapshot.docs
+//     .map((docSnapshot) => docSnapshot.id)
+//     .forEach((id) => print(id));
+// que

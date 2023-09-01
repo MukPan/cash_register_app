@@ -18,7 +18,7 @@ class OrderNumBtn extends HookConsumerWidget {
 
     //次ページの移動
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => ConfirmOrderPage()
+      builder: (context) => const ConfirmOrderPage()
     ));
   }
 
