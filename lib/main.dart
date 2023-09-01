@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'firebase_options.dart';
 import 'context/order_list_context.dart';
 import 'provider/order_num_list_notifier.dart';
 import 'provider/selected_order_num_notifier.dart';
+import 'provider/total_amount_notifier.dart';
 
 ///Firestoreインスタンス
 final db = FirebaseFirestore.instance;
@@ -20,9 +20,14 @@ final db = FirebaseFirestore.instance;
 final orderNumListProvider
   = StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());
 
-//処理中の注文番号
+///処理中の注文番号
 final selectedOrderNumProvider
   = StateNotifierProvider<SelectedOrderNumNotifier, int>((ref) => SelectedOrderNumNotifier());
+
+///処理中の合計金額
+final totalAmountProvider
+= StateNotifierProvider<TotalAmountNotifier, int>((ref) => TotalAmountNotifier());
+
 
 
 //TODO: 選択した注文番号のプロバイダーを作る
@@ -95,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   print(currentOrderNumList);
                 });
               },
-              child: const Icon(Icons.change_circle_sharp));
+              child: const Icon(Icons.refresh));
         },
       ),
     );

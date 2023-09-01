@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../component/order_num.dart';
-import '../context/items_list_context.dart';
+import '../context/item_details_context.dart';
 import '../context/selected_no_context.dart';
+import '../context/total_amount_context.dart';
 import 'cash_register_page.dart';
 import '../context/selected_no_context.dart';
 
@@ -36,31 +37,15 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         body: Row(
           children: [
             //注文内容
-            const ItemsListContext(),
+            const ItemDetailsContext(),
 
             Column(
               children: [
                 //1:注文番号 selected_no_context
                 const SelectedNoContext(),
                 //2:合計金額
-                Container(
-                  width: MediaQuery.of(context).size.width/2.0 - 60.0,
-                  margin: const EdgeInsets.all(30.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1)
-                  ),
-                  child: Center(
-                      child: RichText(
-                        text: const TextSpan(
-                            children: [
-                              TextSpan(text: "合計金額 : \n", style: TextStyle(fontSize: 20)),
-                              TextSpan(text: "1,000", style: TextStyle(fontSize: 80)),
-                              TextSpan(text: " 円", style: TextStyle(fontSize: 30))
-                            ]
-                        ),
-                      )
-                  ),
-                ),
+                const TotalAmountContext(),
+
                 //3:次へ
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
