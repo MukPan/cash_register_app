@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../main.dart';
+import '../provider/order_num_list_notifier.dart';
 import 'order_num_btn.dart';
 
 ///注文番号リストWidget

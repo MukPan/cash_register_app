@@ -15,3 +15,7 @@ class SelectedOrderNumNotifier extends StateNotifier<int> {
   ///状態を明示的に更新するメソッド
   void changeState(state) => {this.state = state};
 }
+
+///処理中の注文番号
+final selectedOrderNumProvider
+= StateNotifierProvider<SelectedOrderNumNotifier, int>((ref) => SelectedOrderNumNotifier());

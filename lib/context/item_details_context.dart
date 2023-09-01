@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../main.dart';
+import '../provider/total_amount_notifier.dart';
+import '../provider/selected_order_num_notifier.dart';
 //TODO: 合計金額をStateにして、ここから更新する
 //TODO: ロード画面を表示する
 
@@ -100,7 +102,7 @@ class ItemDetailsContext extends HookConsumerWidget {
           itemDetailList = snapshot.data ?? ["取得に失敗しました。"];
 
           return Container(
-            width: MediaQuery.of(context).size.width/2.0 - 60.0,
+            width: MediaQuery.of(context).size.width/2.0 - 60.0, //TODO: paddingを試す
             color: CupertinoColors.systemGrey3,
             margin: const EdgeInsets.all(30.0), //できれば比率によって余白を変えたい
             child: Scrollbar(

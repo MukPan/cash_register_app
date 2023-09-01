@@ -3,6 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../main.dart';
 import 'package:intl/intl.dart';
 
+import '../provider/total_amount_notifier.dart';
+
 class TotalAmountContext extends HookConsumerWidget {
   const TotalAmountContext({Key? key}) : super(key: key);
 

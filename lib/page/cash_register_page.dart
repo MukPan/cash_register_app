@@ -1,4 +1,8 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../context/cash_register_context.dart';
 
 class CashRegisterPage extends StatefulWidget {
   const CashRegisterPage({Key? key}) : super(key: key);
@@ -14,7 +18,33 @@ class CashRegisterPageState extends State<CashRegisterPage> {
         appBar: AppBar(
           title: const Text("お預かり額の入力"),
         ),
-      body: Container(),
+      body: Row(
+        children: [
+          //注文内容
+          const CashRegisterContext(),
+
+          Column(
+            children: [
+              Container()
+              //1:注文番号 selected_no_context
+              // const SelectedNoContext(),
+              // //2:合計金額
+              // const TotalAmountContext(),
+              //
+              // //3:次へ
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     foregroundColor: Colors.white,
+              //     backgroundColor: Colors.orange,
+              //   ),
+              //   onPressed: () => {moveCashRegisterPage(context)},
+              //   child: const Text("次へ"),
+              // ),
+
+            ],
+          )
+        ],
+      )
     );
   }
 }

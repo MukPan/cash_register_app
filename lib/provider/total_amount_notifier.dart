@@ -15,3 +15,7 @@ class TotalAmountNotifier extends StateNotifier<int> {
   ///状態を明示的に更新するメソッド
   void changeState(state) => {this.state = state};
 }
+
+///処理中の合計金額
+final totalAmountProvider
+= StateNotifierProvider<TotalAmountNotifier, int>((ref) => TotalAmountNotifier());
