@@ -1,21 +1,21 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../component/money_counter_btn.dart';
+import '../provider/money_count_provider_family.dart';
+
+
+
 
 ///貨幣を入力するグリッド
 class CashRegisterContext extends StatelessWidget {
   const CashRegisterContext({Key? key}) : super(key: key);
 
-  static const moneyIdList = [
-    "1円",
-    "5円",
-    "10円",
-    "50円",
-    "100円",
-    "500円",
-    "1,000円",
-    "5,000円",
-    "10,000円",
-  ];
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +31,7 @@ class CashRegisterContext extends StatelessWidget {
         ),
         itemCount: moneyIdList.length,
         //指定した要素の数分を生成
-        itemBuilder: (context, index) {
-          return TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.blue.shade100,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(0) //角ばったボタン
-                )
-              )
-            ),
-            onPressed: () => {},
-            child: Center(child: Text(moneyIdList[index],
-              style: const TextStyle(fontSize: 24,),
-            )),
-          );
-        },
+        itemBuilder: (context, index) => MoneyCounterBtn(moneyId: moneyIdList[index]),
       ),
     );
   }
