@@ -27,7 +27,7 @@ class TotalAmountContext extends HookConsumerWidget {
           child: RichText(
             text: TextSpan(
                 children: [
-                  const TextSpan(text: "合計金額 : \n", style: TextStyle(fontSize: 20)),
+                  const TextSpan(text: "合計 : \n", style: TextStyle(fontSize: 20)),
                   TextSpan(text: totalAmount, style: const TextStyle(fontSize: 80)),
                   const TextSpan(text: " 円", style: TextStyle(fontSize: 30))
                 ]

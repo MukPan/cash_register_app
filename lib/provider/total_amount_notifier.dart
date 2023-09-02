@@ -18,4 +18,4 @@ class TotalAmountNotifier extends StateNotifier<int> {
 
 ///処理中の合計金額
 final totalAmountProvider
-= StateNotifierProvider<TotalAmountNotifier, int>((ref) => TotalAmountNotifier());
+  = StateNotifierProvider<TotalAmountNotifier, int>((ref) => TotalAmountNotifier());
