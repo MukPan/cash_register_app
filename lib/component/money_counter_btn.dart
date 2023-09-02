@@ -55,27 +55,60 @@ class MoneyCounterBtn extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     int moenyCount = ref.watch(moneyCountProviderFamily(moneyId));
 
-    return TextButton(
-      style: TextButton.styleFrom(
-          backgroundColor: Colors.blue.shade100,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                  Radius.circular(0) //角ばったボタン
-              )
-          )
-      ),
-      onPressed: () {
-        countUpMoney(ref); //カウント+1
-        changeVariousAmounts(ref); //金額state更新
-      },
+    return Stack(
+      alignment: Alignment.topLeft,
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue.shade100,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)) //角ばったボタン
+              ),
 
-      child: Column(
-        children: [
-          Text(moneyId), //貨幣名称
-          Image.asset(_moneyImgPathList[index], height: 80,), //貨幣イメージ
-          Text(moenyCount.toString()) //入力枚数
-        ],
-      ),
+            ),
+            onPressed: () {
+              countUpMoney(ref); //カウント+1
+              changeVariousAmounts(ref); //金額state更新
+            },
+
+            child: Column(children: [
+              Text(moneyId), //貨幣名称
+              Image.asset(_moneyImgPathList[index], height: 80), //貨幣イメージ
+              Text(moenyCount.toString()) //入力枚数
+            ],),
+          ),
+        ),
+        //マイナスボタン
+        SizedBox(
+          width: 30,
+          height: 30,
+          child: IconButton(
+            icon: const Icon(Icons.remove, color: Colors.white),
+            onPressed: () {},
+            padding: EdgeInsets.zero, //忘れるな！！！！！！！！！！ないとアイコンが飛び出すぞ！！！！！！！！！
+            alignment: Alignment.center, //忘れるな！！！！！！！！！！ないとアイコンが飛び出すぞ！！！！！！！！！
+            iconSize: 15,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.black38),
+            ),
+          ),
+        )
+
+      ],
     );
   }
 }
+
+// CircleAvatar(
+// radius: 10,
+// backgroundColor: Colors.black,
+// child: Center(
+// child: IconButton(
+// icon: const Icon(Icons.remove, color: Colors.white,),
+// onPressed: () {},
+// splashRadius: 0.1,
+// ),
+// )
+// ),
