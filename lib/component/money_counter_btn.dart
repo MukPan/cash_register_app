@@ -1,3 +1,4 @@
+import 'package:cash_register_app/component/money_count_down_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -27,27 +28,11 @@ class MoneyCounterBtn extends HookConsumerWidget {
   ];
 
   ///貨幣のカウントに1を足す
-  void countUpMoney(WidgetRef ref) {
+  void _countUpMoney(WidgetRef ref) {
     ref.read(moneyCountProviderFamily(moneyId).notifier).state++;
   }
 
-  ///合計、お預り、お釣りの状態を更新する
-  void changeVariousAmounts(WidgetRef ref) {
-    //合計 commaInsertFormat.format
-    final int totalAmount = ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount));
-    //お預り
-    final int depositAmount = moneyIdList
-        .map((moneyId) => moneyIdStrToInt[moneyId] !* ref.watch(moneyCountProviderFamily(moneyId)).toInt())
-        .map((amountNum) => amountNum.toInt())
-        .reduce((sum, amount) => sum + amount);
-    //お釣り
-    final int changeAmount = depositAmount - totalAmount;
 
-    //staete更新
-    ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = totalAmount;
-    ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = depositAmount;
-    ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = changeAmount;
-  }
 
 
 
@@ -69,7 +54,7 @@ class MoneyCounterBtn extends HookConsumerWidget {
 
             ),
             onPressed: () {
-              countUpMoney(ref); //カウント+1
+              _countUpMoney(ref); //カウント+1
               changeVariousAmounts(ref); //金額state更新
             },
 
@@ -81,20 +66,7 @@ class MoneyCounterBtn extends HookConsumerWidget {
           ),
         ),
         //マイナスボタン
-        SizedBox(
-          width: 30,
-          height: 30,
-          child: IconButton(
-            icon: const Icon(Icons.remove, color: Colors.white),
-            onPressed: () {},
-            padding: EdgeInsets.zero, //忘れるな！！！！！！！！！！ないとアイコンが飛び出すぞ！！！！！！！！！
-            alignment: Alignment.center, //忘れるな！！！！！！！！！！ないとアイコンが飛び出すぞ！！！！！！！！！
-            iconSize: 15,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.black38),
-            ),
-          ),
-        )
+        MoneyCountDownBtn(moneyId: moneyId)
 
       ],
     );
