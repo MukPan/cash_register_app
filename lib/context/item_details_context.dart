@@ -62,9 +62,8 @@ class ItemDetailsContext extends HookConsumerWidget {
       }
       //合計金額をプロバイダーに登録
       ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = totalAmount;
-
-      //お釣りのプロバイダーにマイナスの合計金額を登録
-      ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -totalAmount;
+      //状態更新
+      changeVariousAmounts(ref);
 
       return resultBuffer.toString();
   }

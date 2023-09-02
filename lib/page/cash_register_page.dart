@@ -1,4 +1,5 @@
 
+import 'package:cash_register_app/page/next_page.dart';
 import 'package:cash_register_app/provider/various_amounts_provider_family.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,13 @@ class CashRegisterPage extends StatefulWidget {
 }
 
 class CashRegisterPageState extends State<CashRegisterPage> {
+  ///会計画面への遷移メソッド
+  void moveNextPage(BuildContext context) => {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const NextPage()
+    ))
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,9 +59,7 @@ class CashRegisterPageState extends State<CashRegisterPage> {
                         backgroundColor: Colors.orange,
                       ),
                       onPressed: (ref.watch(variousAmountsProviderFamily(VariousAmounts.changeAmount)) < 0) ? null :
-                        () {
-                          print("click");
-                      }, //moveCashRegisterPage(context)
+                        () { moveNextPage(context); }, //moveCashRegisterPage(context)
                       child: const Text("次へ"),
                     );
                   },

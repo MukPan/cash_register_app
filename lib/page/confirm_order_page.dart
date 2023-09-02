@@ -17,7 +17,6 @@ class ConfirmOrderPage extends StatefulWidget {
 }
 
 class ConfirmOrderPageState extends State<ConfirmOrderPage> {
-  List<String> orderList = ["唐揚げ", "ポテト", "コーラ"];
 
   ///会計画面への遷移メソッド
   void moveCashRegisterPage(BuildContext context) => {
