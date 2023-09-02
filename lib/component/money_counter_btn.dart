@@ -1,13 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../provider/money_count_provider_family.dart';
+import '../provider/total_amount_notifier.dart';
+import '../provider/various_amounts_provider_family.dart';
 
 class MoneyCounterBtn extends HookConsumerWidget {
-  const MoneyCounterBtn({Key? key, required this.moneyId }) : super(key: key);
+  const MoneyCounterBtn({Key? key, required this.moneyId, required this.index}) : super(key: key);
 
   ///貨幣の名称(Familyのid)
   final String moneyId;
+  ///貨幣イメージを呼び出すためのindex
+  final int index;
+  ///イメージのパスリスト
+  static const List<String> _moneyImgPathList = [
+    "images/money_1yen.png",
+    "images/money_5yen.png",
+    "images/money_10yen.png",
+    "images/money_50yen.png",
+    "images/money_100yen.png",
+    "images/money_500yen.png",
+    "images/money_1000yen.png",
+    "images/money_5000yen.png",
+    "images/money_10000yen.png",
+  ];
+
+  ///貨幣のカウントに1を足す
+  void countUpMoney(WidgetRef ref) {
+    ref.read(moneyCountProviderFamily(moneyId).notifier).state++;
+  }
+
+  ///合計、お預り、お釣りの状態を更新する
+  void changeVariousAmounts(WidgetRef ref) {
+    //合計 commaInsertFormat.format
+    final int totalAmount = ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount));
+    //お預り
+    final int depositAmount = moneyIdList
+        .map((moneyId) => moneyIdStrToInt[moneyId] !* ref.watch(moneyCountProviderFamily(moneyId)).toInt())
+        .map((amountNum) => amountNum.toInt())
+        .reduce((sum, amount) => sum + amount);
+    //お釣り
+    final int changeAmount = depositAmount - totalAmount;
+
+    //staete更新
+    ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = totalAmount;
+    ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = depositAmount;
+    ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = changeAmount;
+  }
 
 
 
@@ -25,14 +65,15 @@ class MoneyCounterBtn extends HookConsumerWidget {
           )
       ),
       onPressed: () {
-        ref.read(moneyCountProviderFamily(moneyId).notifier).state++;
-        print("$moneyId: ${moenyCount+1}枚");
-
+        countUpMoney(ref); //カウント+1
+        changeVariousAmounts(ref); //金額state更新
       },
+
       child: Column(
         children: [
-          Text(moneyId),
-          Text(moenyCount.toString())
+          Text(moneyId), //貨幣名称
+          Image.asset(_moneyImgPathList[index], height: 80,), //貨幣イメージ
+          Text(moenyCount.toString()) //入力枚数
         ],
       ),
     );

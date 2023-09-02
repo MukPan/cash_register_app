@@ -20,4 +20,4 @@ class OrderNumListNotifier extends StateNotifier<List<int>> {
 
 ///注文番号リスト
 final orderNumListProvider
-= StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());
+  = StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());

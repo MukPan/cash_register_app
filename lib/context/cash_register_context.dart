@@ -31,7 +31,7 @@ class CashRegisterContext extends StatelessWidget {
         ),
         itemCount: moneyIdList.length,
         //指定した要素の数分を生成
-        itemBuilder: (context, index) => MoneyCounterBtn(moneyId: moneyIdList[index]),
+        itemBuilder: (context, index) => MoneyCounterBtn(moneyId: moneyIdList[index], index: index,),
       ),
     );
   }

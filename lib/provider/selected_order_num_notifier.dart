@@ -18,4 +18,4 @@ class SelectedOrderNumNotifier extends StateNotifier<int> {
 
 ///処理中の注文番号
 final selectedOrderNumProvider
-= StateNotifierProvider<SelectedOrderNumNotifier, int>((ref) => SelectedOrderNumNotifier());
+  = StateNotifierProvider<SelectedOrderNumNotifier, int>((ref) => SelectedOrderNumNotifier());

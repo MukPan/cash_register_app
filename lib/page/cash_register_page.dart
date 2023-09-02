@@ -1,6 +1,8 @@
 
+import 'package:cash_register_app/provider/various_amounts_provider_family.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../context/cash_register_context.dart';
 import '../context/selected_no_context.dart';
@@ -41,16 +43,22 @@ class CashRegisterPageState extends State<CashRegisterPage> {
               ),
 
               //3:次へ
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.orange,
-                ),
-                onPressed: () => {}, //moveCashRegisterPage(context)
-                child: const Text("次へ"),
-              ),
-
-            ],
+              Consumer(
+                  builder: (context, ref, child) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.orange,
+                      ),
+                      onPressed: (ref.watch(variousAmountsProviderFamily(VariousAmounts.changeAmount)) < 0) ? null :
+                        () {
+                          print("click");
+                      }, //moveCashRegisterPage(context)
+                      child: const Text("次へ"),
+                    );
+                  },
+                )
+              ],
 
 
           )

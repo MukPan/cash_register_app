@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../provider/total_amount_notifier.dart';
 import '../provider/money_count_provider_family.dart';
+import '../provider/various_amounts_provider_family.dart';
+
 
 class VariousAmountsContext extends HookConsumerWidget {
   const VariousAmountsContext({Key? key}) : super(key: key);
@@ -11,18 +13,27 @@ class VariousAmountsContext extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //カンマ挿入フォーマット
     final commaInsertFormat = NumberFormat("#,###");
-    //合計 commaInsertFormat.format
-    final int totalAmount = ref.watch(totalAmountProvider);
+    // //合計 commaInsertFormat.format
+    // final int totalAmount = ref.watch(totalAmountProvider);
+    // //お預り
+    // final int depositAmount = moneyIdList
+    //     .map((moneyId) => moneyIdStrToInt[moneyId] !* ref.watch(moneyCountProviderFamily(moneyId)).toInt())
+    //     .map((amountNum) => amountNum.toInt())
+    //     .reduce((sum, amount) => sum + amount);
+    // //お釣り
+    // final int changeAmount = depositAmount - totalAmount;
+
+    //合計
+    final int totalAmount = ref.watch(variousAmountsProviderFamily(VariousAmounts.totalAmount));
     //お預り
-    final int depositAmount = moneyIdList
-        .map((moneyId) => moneyIdStrToInt[moneyId] !* ref.watch(moneyCountProviderFamily(moneyId)).toInt())
-        .map((amountNum) => amountNum.toInt())
-        .reduce((sum, amount) => sum + amount);
+    final int depositAmount = ref.watch(variousAmountsProviderFamily(VariousAmounts.depositAmount));
     //お釣り
-    final int changeAmount = depositAmount - totalAmount;
+    final int changeAmount = ref.watch(variousAmountsProviderFamily(VariousAmounts.changeAmount));
+
     //お釣り表示の色
-    final changeDisplayColor;
+    final MaterialColor changeDisplayColor;
 
     if (changeAmount == 0) //ちょうど
       { changeDisplayColor = Colors.grey; }
@@ -35,9 +46,6 @@ class VariousAmountsContext extends HookConsumerWidget {
     final String totalAmountStr = commaInsertFormat.format(totalAmount);
     final String depositAmountStr = commaInsertFormat.format(depositAmount);
     final String changeAmountStr = commaInsertFormat.format(changeAmount);
-
-    //TODO: お釣りをプロバイダーに載せる
-
 
 
     return Center(
