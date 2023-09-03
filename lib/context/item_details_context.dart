@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../main.dart';
+import '../provider/money_count_provider_family.dart';
 import '../provider/total_amount_notifier.dart';
 import '../provider/selected_order_num_notifier.dart';
 import '../provider/various_amounts_provider_family.dart';
@@ -67,10 +68,14 @@ class ItemDetailsContext extends HookConsumerWidget {
           print("$optionPrice * $qty  : $_totalAmount");
         });
       }
-      //合計金額をプロバイダーに登録
+      //合計金額をプロバイダーに登録&初期化
       ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
-      //お釣りは合計金額のマイナスに設定
+      ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = 0;
       ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -_totalAmount;
+      //貨幣の枚数も初期化
+      for (String moneyId in moneyIdList) {
+        ref.read(moneyCountProviderFamily(moneyId).notifier).state = 0;
+      }
 
       return resultBuffer.toString();
   }
