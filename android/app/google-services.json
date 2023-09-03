@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "729459310329",
+    "project_id": "simplified-ordering-system",
+    "storage_bucket": "simplified-ordering-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729459310329:android:60d4942089d3ffdd1aec28",
+        "android_client_info": {
+          "package_name": "com.example.cash_register_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729459310329-fl7nnjjksdebvje5h5gsrajqausslska.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfT_7V9laOVbeMZMbMwn8DCBo_Y-1TsrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729459310329-fl7nnjjksdebvje5h5gsrajqausslska.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
