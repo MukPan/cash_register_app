@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../component/order_num.dart';
-import '../main.dart';
+import '../provider/selected_order_num_notifier.dart';
 
 ///選択した注文番号Widget
 class SelectedNoContext extends HookConsumerWidget {

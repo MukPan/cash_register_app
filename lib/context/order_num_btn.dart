@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../component/order_num.dart';
 import '../page/confirm_order_page.dart';
-import '../main.dart';
+import '../provider/selected_order_num_notifier.dart';
 
 class OrderNumBtn extends HookConsumerWidget {
   const OrderNumBtn({Key? key, required this.orderNum}) : super(key: key);

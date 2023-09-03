@@ -4,12 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../main.dart';
+import '../provider/money_count_provider_family.dart';
+import '../provider/total_amount_notifier.dart';
+import '../provider/selected_order_num_notifier.dart';
+import '../provider/various_amounts_provider_family.dart';
 //TODO: 合計金額をStateにして、ここから更新する
 //TODO: ロード画面を表示する
 
 class ItemDetailsContext extends HookConsumerWidget {
   const ItemDetailsContext({Key? key}) : super(key: key);
 
+//合計金額
+  static int _totalAmount = 0;
+
+  ///合計金額算出用の変数を初期化
+  void initTotalAmount() {
+    _totalAmount = 0;
+  }
 
   ///商品詳細リストを取得するメソッド
   ///ドキュメントリファレンスから商品ドキュメントを参照する
@@ -18,8 +29,6 @@ class ItemDetailsContext extends HookConsumerWidget {
     WidgetRef ref) async {
       //リザルト用のStrバッファ
       StringBuffer resultBuffer = StringBuffer();
-      //合計金額
-      int totalAmount = 0;
 
       //docから各パラメータ取得
       final itemDocRef = doc.data()["item"];
@@ -43,7 +52,8 @@ class ItemDetailsContext extends HookConsumerWidget {
         //バッファに追記
         resultBuffer.writeln("$itemName: $itemPrice円    ×$qty");
         //合計金額に加算
-        totalAmount += itemPrice * qty;
+        _totalAmount += itemPrice * qty;
+        print("$itemPrice * $qty  : $_totalAmount");
       });
 
       //商品詳細を取得
@@ -54,11 +64,19 @@ class ItemDetailsContext extends HookConsumerWidget {
           //バッファに追記
           resultBuffer.writeln("    $optionName: $optionPrice円");
           //合計金額に加算
-          totalAmount += optionPrice * qty;
+          _totalAmount += optionPrice * qty;
+          print("$optionPrice * $qty  : $_totalAmount");
         });
       }
-      //合計金額をプロバイダーに登録
-      ref.read(totalAmountProvider.notifier).changeState(totalAmount);
+      //合計金額をプロバイダーに登録&初期化
+      ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
+      ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = 0;
+      ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -_totalAmount;
+      //貨幣の枚数も初期化
+      for (String moneyId in moneyIdList) {
+        ref.read(moneyCountProviderFamily(moneyId).notifier).state = 0;
+      }
+
       return resultBuffer.toString();
   }
 
@@ -67,8 +85,6 @@ class ItemDetailsContext extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //注文番号
     final orderNum = ref.read(selectedOrderNumProvider);
-    //合計金額
-    // final totalAmount = ref.read(totalAmountProvider);
     //注文詳細リスト
     late List<String> itemDetailList;
     //注文内容をまとめたコレクション
@@ -84,6 +100,9 @@ class ItemDetailsContext extends HookConsumerWidget {
           .map((doc) => getItemDetailsFuture(doc, ref))))
         .toList();
 
+      //計算終了後に合計金額変数を初期化
+      initTotalAmount();
+
       return tmpItemDetailList;
       });
 
@@ -95,12 +114,13 @@ class ItemDetailsContext extends HookConsumerWidget {
         builder: (_, snapshot) {
           //未取得の場合空のコンテナを返す
           if (!snapshot.hasData) return Container();
+          if (!(snapshot.connectionState == ConnectionState.done)) return Container();
 
           //then()処理後の返り値を受け取る
           itemDetailList = snapshot.data ?? ["取得に失敗しました。"];
 
           return Container(
-            width: MediaQuery.of(context).size.width/2.0 - 60.0,
+            width: MediaQuery.of(context).size.width/2.0 - 60.0, //TODO: paddingを試す
             color: CupertinoColors.systemGrey3,
             margin: const EdgeInsets.all(30.0), //できれば比率によって余白を変えたい
             child: Scrollbar(

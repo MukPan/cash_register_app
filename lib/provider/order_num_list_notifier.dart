@@ -17,3 +17,7 @@ class OrderNumListNotifier extends StateNotifier<List<int>> {
   ///状態を明示的に更新するメソッド
   void changeState(state) => {this.state = state};
 }
+
+///注文番号リスト
+final orderNumListProvider
+  = StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());

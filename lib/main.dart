@@ -12,22 +12,10 @@ import 'provider/order_num_list_notifier.dart';
 import 'provider/selected_order_num_notifier.dart';
 import 'provider/total_amount_notifier.dart';
 
+//TODO: GridViewを使って注文番号表示
+
 ///Firestoreインスタンス
 final db = FirebaseFirestore.instance;
-
-/* プロバイダー */
-///注文番号リスト
-final orderNumListProvider
-  = StateNotifierProvider<OrderNumListNotifier, List<int>>((ref) => OrderNumListNotifier());
-
-///処理中の注文番号
-final selectedOrderNumProvider
-  = StateNotifierProvider<SelectedOrderNumNotifier, int>((ref) => SelectedOrderNumNotifier());
-
-///処理中の合計金額
-final totalAmountProvider
-= StateNotifierProvider<TotalAmountNotifier, int>((ref) => TotalAmountNotifier());
-
 
 
 //TODO: 選択した注文番号のプロバイダーを作る
