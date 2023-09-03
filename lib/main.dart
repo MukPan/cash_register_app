@@ -9,8 +9,6 @@ import 'firebase_options.dart';
 
 import 'context/order_list_context.dart';
 import 'provider/order_num_list_notifier.dart';
-import 'provider/selected_order_num_notifier.dart';
-import 'provider/total_amount_notifier.dart';
 
 //TODO: GridViewを使って注文番号表示
 

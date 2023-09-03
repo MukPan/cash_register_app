@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../main.dart';
 import '../provider/money_count_provider_family.dart';
-import '../provider/total_amount_notifier.dart';
 import '../provider/selected_order_num_notifier.dart';
 import '../provider/various_amounts_provider_family.dart';
 //TODO: 合計金額をStateにして、ここから更新する

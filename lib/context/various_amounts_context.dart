@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../provider/total_amount_notifier.dart';
-import '../provider/money_count_provider_family.dart';
 import '../provider/various_amounts_provider_family.dart';
 
 
