@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../component/default_app_bar.dart';
 import '../component/order_num.dart';
 import '../context/item_details_context.dart';
 import '../context/selected_no_context.dart';
@@ -30,9 +31,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("お会計"),
-        ),
+        appBar: const DefaultAppBar(title: "お会計"),
         body: Row(
           children: [
             //注文内容

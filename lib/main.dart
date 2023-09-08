@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:cash_register_app/component/default_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -26,6 +27,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // debugRepaintRainbowEnabled = true;
+
   runApp(
       const ProviderScope(child: MyApp())
   );
@@ -37,9 +40,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        scaffoldBackgroundColor: Colors.white,
+        highlightColor: Colors.white,
         useMaterial3: true,
       ),
       home: const MyHomePage(),
@@ -48,23 +54,13 @@ class MyApp extends StatelessWidget {
 }
 
 ///ホーム
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-
-///ホームの状態
-class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('注文番号の選択'),
-      ),
+      appBar: const DefaultAppBar(title: "注文番号の選択"),
       //注文番号一覧
       body: const OrderListContext(),
 
@@ -83,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   //stateを更新
                   ref.read(orderNumListProvider.notifier)
                       .changeState([...currentOrderNumList]);
-                  print(currentOrderNumList);
                 });
               },
               child: const Icon(Icons.refresh));
@@ -92,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
 
 
 //     .map((docSnapshot) => docSnapshot.id)

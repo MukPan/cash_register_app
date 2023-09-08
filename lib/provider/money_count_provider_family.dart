@@ -30,3 +30,6 @@ const moneyIdStrToInt = <String, int>{
   "5,000円": 5000,
   "10,000円": 10000,
 };
+
+
+

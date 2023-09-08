@@ -1,3 +1,4 @@
+import 'package:cash_register_app/component/default_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class NextPage extends StatelessWidget {
@@ -6,9 +7,7 @@ class NextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('未開発'),
-      ),
+      appBar: const DefaultAppBar(title: "未開発"),
       body: Container(),
     );
   }

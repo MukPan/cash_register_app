@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../component/default_app_bar.dart';
 import '../context/cash_register_context.dart';
 import '../context/selected_no_context.dart';
 import '../context/various_amounts_context.dart';
@@ -27,9 +28,7 @@ class CashRegisterPageState extends State<CashRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("お預かり額の入力"),
-        ),
+        appBar: const DefaultAppBar(title: "お預かり額の入力"),
       body: Row(
         children: [
           //注文内容
