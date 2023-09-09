@@ -12,6 +12,7 @@ class OrderNum extends StatelessWidget {
         orderNum.toString(),
         style: const TextStyle(
         fontSize: 50,
+        color: Colors.indigo, //black
         fontWeight: FontWeight.bold
     ));
   }
