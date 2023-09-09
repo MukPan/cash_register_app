@@ -13,7 +13,7 @@ import '../provider/various_amounts_provider_family.dart';
 class ItemDetailsContext extends HookConsumerWidget {
   const ItemDetailsContext({Key? key}) : super(key: key);
 
-//合計金額
+  ///合計金額
   static int _totalAmount = 0;
 
   ///合計金額算出用の変数を初期化
@@ -34,8 +34,6 @@ class ItemDetailsContext extends HookConsumerWidget {
       final optionDocRefList = doc.data()["options"];
       final qty = doc.data()["qty"];
 
-      print(itemDocRef);
-      print(optionDocRefList);
 
       //型チェック
       if (itemDocRef is! DocumentReference<Map<String, dynamic>>) return "Incorrect itemDocRef";
@@ -86,14 +84,14 @@ class ItemDetailsContext extends HookConsumerWidget {
     final orderNum = ref.read(selectedOrderNumProvider);
     //注文詳細リスト
     late List<String> itemDetailList;
-    //注文内容をまとめたコレクション
-    final orderCollection = db
+    //注文内容をまとめたコレクションリファレンス
+    final orderCollectionRef = db
         .collection("orderNumCollection")
         .doc(orderNum.toString())
         .collection("orderCollection");
 
     //注文番号から注文内容を呼び出す
-    final getItemDetailListFuture = orderCollection.get().then((querySnapshot) async {
+    final getItemDetailListFuture = orderCollectionRef.get().then((querySnapshot) async {
       //State更新用の注文詳細リストを作成
       final tmpItemDetailList = (await Future.wait(querySnapshot.docs
           .map((doc) => getItemDetailsFuture(doc, ref))))
@@ -108,63 +106,166 @@ class ItemDetailsContext extends HookConsumerWidget {
 
 
     //return Widget//
-    return FutureBuilder(
-        future: getItemDetailListFuture, //Futureを監視
-        builder: (_, snapshot) {
+    return StreamBuilder(
+        stream: orderCollectionRef.snapshots(),
+        builder: (context, snapshot) {
           //未取得の場合空のコンテナを返す
           if (!snapshot.hasData) return Container();
-          if (!(snapshot.connectionState == ConnectionState.done)) return Container();
+          if (!(snapshot.connectionState == ConnectionState.active)) return Container();
 
-          //then()処理後の返り値を受け取る
-          itemDetailList = snapshot.data ?? ["取得に失敗しました。"];
+          print("nuuununun");
+          final customOrderDocList = snapshot.data?.docs ?? [];
 
-          return Container(
-            width: MediaQuery.of(context).size.width/2.0 - 60.0, //TODO: paddingを試す
-            color: CupertinoColors.systemGrey3,
-            margin: const EdgeInsets.all(30.0), //できれば比率によって余白を変えたい
-            child: Scrollbar(
-                child: ListView.separated(
-                  itemBuilder: (BuildContext context, int index) => Text(itemDetailList[index]),
-                  separatorBuilder: (BuildContext context, int index) => Container(),
-                  itemCount: itemDetailList.length,
-                )
-            ),
+          DocumentReference a;
+
+          //docから各パラメータ取得
+          // final itemDocRef = doc.data()["item"];
+          // final optionDocRefList = doc.data()["options"];
+          // final qty = doc.data()["qty"];
+
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(8),
+            itemCount: customOrderDocList.length,
+            separatorBuilder: (BuildContext context, int index) => const Divider(),
+            itemBuilder: (BuildContext context, int itemIndex) {
+              //docから各リファレンス取得
+              final itemDocRef
+                = customOrderDocList[itemIndex].data()["item"];
+              final optionDocRefs
+                = customOrderDocList[itemIndex].data()["options"];
+
+              print("optionDocRefs");
+              print(optionDocRefs);
+              print("itemDocRef");
+              print(itemDocRef);
+
+              //型チェック
+              if (itemDocRef is! DocumentReference<Map<String, dynamic>>) return Container();
+              if (optionDocRefs is! List<dynamic>) return Container();
+              if (optionDocRefs.any((optionDocRef) =>
+                optionDocRef is! DocumentReference<Map<String, dynamic>>)) return Container();
+              // if (qty is! int) return Container();
+
+
+
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // これで両端に寄せる
+                  children: [
+                    //左寄り
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        textDirection: TextDirection.ltr, //L→R 指定しないとツールでエラー
+                        children: [
+                          //1行目
+                          StreamBuilder(
+                              stream: itemDocRef.snapshots(),
+                              builder: (context, snapshot) {
+                                //データ取得チェック
+                                if (!snapshot.hasData) return Container();
+                                if (!(snapshot.connectionState == ConnectionState.active)) return Container();
+
+                                final itemDoc = snapshot.data;
+                                final String? itemName = itemDoc?.id;
+                                final int itemPrice = (itemDoc?.data() as Map<String, dynamic>)["price"];
+                                return Text(
+                                  "$itemName, ${itemPrice.toString()}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25.0
+                                  ),
+                                );
+                              }
+                          ),
+                          //2行目以降
+                          SizedBox(
+                            child: ListView.builder(
+                              shrinkWrap: true, //TODO: バグり散らかしてる
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: optionDocRefs.length,
+                              itemBuilder: (BuildContext context, int optIndex) {
+                                return StreamBuilder(
+                                  stream: (optionDocRefs[optIndex] as DocumentReference<Map<String, dynamic>>).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!(snapshot.connectionState == ConnectionState.done ||
+                                        snapshot.connectionState == ConnectionState.active)) return Container();
+
+                                    final optDoc = snapshot.data;
+                                    print(optDoc);
+                                    final String? optName = optDoc?.id;
+                                    final int optPrice = (optDoc?.data() as Map<String, dynamic>)["price"];
+                                    return Text(
+                                      "$optName(${optPrice.toString()})",
+                                      style: const TextStyle(
+                                          fontSize: 15.0,
+                                          color: CupertinoColors.systemGrey
+                                      ),
+                                    );
+
+                                  },
+
+                                );
+                              },
+                            ),
+                          )
+                          // if (index % 3 != 0) OptionName(index: index),
+                          // if (index % 2 != 0) OptionName(index: index+1),
+                          // if (index % 5 != 0) OptionName(index: index+2),
+                          // OptionName(index: index+3),
+                          // //カウンタ
+                          // ItemCounter(index: index)
+                        ],
+                      ),
+                    ),
+                    //右寄り
+                    Expanded(
+                      child: Container(),
+                    )
+                    // Column(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   crossAxisAlignment: CrossAxisAlignment.end, //center
+                    //   textDirection: TextDirection.ltr,
+                    //   children: [
+                    //     Image.asset(_foodImgPathList[index%3], height: 80, width: 80, ),
+                    //     Subtotal(index: index)
+                    //   ],
+                    // )
+                  ],
+                ),
+              );
+            },
           );
         }
     );
   }
 }
 
-// Future<String> getItemDetailsFuture(docRefList) async {
+// return FutureBuilder(
+// future: getItemDetailListFuture, //Futureを監視
+// builder: (_, snapshot) {
+// //未取得の場合空のコンテナを返す
+// if (!snapshot.hasData) return Container();
+// if (!(snapshot.connectionState == ConnectionState.done)) return Container();
 //
-//   String result = "miss1";
-//   //型チェック
-//   if (docRefList is! List) return "miss2";
-//   final itemDocRef = docRefList[0];
-//   final optionListDocRef = docRefList[1];
-//   print("nu");
-//   print(optionListDocRef[1]);
+// //then()処理後の返り値を受け取る
+// itemDetailList = snapshot.data ?? ["取得に失敗しました。"];
 //
-//   if (itemDocRef is! DocumentReference<Map<String, dynamic>>) return "miss3";
-//   if (optionListDocRef is! DocumentReference<Map<String, dynamic>>) return "miss4";
-//   // if (docRefList is! List<DocumentReference<Map<String, dynamic>>>) return "miss3";
-//
-//   late String itemName;
-//   late int itemPrice;
-//
-//   //商品詳細を取得
-//   await itemDocRef.get().then((DocumentSnapshot doc) {
-//     itemName = doc.id;
-//     itemPrice = (doc.data() as Map<String, dynamic>)["price"];
-//     result = "$itemName: $itemPrice円";
-//   });
-//
-//   //オプション詳細を取得
-//   await optionListDocRef.get().then((DocumentSnapshot doc) {
-//     print(doc);
-//     // itemName = doc.id;
-//     // itemPrice = int.parse((doc.data() as Map<String, dynamic>)["price"]);
-//   });
-//
-//   return result;
+// return Container(
+// width: MediaQuery.of(context).size.width/2.0 - 60.0, //TODO: paddingを試す
+// color: CupertinoColors.systemGrey3,
+// margin: const EdgeInsets.all(30.0), //できれば比率によって余白を変えたい
+// child: Scrollbar(
+// child: ListView.separated(
+// itemBuilder: (BuildContext context, int index) => Text(itemDetailList[index]),
+// separatorBuilder: (BuildContext context, int index) => Container(),
+// itemCount: itemDetailList.length,
+// )
+// ),
+// );
 // }
+// );
