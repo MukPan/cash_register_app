@@ -5,7 +5,7 @@ import '../dialog/remove_item_alert_dialog.dart';
 import '../provider/item_count_family.dart';
 
 class ItemCounter extends HookConsumerWidget {
-  const ItemCounter({Key? key, required this.index}) : super(key: key);
+  const ItemCounter({Key? key, required this.index}) : super(key: key); //required this.index
 
   ///行番号
   final int index;
@@ -20,9 +20,11 @@ class ItemCounter extends HookConsumerWidget {
     ref.read(itemCountFamily(index).notifier).state--; //書込
   }
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
   final int count = ref.watch(itemCountFamily(index)); //読取
+  const bool countBtnIsEnabled = false;
 
     return Container(
     width: 100,
@@ -35,7 +37,7 @@ class ItemCounter extends HookConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-            onPressed: (count <= 0) ? null : () async {
+            onPressed: (count <= 0 || !countBtnIsEnabled) ? null : () async {
               //カウントが1のとき
               bool isRemove = false;
               if (count == 1) {
@@ -52,7 +54,7 @@ class ItemCounter extends HookConsumerWidget {
         ),
         Text(count.toString()),
         IconButton(
-            onPressed: (count >= 5) ? null : () { //上限を設ける
+            onPressed: (count >= 5 || !countBtnIsEnabled) ? null : () { //上限を設ける
               _increaseCount(ref);
             },
             icon: const Icon(Icons.add)

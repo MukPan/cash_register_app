@@ -1,5 +1,6 @@
 import 'package:cash_register_app/object/option_object.dart';
 import 'package:cash_register_app/object/order_object.dart';
+import 'package:cash_register_app/provider/item_count_family.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ import '../provider/various_amounts_provider_family.dart';
 class ItemDetailsContext extends HookConsumerWidget {
   const ItemDetailsContext({Key? key}) : super(key: key);
 
-//合計金額
+  ///合計金額
   static int _totalAmount = 0;
 
   ///合計金額算出用の変数を初期化
@@ -62,10 +63,10 @@ class ItemDetailsContext extends HookConsumerWidget {
 
       //合計金額に加算 //TODO: 消す
       _totalAmount += itemPrice * qty;
-      print("$itemPrice * $qty  : $_totalAmount");
+      // print("$itemPrice * $qty  : $_totalAmount");
     });
 
-    //商品詳細を取得
+    //オプション詳細を取得
     for (final optionDocRef in optionDocRefList) {
       await optionDocRef.get().then((DocumentSnapshot doc) {
         final String optionName = doc.id;
@@ -82,14 +83,6 @@ class ItemDetailsContext extends HookConsumerWidget {
         print("$optionPrice * $qty  : $_totalAmount");
       });
     }
-    //合計金額をプロバイダーに登録&初期化 //TODO: 関数化する
-    ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
-    ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = 0;
-    ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -_totalAmount;
-    //貨幣の枚数も初期化
-    for (String moneyId in moneyIdList) {
-      ref.read(moneyCountProviderFamily(moneyId).notifier).state = 0;
-    }
 
     //値オブジェクトで返却
     return OrderObject(
@@ -101,6 +94,7 @@ class ItemDetailsContext extends HookConsumerWidget {
   }
 
 
+  ///ビルド
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //注文番号
@@ -120,8 +114,21 @@ class ItemDetailsContext extends HookConsumerWidget {
       final List<OrderObject> tmpOrderObjList = (await Future.wait(querySnapshot
           .docs.map((doc) => convertDocToObjFuture(doc, ref)))) //商品ドキュメントを値オブジェクトに変換
           .toList();
+      //合計金額をプロバイダーに登録&初期化
+      ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
+      ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = 0;
+      ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -_totalAmount;
+      //貨幣の枚数も初期化
+      for (String moneyId in moneyIdList) {
+        ref.read(moneyCountProviderFamily(moneyId).notifier).state = 0;
+      }
+      //各個数をプロバイダーに登録
+      tmpOrderObjList.asMap().forEach((index, orderObj) {
+        ref.read(itemCountFamily(index).notifier).state = orderObj.itemQty;
+      });
       //計算終了後に合計金額変数を初期化
       initTotalAmount();
+      //Future処理完了
       return tmpOrderObjList;
     });
 

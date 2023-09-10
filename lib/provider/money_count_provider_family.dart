@@ -1,9 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-//"100円": 5(枚)
-final moneyCountProviderFamily = StateProviderFamily<int, String>((ref, id) {
+//"100円": 5(枚) //StateProvider.family or StateProviderFamily
+final moneyCountProviderFamily = StateProvider.family<int, String>((ref, id) {
   return 0; // 初期値を設定
 });
+
+
 
 //貨幣の名称群(familyのid)
 const moneyIdList = [
