@@ -1,12 +1,10 @@
 import 'package:cash_register_app/component/money_count_down_btn.dart';
 import 'package:flutter/material.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import '../provider/money_count_provider_family.dart';
-
 import '../provider/various_amounts_provider_family.dart';
 
+//TODO: 編集ボタンを押してから数を変更できるようにする
 class MoneyCounterBtn extends HookConsumerWidget {
   const MoneyCounterBtn({Key? key, required this.moneyId, required this.index}) : super(key: key);
 
@@ -31,10 +29,6 @@ class MoneyCounterBtn extends HookConsumerWidget {
   void _countUpMoney(WidgetRef ref) {
     ref.read(moneyCountProviderFamily(moneyId).notifier).state++;
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

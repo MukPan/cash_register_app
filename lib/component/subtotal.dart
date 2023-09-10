@@ -9,17 +9,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../provider/item_count_family.dart';
 
-class Subtotal extends StatelessWidget {
+class Subtotal extends HookConsumerWidget {
   const Subtotal({Key? key, required this.orderObj}) : super(key: key);
 
   ///商品値オブジェクト
   final OrderObject orderObj;
 
 
-
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //オブジェクトからパラメータを取り出す
     final int qty = orderObj.itemQty;
     final int itemPrice = orderObj.itemPrice;

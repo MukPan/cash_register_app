@@ -82,7 +82,7 @@ class ItemDetailsContext extends HookConsumerWidget {
         print("$optionPrice * $qty  : $_totalAmount");
       });
     }
-    //合計金額をプロバイダーに登録&初期化
+    //合計金額をプロバイダーに登録&初期化 //TODO: 関数化する
     ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
     ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = 0;
     ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -_totalAmount;
@@ -138,8 +138,8 @@ class ItemDetailsContext extends HookConsumerWidget {
           orderObjList = snapshot.data ?? [];
 
           return ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            // shrinkWrap: true,
+            // physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(8),
             itemCount: orderObjList.length,
             separatorBuilder: (BuildContext context, int index) => const Divider(),
