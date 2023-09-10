@@ -11,9 +11,12 @@ class SelectedNoContext extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     int orderNum = ref.read(selectedOrderNumProvider);
 
-    return Row(children: [
-      const Text("注文番号 : ", style: TextStyle(fontSize: 20)),
-      OrderNum(orderNum: orderNum),
-    ],);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("注文番号 : ", style: TextStyle(fontSize: 20)),
+        OrderNum(orderNum: orderNum),
+      ],
+    );
   }
 }
