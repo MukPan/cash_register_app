@@ -1,0 +1,25 @@
+{
+  "orderCollection": {
+    "ZvFE8PHn2avRhVfF54oO":
+
+    {
+      "itemName": "たこ焼き",
+      "itemPrice": 300,
+      "itemQty": 3,
+      "optionList": {
+        "1": {
+          "optionName": "ソース",
+          "optionPrice": 0
+        },
+        "2": {
+          "optionName": "焼きチーズ",
+          "optionPrice": 100
+        }
+      }
+    },
+
+    "BJnWR8rt3mJPHqEBmZUD": {
+
+    }
+  }
+}

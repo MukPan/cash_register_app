@@ -19,7 +19,6 @@ class ConfirmOrderPage extends StatelessWidget {
       }
 
   //TODO: 注文番号とメニューをプロバイダーから受け取る
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
