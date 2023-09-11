@@ -30,8 +30,7 @@ class CashRegisterPage extends StatelessWidget {
             //注文内容
             Expanded(
                 child: Container(
-                    margin: const EdgeInsets.all(10),
-                    height: double.infinity,
+                    margin: const EdgeInsets.fromLTRB(20, 20, 0, 10),
                     child: const CashRegisterContext(),
                 )
             ),
@@ -47,7 +46,6 @@ class CashRegisterPage extends StatelessWidget {
                     //2:合計金額
                     Container(
                       //TODO:画面半分コンテナをコンポーネント化する
-                        width: MediaQuery.of(context).size.width/2.0 - 60.0,
                         margin: const EdgeInsets.all(30.0),
                         decoration: BoxDecoration(
                             border: Border.all(width: 1)
