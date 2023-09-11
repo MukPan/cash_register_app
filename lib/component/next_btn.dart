@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
 class NextBtn extends StatelessWidget {
-  const NextBtn({Key? key, required this.moveNextPageFunc}) : super(key: key);
+  const NextBtn({Key? key, required this.moveNextPageFunc, this.isValid = true}) : super(key: key);
 
+  ///次のページに遷移するための関数
   final void Function(BuildContext) moveNextPageFunc;
+
+  ///ボタンが有効であるか
+  final bool isValid;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +22,7 @@ class NextBtn extends StatelessWidget {
           foregroundColor: Colors.white,
           backgroundColor: Colors.orange,
         ),
-        onPressed: () => {moveNextPageFunc(context)},
+        onPressed: isValid ? () => {moveNextPageFunc(context)} : null,
         child: const Text(
           "次へ",
           style: TextStyle(

@@ -39,23 +39,40 @@ class MoneyCounterBtn extends HookConsumerWidget {
       children: [
         SizedBox(
           width: double.infinity,
-          child: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.blue.shade100,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 3,
+              foregroundColor: Colors.grey.withAlpha(100), //ボタンを押下時のエフェクト色と文字色(上書き可能)
+              backgroundColor: Colors.white,
+              // shadowColor: Colors.black,
+              surfaceTintColor: Colors.white,
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0)) //角ばったボタン
               ),
-
             ),
             onPressed: () {
               _countUpMoney(ref); //カウント+1
               changeVariousAmounts(ref); //金額state更新
             },
 
-            child: Column(children: [
-              Text(moneyId), //貨幣名称
-              Image.asset(_moneyImgPathList[index], height: 80), //貨幣イメージ
-              Text(moenyCount.toString()) //入力枚数
+            child: Column(
+              children: [
+                Text(
+                  moneyId,
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
+                ), //貨幣名称
+                const Spacer(),
+                Image.asset(_moneyImgPathList[index], height: 80), //貨幣イメージ
+                const Spacer(),
+                Text(
+                  moenyCount.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ) //入力枚数
             ],),
           ),
         ),
