@@ -8,8 +8,6 @@ import '../provider/various_amounts_provider_family.dart';
 class TotalAmountContext extends HookConsumerWidget {
   const TotalAmountContext({Key? key}) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //カンマを挿入した合計金額
@@ -18,8 +16,7 @@ class TotalAmountContext extends HookConsumerWidget {
 
 
     return Container(
-      width: MediaQuery.of(context).size.width/2.0 - 60.0,
-      margin: const EdgeInsets.all(30.0),
+      margin: const EdgeInsets.fromLTRB(30, 20, 30, 30),
       decoration: BoxDecoration(
           border: Border.all(width: 1)
       ),

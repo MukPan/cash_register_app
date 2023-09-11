@@ -1,8 +1,16 @@
+import 'package:cash_register_app/object/option_object.dart';
+import 'package:cash_register_app/object/order_object.dart';
+import 'package:cash_register_app/provider/item_count_family.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../component/item_counter.dart';
+import '../component/item_img.dart';
+import '../component/item_name.dart';
+import '../component/option_names.dart';
+import '../component/subtotal.dart';
 import '../main.dart';
 import '../provider/money_count_provider_family.dart';
 import '../provider/selected_order_num_notifier.dart';
@@ -13,7 +21,7 @@ import '../provider/various_amounts_provider_family.dart';
 class ItemDetailsContext extends HookConsumerWidget {
   const ItemDetailsContext({Key? key}) : super(key: key);
 
-//合計金額
+  ///合計金額
   static int _totalAmount = 0;
 
   ///合計金額算出用の変数を初期化
@@ -22,51 +30,114 @@ class ItemDetailsContext extends HookConsumerWidget {
   }
 
   ///商品詳細リストを取得するメソッド
-  ///ドキュメントリファレンスから商品ドキュメントを参照する
-  Future<String> getItemDetailsFuture(
-    QueryDocumentSnapshot<Map<String, dynamic>> doc,
-    WidgetRef ref) async {
-      //リザルト用のStrバッファ
-      StringBuffer resultBuffer = StringBuffer();
+  ///与えられたドキュメントを値オブジェクトへ変換する
+  Future<OrderObject> _convertDocToObjFuture(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc,
+      WidgetRef ref) async {
 
-      //docから各パラメータ取得
-      final itemDocRef = doc.data()["item"];
-      final optionDocRefList = doc.data()["options"];
-      final qty = doc.data()["qty"];
+    //docから各パラメータ取得
+    final itemDocRef = doc.data()["item"];
+    final optionDocRefList = doc.data()["options"];
+    final qty = doc.data()["qty"];
 
-      print(itemDocRef);
-      print(optionDocRefList);
+    //型チェック
+    if (itemDocRef is! DocumentReference<Map<String, dynamic>>) return OrderObject();
+    if (optionDocRefList is! List<dynamic>) return OrderObject();
+    if (optionDocRefList.any((optionDocRef) =>
+    optionDocRef is! DocumentReference<Map<String, dynamic>>)) return OrderObject();
+    if (qty is! int) return OrderObject();
 
-      //型チェック
-      if (itemDocRef is! DocumentReference<Map<String, dynamic>>) return "Incorrect itemDocRef";
-      if (optionDocRefList is! List<dynamic>) return "Incorrect optionDocRefList";
-      if (optionDocRefList.any((optionDocRef) =>
-        optionDocRef is! DocumentReference<Map<String, dynamic>>)) return "Incorrect optionDocRef";
-      if (qty is! int) return "Incorrect qty";
+    //リザルト用パラメータ
+    late final String resItemName;
+    late final int resItemPrice;
+    final int resItemQty = qty;
+    final List<OptionObject> resOptionList = [];
 
-      //商品詳細を取得
-      await itemDocRef.get().then((DocumentSnapshot doc) {
-        final String itemName = doc.id;
-        final int itemPrice = (doc.data() as Map<String, dynamic>)["price"];
-        //バッファに追記
-        resultBuffer.writeln("$itemName: $itemPrice円    ×$qty");
+    //商品詳細を取得
+    await itemDocRef.get().then((DocumentSnapshot doc) {
+      final String itemName = doc.id;
+      final int itemPrice = (doc.data() as Map<String, dynamic>)["price"];
+      //変数に記録
+      resItemName = itemName;
+      resItemPrice = itemPrice;
+
+      //合計金額に加算
+      _totalAmount += itemPrice * qty;
+      // print("$itemPrice * $qty  : $_totalAmount");
+    });
+
+    //オプション詳細を取得
+    for (final optionDocRef in optionDocRefList) {
+      await optionDocRef.get().then((DocumentSnapshot doc) {
+        final String optionName = doc.id;
+        final int optionPrice = (doc.data() as Map<String, dynamic>)["price"];
+        //オプションをリストに追加
+        resOptionList.add(
+            OptionObject(
+                optionName: optionName,
+                optionPrice: optionPrice
+            )
+        );
         //合計金額に加算
-        _totalAmount += itemPrice * qty;
-        print("$itemPrice * $qty  : $_totalAmount");
+        _totalAmount += optionPrice * qty;
+        print("$optionPrice * $qty  : $_totalAmount");
       });
+    }
 
-      //商品詳細を取得
-      for (final optionDocRef in optionDocRefList) {
-        await optionDocRef.get().then((DocumentSnapshot doc) {
-          final String optionName = doc.id;
-          final int optionPrice = (doc.data() as Map<String, dynamic>)["price"];
-          //バッファに追記
-          resultBuffer.writeln("    $optionName: $optionPrice円");
-          //合計金額に加算
-          _totalAmount += optionPrice * qty;
-          print("$optionPrice * $qty  : $_totalAmount");
-        });
-      }
+    //値オブジェクトで返却
+    return OrderObject(
+      itemName: resItemName,
+      itemPrice: resItemPrice,
+      itemQty: resItemQty,
+      optionList: resOptionList
+    );
+  }
+
+  ///ローディングを表示するメソッド
+  void showProgressDialog(context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 500), // これを入れると遅延を入れなくて
+      barrierColor: Colors.black.withOpacity(0.5),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return const Center(
+          child: SizedBox(
+            width: 180,
+            height: 180,
+            child: CircularProgressIndicator(
+              strokeWidth: 10,
+              color: Colors.indigo,
+            ),
+          )
+        );
+      },
+    );
+  }
+
+
+  ///ビルド
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    //注文番号
+    final orderNum = ref.read(selectedOrderNumProvider);
+    //注文詳細リスト
+    late List<OrderObject> orderObjList;
+    //注文内容をまとめたコレクション
+    final orderCollection = db
+        .collection("orderNumCollection")
+        .doc(orderNum.toString()) //注文番号のドキュメントにアクセス
+        .collection("orderCollection");
+
+    //注文番号から注文内容を呼び出す
+    //orderCollection(querySnapshot)には複数の商品ドキュメントが格納されている
+    final getOrderObjListFuture = orderCollection.get().then((querySnapshot) async {
+      //ローディング開始
+      showProgressDialog(context);
+      //State更新用の注文詳細リストを作成
+      final List<OrderObject> tmpOrderObjList = (await Future.wait(querySnapshot
+          .docs.map((doc) => _convertDocToObjFuture(doc, ref)))) //商品ドキュメントを値オブジェクトに変換
+          .toList();
       //合計金額をプロバイダーに登録&初期化
       ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
       ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = 0;
@@ -75,96 +146,85 @@ class ItemDetailsContext extends HookConsumerWidget {
       for (String moneyId in moneyIdList) {
         ref.read(moneyCountProviderFamily(moneyId).notifier).state = 0;
       }
-
-      return resultBuffer.toString();
-  }
-
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    //注文番号
-    final orderNum = ref.read(selectedOrderNumProvider);
-    //注文詳細リスト
-    late List<String> itemDetailList;
-    //注文内容をまとめたコレクション
-    final orderCollection = db
-        .collection("orderNumCollection")
-        .doc(orderNum.toString())
-        .collection("orderCollection");
-
-    //注文番号から注文内容を呼び出す
-    final getItemDetailListFuture = orderCollection.get().then((querySnapshot) async {
-      //State更新用の注文詳細リストを作成
-      final tmpItemDetailList = (await Future.wait(querySnapshot.docs
-          .map((doc) => getItemDetailsFuture(doc, ref))))
-        .toList();
-
+      //各個数をプロバイダーに登録
+      tmpOrderObjList.asMap().forEach((index, orderObj) {
+        ref.read(itemCountFamily(index).notifier).state = orderObj.itemQty;
+      });
       //計算終了後に合計金額変数を初期化
       initTotalAmount();
-
-      return tmpItemDetailList;
-      });
+      //ローディング終了
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+      //Future処理完了
+      return tmpOrderObjList;
+    });
 
 
 
     //return Widget//
     return FutureBuilder(
-        future: getItemDetailListFuture, //Futureを監視
-        builder: (_, snapshot) {
+        future: getOrderObjListFuture, //Futureを監視
+        builder: (_, snapshot) { //snapshot: then()の戻り値の参照？
+
           //未取得の場合空のコンテナを返す
+
           if (!snapshot.hasData) return Container();
           if (!(snapshot.connectionState == ConnectionState.done)) return Container();
 
           //then()処理後の返り値を受け取る
-          itemDetailList = snapshot.data ?? ["取得に失敗しました。"];
+          orderObjList = snapshot.data ?? [];
 
-          return Container(
-            width: MediaQuery.of(context).size.width/2.0 - 60.0, //TODO: paddingを試す
-            color: CupertinoColors.systemGrey3,
-            margin: const EdgeInsets.all(30.0), //できれば比率によって余白を変えたい
-            child: Scrollbar(
-                child: ListView.separated(
-                  itemBuilder: (BuildContext context, int index) => Text(itemDetailList[index]),
-                  separatorBuilder: (BuildContext context, int index) => Container(),
-                  itemCount: itemDetailList.length,
-                )
-            ),
+          return ListView.separated(
+            // shrinkWrap: true,
+            // physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(8),
+            itemCount: orderObjList.length,
+            separatorBuilder: (BuildContext context, int index) => const Divider(),
+            //ループ処理//
+            itemBuilder: (BuildContext context, int itemIndex) {
+              //処理中の値オブジェクト
+              final orderObj = orderObjList[itemIndex];
+
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // これで両端に寄せる
+                  children: [
+                    //左寄り
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        textDirection: TextDirection.ltr, //L→R 指定しないとツールでエラー
+                        children: [
+                          //1行目
+                          ItemName(itemName: orderObj.itemName),
+                          //2行目以降
+                          OptionNames(optList: orderObj.optionList),
+                          //カウンタ
+                          ItemCounter(index: itemIndex)
+                        ],
+                      ),
+                    ),
+                    //右寄り
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end, //center
+                        textDirection: TextDirection.ltr,
+                        children: [
+                          ItemImg(itemName: orderObj.itemName),
+                          Subtotal(orderObj: orderObj)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
           );
         }
     );
   }
 }
-
-// Future<String> getItemDetailsFuture(docRefList) async {
-//
-//   String result = "miss1";
-//   //型チェック
-//   if (docRefList is! List) return "miss2";
-//   final itemDocRef = docRefList[0];
-//   final optionListDocRef = docRefList[1];
-//   print("nu");
-//   print(optionListDocRef[1]);
-//
-//   if (itemDocRef is! DocumentReference<Map<String, dynamic>>) return "miss3";
-//   if (optionListDocRef is! DocumentReference<Map<String, dynamic>>) return "miss4";
-//   // if (docRefList is! List<DocumentReference<Map<String, dynamic>>>) return "miss3";
-//
-//   late String itemName;
-//   late int itemPrice;
-//
-//   //商品詳細を取得
-//   await itemDocRef.get().then((DocumentSnapshot doc) {
-//     itemName = doc.id;
-//     itemPrice = (doc.data() as Map<String, dynamic>)["price"];
-//     result = "$itemName: $itemPrice円";
-//   });
-//
-//   //オプション詳細を取得
-//   await optionListDocRef.get().then((DocumentSnapshot doc) {
-//     print(doc);
-//     // itemName = doc.id;
-//     // itemPrice = int.parse((doc.data() as Map<String, dynamic>)["price"]);
-//   });
-//
-//   return result;
-// }
