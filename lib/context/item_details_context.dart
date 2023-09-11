@@ -31,7 +31,7 @@ class ItemDetailsContext extends HookConsumerWidget {
 
   ///商品詳細リストを取得するメソッド
   ///与えられたドキュメントを値オブジェクトへ変換する
-  Future<OrderObject> convertDocToObjFuture(
+  Future<OrderObject> _convertDocToObjFuture(
       QueryDocumentSnapshot<Map<String, dynamic>> doc,
       WidgetRef ref) async {
 
@@ -61,7 +61,7 @@ class ItemDetailsContext extends HookConsumerWidget {
       resItemName = itemName;
       resItemPrice = itemPrice;
 
-      //合計金額に加算 //TODO: 消す
+      //合計金額に加算
       _totalAmount += itemPrice * qty;
       // print("$itemPrice * $qty  : $_totalAmount");
     });
@@ -78,7 +78,7 @@ class ItemDetailsContext extends HookConsumerWidget {
                 optionPrice: optionPrice
             )
         );
-        //合計金額に加算 //TODO: 消す
+        //合計金額に加算
         _totalAmount += optionPrice * qty;
         print("$optionPrice * $qty  : $_totalAmount");
       });
@@ -90,6 +90,28 @@ class ItemDetailsContext extends HookConsumerWidget {
       itemPrice: resItemPrice,
       itemQty: resItemQty,
       optionList: resOptionList
+    );
+  }
+
+  ///ローディングを表示するメソッド
+  void showProgressDialog(context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 500), // これを入れると遅延を入れなくて
+      barrierColor: Colors.black.withOpacity(0.5),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return const Center(
+          child: SizedBox(
+            width: 180,
+            height: 180,
+            child: CircularProgressIndicator(
+              strokeWidth: 10,
+              color: Colors.indigo,
+            ),
+          )
+        );
+      },
     );
   }
 
@@ -110,9 +132,11 @@ class ItemDetailsContext extends HookConsumerWidget {
     //注文番号から注文内容を呼び出す
     //orderCollection(querySnapshot)には複数の商品ドキュメントが格納されている
     final getOrderObjListFuture = orderCollection.get().then((querySnapshot) async {
+      //ローディング開始
+      showProgressDialog(context);
       //State更新用の注文詳細リストを作成
       final List<OrderObject> tmpOrderObjList = (await Future.wait(querySnapshot
-          .docs.map((doc) => convertDocToObjFuture(doc, ref)))) //商品ドキュメントを値オブジェクトに変換
+          .docs.map((doc) => _convertDocToObjFuture(doc, ref)))) //商品ドキュメントを値オブジェクトに変換
           .toList();
       //合計金額をプロバイダーに登録&初期化
       ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
@@ -128,6 +152,10 @@ class ItemDetailsContext extends HookConsumerWidget {
       });
       //計算終了後に合計金額変数を初期化
       initTotalAmount();
+      //ローディング終了
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
       //Future処理完了
       return tmpOrderObjList;
     });
@@ -138,9 +166,12 @@ class ItemDetailsContext extends HookConsumerWidget {
     return FutureBuilder(
         future: getOrderObjListFuture, //Futureを監視
         builder: (_, snapshot) { //snapshot: then()の戻り値の参照？
+
           //未取得の場合空のコンテナを返す
+
           if (!snapshot.hasData) return Container();
           if (!(snapshot.connectionState == ConnectionState.done)) return Container();
+
           //then()処理後の返り値を受け取る
           orderObjList = snapshot.data ?? [];
 

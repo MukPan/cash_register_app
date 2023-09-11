@@ -18,11 +18,9 @@ class ConfirmOrderPage extends StatelessWidget {
         ));
       }
 
-
   //TODO: 注文番号とメニューをプロバイダーから受け取る
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: const DefaultAppBar(title: "注文内容の確認"),
         body: Row(
