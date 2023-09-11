@@ -1,4 +1,5 @@
 
+import 'package:cash_register_app/component/next_btn.dart';
 import 'package:cash_register_app/page/next_page.dart';
 import 'package:cash_register_app/provider/various_amounts_provider_family.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,14 +11,9 @@ import '../context/cash_register_context.dart';
 import '../context/selected_no_context.dart';
 import '../context/various_amounts_context.dart';
 
-class CashRegisterPage extends StatefulWidget {
+class CashRegisterPage extends StatelessWidget {
   const CashRegisterPage({Key? key}) : super(key: key);
 
-  @override
-  CashRegisterPageState createState() => CashRegisterPageState();
-}
-
-class CashRegisterPageState extends State<CashRegisterPage> {
   ///会計画面への遷移メソッド
   void moveNextPage(BuildContext context) => {
     Navigator.of(context).push(MaterialPageRoute(
@@ -29,46 +25,54 @@ class CashRegisterPageState extends State<CashRegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const DefaultAppBar(title: "お預かり額の入力"),
-      body: Row(
-        children: [
-          //注文内容
-          const CashRegisterContext(),
-
-          Column(
-            children: [
-              //1:注文番号
-              const SelectedNoContext(),
-              //2:合計金額
-              Container(
-                //TODO:画面半分コンテナをコンポーネント化する
-                width: MediaQuery.of(context).size.width/2.0 - 60.0,
-                margin: const EdgeInsets.all(30.0),
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1)
-                ),
-                child: const VariousAmountsContext()
-              ),
-
-              //3:次へ
-              Consumer(
-                  builder: (context, ref, child) {
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.orange,
-                      ),
-                      onPressed: (ref.watch(variousAmountsProviderFamily(VariousAmounts.changeAmount)) < 0) ? null :
-                        () { moveNextPage(context); }, //moveCashRegisterPage(context)
-                      child: const Text("次へ"),
-                    );
-                  },
+        body: Row(
+          children: [
+            //注文内容
+            Expanded(
+                child: Container(
+                    margin: const EdgeInsets.all(10),
+                    height: double.infinity,
+                    child: const CashRegisterContext(),
                 )
-              ],
+            ),
 
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(10),
+                height: double.infinity,
+                child: Column(
+                  children: [
+                    //1:注文番号
+                    const SelectedNoContext(),
+                    //2:合計金額
+                    Container(
+                      //TODO:画面半分コンテナをコンポーネント化する
+                        width: MediaQuery.of(context).size.width/2.0 - 60.0,
+                        margin: const EdgeInsets.all(30.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1)
+                        ),
+                        child: const VariousAmountsContext()
+                    ),
 
-          )
-        ],
-      )
+                    //3:次へ
+                    Consumer(
+                      builder: (context, ref, child) {
+                        //現在のお釣り
+                        int changeAmount = ref.watch(variousAmountsProviderFamily(VariousAmounts.changeAmount));
+
+                        return NextBtn(
+                          moveNextPageFunc: moveNextPage,
+                          isValid: changeAmount >= 0, //お釣りが0円以上のとき有効
+                        );
+                      },
+                    )
+                  ],
+                ),
+              )
+            )
+          ],
+        )
     );
   }
 }

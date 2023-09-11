@@ -36,6 +36,7 @@ class ConfirmOrderPage extends StatelessWidget {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.all(10),
+                height: double.infinity,
                 child: Column(
                   children: [
                     //1:注文番号
