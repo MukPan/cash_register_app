@@ -4,10 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../provider/item_count_family.dart';
 
 class RemoveItemAlertDialog extends StatelessWidget {
-  const RemoveItemAlertDialog({Key? key, required this.index}) : super(key: key);
+  const RemoveItemAlertDialog({Key? key}) : super(key: key);
 
-  ///行番号
-  final int index;
 
   @override
   Widget build(BuildContext context) {

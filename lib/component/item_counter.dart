@@ -43,7 +43,7 @@ class ItemCounter extends HookConsumerWidget {
               if (count == 1) {
                 isRemove = await showDialog(
                     context: context,
-                    builder: (content) => RemoveItemAlertDialog(index: index)
+                    builder: (content) => const RemoveItemAlertDialog()
                 ) ?? false;
               }
 

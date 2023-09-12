@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cash_register_app/component/default_app_bar.dart';
 import 'package:cash_register_app/context/order_num_list.dart';
+import 'package:cash_register_app/page/cash_count_manager_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -52,11 +53,27 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
+  ///貨幣枚数管理ページへの遷移メソッド
+  void moveCashCountManagerPage(BuildContext context) => {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const CashCountManagerPage()
+    ))
+  };
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: DefaultAppBar(title: "注文番号の選択"),
-      body: OrderNumList(),
+    return Scaffold(
+      appBar: const DefaultAppBar(title: "注文番号の選択"),
+      body: const OrderNumList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () { moveCashCountManagerPage(context); },
+        backgroundColor: Colors.orange,
+        focusColor: Colors.orange,
+        child: const Icon(
+          Icons.attach_money_sharp,
+          color: Colors.indigo,
+        ),
+      ),
     );
   }
 }
