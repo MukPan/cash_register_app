@@ -3,8 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../object/denominations.dart';
 
-final cashCountFamily = StateProvider.family<int, Denominations>((ref, id) {
-  return 10; //0枚
+final changeMoneyCountFamily = StateProvider.family<int, Denominations>((ref, id) {
+  return 0;
 });
-
 

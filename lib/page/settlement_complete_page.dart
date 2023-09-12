@@ -25,7 +25,7 @@ class SettlementCompletePage extends StatelessWidget {
               ),
             ),
             const Spacer(flex: 1),
-            NextBtn(moveNextPageFunc: _moveHomePage, btnText: "ホームへ"),
+            NextBtn(moveNextPageFunc: () {_moveHomePage(context);}, btnText: "ホームへ"),
             const Spacer(flex: 2),
           ],
         )

@@ -1,5 +1,5 @@
 
-import '../provider/cash_count_family.dart';
+import 'denominations.dart';
 
 ///金種のデータ参照用のオブジェクト
 class DenominationInfo {

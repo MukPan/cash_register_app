@@ -1,5 +1,6 @@
 
 import 'package:cash_register_app/component/next_btn.dart';
+import 'package:cash_register_app/context/move_settlement_complete_page_btn.dart';
 import 'package:cash_register_app/dialog/alert_dialog_texts.dart';
 import 'package:cash_register_app/page/settlement_complete_page.dart';
 import 'package:cash_register_app/provider/various_amounts_provider_family.dart';
@@ -15,12 +16,7 @@ import '../context/various_amounts_context.dart';
 class CashRegisterPage extends StatelessWidget {
   const CashRegisterPage({Key? key}) : super(key: key);
 
-  ///会計画面への遷移メソッド
-  void moveSettlementCompletePage(BuildContext context) => {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const SettlementCompletePage()
-    ))
-  };
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,24 +49,8 @@ class CashRegisterPage extends StatelessWidget {
                         ),
                         child: const VariousAmountsContext()
                     ),
-
-                    //3:次へ
-                    Consumer(
-                      builder: (context, ref, child) {
-                        //現在のお釣り
-                        int changeAmount = ref.watch(variousAmountsProviderFamily(VariousAmounts.changeAmount));
-
-                        return NextBtn(
-                          moveNextPageFunc: moveSettlementCompletePage,
-                          isValid: changeAmount >= 0, //お釣りが0円以上のとき有効
-                          btnText: "決済",
-                          alertDialogTexts: AlertDialogTexts(
-                            title: const Text("決済確認"),
-                            content: const Text("決済を完了しますか。\nこの操作は取り消すことができません。")
-                          )
-                        );
-                      },
-                    )
+                    //3:次ページボタン
+                    const MoveSettlementCompletePageBtn()
                   ],
                 ),
               )

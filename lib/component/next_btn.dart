@@ -12,7 +12,7 @@ class NextBtn extends StatelessWidget {
   }) : super(key: key);
 
   ///次のページに遷移するための関数
-  final void Function(BuildContext) moveNextPageFunc;
+  final void Function() moveNextPageFunc;
 
   ///ボタンが有効であるか
   final bool isValid;
@@ -28,7 +28,7 @@ class NextBtn extends StatelessWidget {
   void _moveNextPage(context) async {
   //確認ダイアログ非表示
   if (alertDialogTexts == null) {
-  moveNextPageFunc(context);
+  moveNextPageFunc();
   return;
   }
   //確認ダイアログ表示
@@ -40,7 +40,7 @@ class NextBtn extends StatelessWidget {
   ) ?? false;
 
   if (!context.mounted) return;
-  if (isMoveNextPage) moveNextPageFunc(context);
+  if (isMoveNextPage) moveNextPageFunc();
   }
 
 
