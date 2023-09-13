@@ -1,6 +1,8 @@
 
 import 'package:cash_register_app/component/next_btn.dart';
-import 'package:cash_register_app/page/next_page.dart';
+import 'package:cash_register_app/context/move_settlement_complete_page_btn.dart';
+import 'package:cash_register_app/dialog/alert_dialog_texts.dart';
+import 'package:cash_register_app/page/settlement_complete_page.dart';
 import 'package:cash_register_app/provider/various_amounts_provider_family.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +16,7 @@ import '../context/various_amounts_context.dart';
 class CashRegisterPage extends StatelessWidget {
   const CashRegisterPage({Key? key}) : super(key: key);
 
-  ///会計画面への遷移メソッド
-  void moveNextPage(BuildContext context) => {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const NextPage()
-    ))
-  };
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,28 +40,20 @@ class CashRegisterPage extends StatelessWidget {
                   children: [
                     //1:注文番号
                     const SelectedNoContext(),
+                    const Spacer(),
                     //2:合計金額
                     Container(
                       //TODO:画面半分コンテナをコンポーネント化する
-                        margin: const EdgeInsets.all(30.0),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        margin: const EdgeInsets.only(left: 30, right: 30),
                         decoration: BoxDecoration(
                             border: Border.all(width: 1)
                         ),
                         child: const VariousAmountsContext()
                     ),
-
-                    //3:次へ
-                    Consumer(
-                      builder: (context, ref, child) {
-                        //現在のお釣り
-                        int changeAmount = ref.watch(variousAmountsProviderFamily(VariousAmounts.changeAmount));
-
-                        return NextBtn(
-                          moveNextPageFunc: moveNextPage,
-                          isValid: changeAmount >= 0, //お釣りが0円以上のとき有効
-                        );
-                      },
-                    )
+                    const Spacer(),
+                    //3:次ページボタン
+                    const MoveSettlementCompletePageBtn()
                   ],
                 ),
               )

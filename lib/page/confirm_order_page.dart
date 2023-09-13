@@ -13,10 +13,10 @@ class ConfirmOrderPage extends StatelessWidget {
 
   ///会計画面への遷移メソッド
   void moveCashRegisterPage(BuildContext context) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CashRegisterPage()
-        ));
-      }
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const CashRegisterPage()
+    ));
+  }
 
   //TODO: 注文番号とメニューをプロバイダーから受け取る
   @override
@@ -44,8 +44,7 @@ class ConfirmOrderPage extends StatelessWidget {
                     //2:合計金額
                     const TotalAmountContext(),
                     //3:次へ
-                    NextBtn(moveNextPageFunc: moveCashRegisterPage),
-
+                    NextBtn(moveNextPageFunc: () {moveCashRegisterPage(context);}),
                   ],
                 )
               )
