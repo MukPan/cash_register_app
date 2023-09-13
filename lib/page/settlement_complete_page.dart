@@ -18,27 +18,42 @@ class SettlementCompletePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const DefaultAppBar(title: "決済完了", showBackBtn: false),
-      body: Row(
+      body: Column(
         children: [
-          //左
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              child: const ChangeTable(),
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: const Text(
+            "ご注文ありがとうございます。",
+              style: TextStyle(
+                fontSize: 30,
+              ),
             ),
           ),
-          //右
           Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              child: Column(
+              child: Row(
                 children: [
-                  const SelectedNoContext(),
-                  const ChangeDisplay(),
-                  NextBtn(moveNextPageFunc: () {_moveHomePage(context);}, btnText: "ホームへ"),                ],
-              ),
-            )
-          )
+                  //左
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: const ChangeTable(),
+                    ),
+                  ),
+                  //右
+                  Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            const SelectedNoContext(),
+                            const ChangeDisplay(),
+                            NextBtn(moveNextPageFunc: () {_moveHomePage(context);}, btnText: "ホームへ"),                ],
+                        ),
+                      )
+                  )
+                ],
+              )
+          ),
         ],
       )
     );

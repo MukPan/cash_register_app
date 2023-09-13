@@ -37,9 +37,10 @@ class ChangeTable extends HookConsumerWidget {
       width: double.infinity,
       height: double.infinity,
       child: DataTable(
+          headingRowHeight: 30,
           columns: const [
             DataColumn(label: Text("金種")),
-            DataColumn(label: Text("image")),
+            DataColumn(label: Text("")),
             DataColumn(label: Text("枚数")),
           ],
           rows: _getChangeCountRows(ref)
