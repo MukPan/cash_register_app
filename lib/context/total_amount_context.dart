@@ -17,6 +17,7 @@ class TotalAmountContext extends HookConsumerWidget {
 
     return Container(
       margin: const EdgeInsets.fromLTRB(30, 20, 30, 30),
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       decoration: BoxDecoration(
           border: Border.all(width: 1)
       ),

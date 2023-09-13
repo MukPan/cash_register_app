@@ -13,15 +13,6 @@ class VariousAmountsContext extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //カンマ挿入フォーマット
     final commaInsertFormat = NumberFormat("#,###");
-    // //合計 commaInsertFormat.format
-    // final int totalAmount = ref.watch(totalAmountProvider);
-    // //お預り
-    // final int depositAmount = moneyIdList
-    //     .map((moneyId) => moneyIdStrToInt[moneyId] !* ref.watch(moneyCountProviderFamily(moneyId)).toInt())
-    //     .map((amountNum) => amountNum.toInt())
-    //     .reduce((sum, amount) => sum + amount);
-    // //お釣り
-    // final int changeAmount = depositAmount - totalAmount;
 
     //合計
     final int totalAmount = ref.watch(variousAmountsProviderFamily(VariousAmounts.totalAmount));

@@ -40,15 +40,18 @@ class CashRegisterPage extends StatelessWidget {
                   children: [
                     //1:注文番号
                     const SelectedNoContext(),
+                    const Spacer(),
                     //2:合計金額
                     Container(
                       //TODO:画面半分コンテナをコンポーネント化する
-                        margin: const EdgeInsets.all(30.0),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        margin: const EdgeInsets.only(left: 30, right: 30),
                         decoration: BoxDecoration(
                             border: Border.all(width: 1)
                         ),
                         child: const VariousAmountsContext()
                     ),
+                    const Spacer(),
                     //3:次ページボタン
                     const MoveSettlementCompletePageBtn()
                   ],

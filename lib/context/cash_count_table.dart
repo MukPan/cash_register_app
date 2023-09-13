@@ -30,7 +30,7 @@ class CashCountTable extends HookConsumerWidget {
         .reduce((sum, amount) => sum + amount);
 
     //合計売上額を算出
-    num totalSalesAmount = denominationInfoList
+    num _totalSalesAmount = denominationInfoList
         .map((info) => info.amount * ref.read(salesCountFamily(info.denominationType)))
         .reduce((sum, amount) => sum + amount);
     
@@ -54,7 +54,7 @@ class CashCountTable extends HookConsumerWidget {
           const DataCell(Text("")),
           DataCell(Text(_amountFormat(totalAmount))),
           const DataCell(Text("")),
-          DataCell(Text(_amountFormat(totalSalesAmount), style: _getAmountColor(totalSalesAmount))),
+          DataCell(Text(_amountFormat(_totalSalesAmount), style: _getAmountColor(_totalSalesAmount))),
         ]));
   }
 

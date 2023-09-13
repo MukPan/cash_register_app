@@ -45,7 +45,6 @@ class ConfirmOrderPage extends StatelessWidget {
                     const TotalAmountContext(),
                     //3:次へ
                     NextBtn(moveNextPageFunc: () {moveCashRegisterPage(context);}),
-
                   ],
                 )
               )
