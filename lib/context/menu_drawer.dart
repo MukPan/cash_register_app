@@ -33,6 +33,9 @@ class MenuDrawer extends StatelessWidget {
             title: _titles[index-1],
             selectedColor: Colors.indigo,
             onTap: () { //次ページへ移動
+              //Drawerを閉じてから
+              Navigator.of(context).pop();
+              //次ページへ遷移
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => _nextPages[index-1]
               ));

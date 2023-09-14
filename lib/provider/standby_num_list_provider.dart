@@ -7,7 +7,8 @@ final standbyNumListProvider = StreamProvider.autoDispose<List<int>>((ref) async
 
   //待機番号リストをStreamで返す
   final Stream<List<int>> standbyNumListStream = db.collection("orderNumCollection")
-      .where("isCompleted", isEqualTo: false)
+      .where("isPaid", isEqualTo: true) //支払い完了
+      .where("isCompleted", isEqualTo: false) //未完成
       .snapshots()
       .map((querySnapshot) {
         //snapshotをリストに変換
