@@ -27,7 +27,9 @@ class OrderNumList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder(
-      stream: db.collection("orderNumCollection").snapshots(), //snapshotのstream
+      stream: db.collection("orderNumCollection")
+        .where("isPaid", isEqualTo: false) //会計未完了
+        .snapshots(), //snapshotのstream
       builder: (context, snapshot) {
         //データベースから注文番号リストの取得
         final List<int> currentOrderNumList = snapshot.data?.docs

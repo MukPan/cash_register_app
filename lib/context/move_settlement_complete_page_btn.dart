@@ -74,16 +74,12 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
 
       return NextBtn(
           moveNextPageFunc: () {
-            //ローディング開始
-            // showProgressDialog(context);
             //データベース更新
             _updatePaidIsTrue(context, ref);
             //キャッシュ状態更新
             _updateCashCountState(ref);
             //ページ遷移
             _moveSettlementCompletePage(context);
-            //ローディング終了
-            // closeProgressDialog(context);
           },
           isValid: changeAmount >= 0, //お釣りが0円以上のとき有効
           btnText: "決済",
