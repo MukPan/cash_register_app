@@ -6,7 +6,7 @@ final standbyNumListProvider = StreamProvider.autoDispose<List<int>>((ref) async
   final db = FirebaseFirestore.instance;
 
   //待機番号リストをStreamで返す
-  final standbyNumListStream = db.collection("orderNumCollection")
+  final Stream<List<int>> standbyNumListStream = db.collection("orderNumCollection")
       .where("isCompleted", isEqualTo: false)
       .snapshots()
       .map((querySnapshot) {
