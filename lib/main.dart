@@ -57,10 +57,27 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: DefaultAppBar(title: "注文番号の選択"),
-      drawer: MenuDrawer(),
-      body: OrderNumList(),
+    return Scaffold(
+      appBar: const DefaultAppBar(title: "注文番号の選択"),
+      drawer: const MenuDrawer(),
+      body: const OrderNumList(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orange,
+        onPressed: () {
+          db.collection("orderNumCollection").get().then((querySnapshot) {
+            querySnapshot.docs
+                .map((doc) => doc.reference)
+                .forEach((docRef) {
+                  docRef.update({
+                    "isPaid": false,
+                    "isCompleted": false,
+                  });
+            });
+          });
+
+        },
+        child: const Icon(Icons.cached, color: Colors.white),
+      ),
     );
   }
 }
