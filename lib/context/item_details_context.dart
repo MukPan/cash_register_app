@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../common/show_progress_dialog.dart';
 import '../component/item_counter.dart';
 import '../component/item_img.dart';
 import '../component/item_name.dart';
@@ -46,6 +47,7 @@ class ItemDetailsContext extends HookConsumerWidget {
     if (optionDocRefList.any((optionDocRef) =>
     optionDocRef is! DocumentReference<Map<String, dynamic>>)) return OrderObject();
     if (qty is! int) return OrderObject();
+
 
     //リザルト用パラメータ
     late final String resItemName;
@@ -93,27 +95,7 @@ class ItemDetailsContext extends HookConsumerWidget {
     );
   }
 
-  ///ローディングを表示するメソッド
-  void showProgressDialog(context) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      transitionDuration: const Duration(milliseconds: 500), // これを入れると遅延を入れなくて
-      barrierColor: Colors.black.withOpacity(0.5),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return const Center(
-          child: SizedBox(
-            width: 180,
-            height: 180,
-            child: CircularProgressIndicator(
-              strokeWidth: 10,
-              color: Colors.indigo,
-            ),
-          )
-        );
-      },
-    );
-  }
+
 
 
   ///ビルド
@@ -168,7 +150,6 @@ class ItemDetailsContext extends HookConsumerWidget {
         builder: (_, snapshot) { //snapshot: then()の戻り値の参照？
 
           //未取得の場合空のコンテナを返す
-
           if (!snapshot.hasData) return Container();
           if (!(snapshot.connectionState == ConnectionState.done)) return Container();
 
@@ -185,6 +166,8 @@ class ItemDetailsContext extends HookConsumerWidget {
             itemBuilder: (BuildContext context, int itemIndex) {
               //処理中の値オブジェクト
               final orderObj = orderObjList[itemIndex];
+
+              print(orderObj.optionList);
 
               return Padding(
                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),

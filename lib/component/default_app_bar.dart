@@ -14,9 +14,8 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
       surfaceTintColor: Colors.white,
       automaticallyImplyLeading: showBackBtn,
-      shape: const Border(
-          bottom: BorderSide(color: Colors.grey)
-      ),
+      shadowColor: Colors.grey,
+      elevation: 2
     );
   }
 

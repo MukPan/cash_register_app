@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'context/menu_drawer.dart';
 import 'firebase_options.dart';
 
 ///Firestoreインスタンス
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
         scaffoldBackgroundColor: Colors.white,
         highlightColor: Colors.white,
+        indicatorColor: Colors.white,
         useMaterial3: true,
       ),
       home: const MyHomePage(),
@@ -53,26 +55,28 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
-  ///貨幣枚数管理ページへの遷移メソッド
-  void moveCashCountManagerPage(BuildContext context) => {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const CashCountManagerPage()
-    ))
-  };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const DefaultAppBar(title: "注文番号の選択"),
+      drawer: const MenuDrawer(),
       body: const OrderNumList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { moveCashCountManagerPage(context); },
         backgroundColor: Colors.orange,
-        focusColor: Colors.orange,
-        child: const Icon(
-          Icons.attach_money_sharp,
-          color: Colors.indigo,
-        ),
+        onPressed: () {
+          db.collection("orderNumCollection").get().then((querySnapshot) {
+            querySnapshot.docs
+                .map((doc) => doc.reference)
+                .forEach((docRef) {
+                  docRef.update({
+                    "isPaid": false,
+                    "isCompleted": false,
+                  });
+            });
+          });
+
+        },
+        child: const Icon(Icons.cached, color: Colors.white),
       ),
     );
   }

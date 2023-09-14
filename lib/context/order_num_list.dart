@@ -15,23 +15,6 @@ class OrderNumList extends HookConsumerWidget {
     ref.read(selectedOrderNumProvider.notifier)
         .changeState(orderNum);
 
-    // 全画面プログレスダイアログを表示する関数
-    void showProgressDialog(context) {
-      showGeneralDialog(
-        context: context,
-        barrierDismissible: false,
-        transitionDuration: Duration.zero,
-        barrierColor: Colors.white,
-        pageBuilder: (BuildContext context, Animation animation,
-            Animation secondaryAnimation) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
-    }
-
-
     //次ページの移動
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
@@ -44,7 +27,9 @@ class OrderNumList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder(
-      stream: db.collection("orderNumCollection").snapshots(), //snapshotのstream
+      stream: db.collection("orderNumCollection")
+        .where("isPaid", isEqualTo: false) //会計未完了
+        .snapshots(), //snapshotのstream
       builder: (context, snapshot) {
         //データベースから注文番号リストの取得
         final List<int> currentOrderNumList = snapshot.data?.docs

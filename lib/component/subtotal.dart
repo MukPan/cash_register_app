@@ -18,13 +18,21 @@ class Subtotal extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // if (orderObj.optionList.isEmpty) return Container();
+
     //オブジェクトからパラメータを取り出す
     final int qty = orderObj.itemQty;
     final int itemPrice = orderObj.itemPrice;
-    final int optionsPrice = orderObj
+    int optionsPrice = 0;
+
+    if (orderObj.optionList.isNotEmpty) { //オプションが空でないとき
+      optionsPrice = orderObj
         .optionList
         .map((optObj) => optObj.optionPrice)
         .reduce((sum, price) => sum + price);
+    }
+
+
     //小計 = 個数 * (商品価格 + オプション価格)
     final int subtotal = qty * (itemPrice + optionsPrice);
 
