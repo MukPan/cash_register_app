@@ -47,6 +47,7 @@ class ItemDetailsContext extends HookConsumerWidget {
     optionDocRef is! DocumentReference<Map<String, dynamic>>)) return OrderObject();
     if (qty is! int) return OrderObject();
 
+
     //リザルト用パラメータ
     late final String resItemName;
     late final int resItemPrice;
@@ -184,6 +185,8 @@ class ItemDetailsContext extends HookConsumerWidget {
             itemBuilder: (BuildContext context, int itemIndex) {
               //処理中の値オブジェクト
               final orderObj = orderObjList[itemIndex];
+
+              print(orderObj.optionList);
 
               return Padding(
                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
