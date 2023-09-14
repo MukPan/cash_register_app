@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../common/show_progress_dialog.dart';
 import '../component/item_counter.dart';
 import '../component/item_img.dart';
 import '../component/item_name.dart';
@@ -94,27 +95,7 @@ class ItemDetailsContext extends HookConsumerWidget {
     );
   }
 
-  ///ローディングを表示するメソッド
-  void showProgressDialog(context) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      transitionDuration: const Duration(milliseconds: 500), // これを入れると遅延を入れなくて
-      barrierColor: Colors.black.withOpacity(0.5),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return const Center(
-          child: SizedBox(
-            width: 180,
-            height: 180,
-            child: CircularProgressIndicator(
-              strokeWidth: 10,
-              color: Colors.indigo,
-            ),
-          )
-        );
-      },
-    );
-  }
+
 
 
   ///ビルド

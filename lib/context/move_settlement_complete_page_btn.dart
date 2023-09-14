@@ -1,5 +1,8 @@
+import 'package:cash_register_app/common/show_progress_dialog.dart';
 import 'package:cash_register_app/provider/change_money_count_family.dart';
 import 'package:cash_register_app/provider/sales_count_family.dart';
+import 'package:cash_register_app/provider/selected_order_num_notifier.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -50,6 +53,19 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
     }
   }
 
+  ///firestoreに支払済みであることを伝えるメソッド
+  void _updatePaidIsTrue(BuildContext context, WidgetRef ref) {
+    //インスタンス初期化
+    final db = FirebaseFirestore.instance;
+    //処理中の注文番号管理をプロバイダーから取得
+    final orderNumStr = ref.read(selectedOrderNumProvider).toString();
+    //データベース更新
+    db.collection("orderNumCollection")
+      .doc(orderNumStr)
+      .update({"isPaid": true});
+  }
+
+  ///Widget返却
     @override
     Widget build(BuildContext context, WidgetRef ref) {
       //現在のお釣り
@@ -58,10 +74,16 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
 
       return NextBtn(
           moveNextPageFunc: () {
+            //ローディング開始
+            // showProgressDialog(context);
+            //データベース更新
+            _updatePaidIsTrue(context, ref);
             //キャッシュ状態更新
             _updateCashCountState(ref);
             //ページ遷移
             _moveSettlementCompletePage(context);
+            //ローディング終了
+            // closeProgressDialog(context);
           },
           isValid: changeAmount >= 0, //お釣りが0円以上のとき有効
           btnText: "決済",
