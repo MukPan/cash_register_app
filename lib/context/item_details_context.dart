@@ -168,7 +168,6 @@ class ItemDetailsContext extends HookConsumerWidget {
         builder: (_, snapshot) { //snapshot: then()の戻り値の参照？
 
           //未取得の場合空のコンテナを返す
-
           if (!snapshot.hasData) return Container();
           if (!(snapshot.connectionState == ConnectionState.done)) return Container();
 

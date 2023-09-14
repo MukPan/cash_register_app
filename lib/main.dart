@@ -55,13 +55,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
-  ///貨幣枚数管理ページへの遷移メソッド
-  void moveCashCountManagerPage(BuildContext context) => {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const CashCountManagerPage()
-    ))
-  };
-
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

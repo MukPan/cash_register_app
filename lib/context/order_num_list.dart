@@ -15,23 +15,6 @@ class OrderNumList extends HookConsumerWidget {
     ref.read(selectedOrderNumProvider.notifier)
         .changeState(orderNum);
 
-    // 全画面プログレスダイアログを表示する関数
-    void showProgressDialog(context) {
-      showGeneralDialog(
-        context: context,
-        barrierDismissible: false,
-        transitionDuration: Duration.zero,
-        barrierColor: Colors.white,
-        pageBuilder: (BuildContext context, Animation animation,
-            Animation secondaryAnimation) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
-    }
-
-
     //次ページの移動
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {

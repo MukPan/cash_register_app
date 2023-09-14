@@ -1,4 +1,5 @@
 import 'package:cash_register_app/component/default_app_bar.dart';
+import 'package:cash_register_app/context/completed_num_list.dart';
 import 'package:flutter/material.dart';
 
 import '../context/menu_drawer.dart';
@@ -9,18 +10,19 @@ class CallNumDisplayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const DefaultAppBar(title: "お呼び出し番号管理"),
-      drawer: const MenuDrawer(),
+    return const Scaffold(
+      appBar: DefaultAppBar(title: "お呼び出し番号管理"),
+      drawer: MenuDrawer(),
       body: Row(
         children: [
           //左
-          const Expanded(
+          Expanded(
             child: StandbyNumList(),
           ),
+          VerticalDivider(width: 0, color: Colors.black),
           //右
           Expanded(
-            child: Container(),
+            child: CompletedNumList(),
           )
         ],
       ),
