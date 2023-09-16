@@ -72,6 +72,7 @@ class MyHomePage extends StatelessWidget {
                   docRef.update({
                     "isPaid": false,
                     "isCompleted": false,
+                    "isGave": false,
                   });
             });
           });

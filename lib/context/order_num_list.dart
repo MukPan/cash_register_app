@@ -29,6 +29,8 @@ class OrderNumList extends HookConsumerWidget {
     return StreamBuilder(
       stream: db.collection("orderNumCollection")
         .where("isPaid", isEqualTo: false) //会計未完了
+        .where("isCompleted", isEqualTo: false) //お渡し前
+        .where("isGave", isEqualTo: false) //お渡し前
         .snapshots(), //snapshotのstream
       builder: (context, snapshot) {
         //データベースから注文番号リストの取得

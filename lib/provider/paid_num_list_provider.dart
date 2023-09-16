@@ -9,6 +9,7 @@ final paidNumListProvider = StreamProvider.autoDispose<List<int>>((ref) async* {
   final Stream<List<int>> standbyNumListStream = db.collection("orderNumCollection")
       .where("isPaid", isEqualTo: true) //支払い完了
       .where("isCompleted", isEqualTo: false) //未調理
+      .where("isGave", isEqualTo: false) //お渡し前
       .snapshots()
       .map((querySnapshot) {
     //snapshotをリストに変換
