@@ -1,4 +1,5 @@
 import 'package:cash_register_app/component/order_num.dart';
+import 'package:cash_register_app/context/call_btn.dart';
 import 'package:cash_register_app/provider/all_order_list_provider.dart';
 import 'package:cash_register_app/provider/order_list_family.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,7 +47,12 @@ class CookingList extends HookConsumerWidget {
                       //注文番号(左)
                       Container(
                         margin: const EdgeInsets.all(20),
-                        child: OrderNum(orderNum: paidOrderNum),
+                        child: Column(
+                          children: [
+                            OrderNum(orderNum: paidOrderNum),
+                            const CallBtn()
+                          ],
+                        ),
                       ),
                       //オーダー一覧(右)
                       Expanded(

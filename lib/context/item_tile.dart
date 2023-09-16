@@ -49,7 +49,10 @@ class ItemTile extends StatelessWidget {
             ),
           ),
           //右寄り
-          ItemImg(itemName: orderObj.itemName)
+          Container(
+            margin: const EdgeInsets.only(right: 15),
+            child: ItemImg(itemName: orderObj.itemName, size: 100),
+          )
         ],
       ),
     );
