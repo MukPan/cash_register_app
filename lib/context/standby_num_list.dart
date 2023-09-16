@@ -9,6 +9,8 @@ class StandbyNumList extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final standbyNumListStream = ref.watch(standbyNumListProvider);
 
+    standbyNumListStream.value;
+
     return standbyNumListStream.when(
       loading: () => const CircularProgressIndicator(),
       error: (error, stackTrace) => Text(error.toString()),

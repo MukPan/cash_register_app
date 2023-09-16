@@ -7,7 +7,9 @@ final completedNumListProvider = StreamProvider.autoDispose<List<int>>((ref) asy
 
   //呼出番号リストをStreamで返す
   final Stream<List<int>> completedNumListStream = db.collection("orderNumCollection")
+      .where("isPaid", isEqualTo: true)
       .where("isCompleted", isEqualTo: true)
+      .where("isGave", isEqualTo: false) //お渡し前
       .snapshots()
       .map((querySnapshot) {
     //snapshotをリストに変換

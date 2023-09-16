@@ -16,10 +16,10 @@ class CashCountTable extends HookConsumerWidget {
   }
 
   ///金額を判定して色を付けるメソッド
-  TextStyle _getAmountColor(num amount) {
-    if (amount < 0) return const TextStyle(color: Colors.red);
-    if (amount == 0) return const TextStyle(color: Colors.black);
-    return const TextStyle(color: Colors.blue);
+  Color _getAmountColor(num amount) {
+    if (amount < 0) return Colors.red;
+    if (amount == 0) return Colors.black;
+    return Colors.blue;
   }
 
   ///動的にキャッシュカウントデータを設置する
@@ -42,8 +42,10 @@ class CashCountTable extends HookConsumerWidget {
               DataCell(Text(info.name)), //金種
               DataCell(Text(count.toString())), //枚数
               DataCell(Text(_amountFormat(info.amount*count))), //金額
-              DataCell(Text(salesCount.toString(), style: _getAmountColor(salesCount))), //売上枚数
-              DataCell(Text(_amountFormat(info.amount*salesCount), style: _getAmountColor(info.amount*salesCount))), //売上額
+              DataCell(Text(salesCount.toString(),
+                  style: TextStyle(color: _getAmountColor(salesCount)))), //売上枚数
+              DataCell(Text(_amountFormat(info.amount*salesCount),
+                  style: TextStyle(color: _getAmountColor(info.amount*salesCount)))), //売上額
             ]
         );
       })
@@ -54,14 +56,15 @@ class CashCountTable extends HookConsumerWidget {
           const DataCell(Text("")),
           DataCell(Text(_amountFormat(totalAmount))),
           const DataCell(Text("")),
-          DataCell(Text(_amountFormat(totalSalesAmount), style: _getAmountColor(totalSalesAmount))),
+          DataCell(Text(_amountFormat(totalSalesAmount),
+              style: TextStyle(color: _getAmountColor(totalSalesAmount)))),
         ]));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(left: 20),
       child: DataTable(
         columns: const [
           DataColumn(label: Text("金種")),

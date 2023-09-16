@@ -27,8 +27,8 @@ class CashRegisterPage extends StatelessWidget {
             //注文内容
             Expanded(
                 child: Container(
-                    margin: const EdgeInsets.fromLTRB(20, 20, 0, 10),
-                    child: const CashRegisterContext(),
+                  margin: const EdgeInsets.fromLTRB(20, 20, 0, 10),
+                  child: const CashRegisterContext(),
                 )
             ),
 
@@ -53,7 +53,8 @@ class CashRegisterPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     //3:次ページボタン
-                    const MoveSettlementCompletePageBtn()
+                    const MoveSettlementCompletePageBtn(),
+                    const Spacer(),
                   ],
                 ),
               )

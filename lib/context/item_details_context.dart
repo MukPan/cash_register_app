@@ -1,8 +1,5 @@
-import 'package:cash_register_app/object/option_object.dart';
 import 'package:cash_register_app/object/order_object.dart';
 import 'package:cash_register_app/provider/item_count_family.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,91 +13,19 @@ import '../main.dart';
 import '../provider/money_count_provider_family.dart';
 import '../provider/selected_order_num_notifier.dart';
 import '../provider/various_amounts_provider_family.dart';
+import '../func/convert_doc_to_obj_future.dart';
 //TODO: 合計金額をStateにして、ここから更新する
 //TODO: ロード画面を表示する
 
 class ItemDetailsContext extends HookConsumerWidget {
   const ItemDetailsContext({Key? key}) : super(key: key);
 
-  ///合計金額
-  static int _totalAmount = 0;
-
-  ///合計金額算出用の変数を初期化
-  void initTotalAmount() {
-    _totalAmount = 0;
-  }
-
-  ///商品詳細リストを取得するメソッド
-  ///与えられたドキュメントを値オブジェクトへ変換する
-  Future<OrderObject> _convertDocToObjFuture(
-      QueryDocumentSnapshot<Map<String, dynamic>> doc,
-      WidgetRef ref) async {
-
-    //docから各パラメータ取得
-    final itemDocRef = doc.data()["item"];
-    final optionDocRefList = doc.data()["options"];
-    final qty = doc.data()["qty"];
-
-    //型チェック
-    if (itemDocRef is! DocumentReference<Map<String, dynamic>>) return OrderObject();
-    if (optionDocRefList is! List<dynamic>) return OrderObject();
-    if (optionDocRefList.any((optionDocRef) =>
-    optionDocRef is! DocumentReference<Map<String, dynamic>>)) return OrderObject();
-    if (qty is! int) return OrderObject();
-
-
-    //リザルト用パラメータ
-    late final String resItemName;
-    late final int resItemPrice;
-    final int resItemQty = qty;
-    final List<OptionObject> resOptionList = [];
-
-    //商品詳細を取得
-    await itemDocRef.get().then((DocumentSnapshot doc) {
-      final String itemName = doc.id;
-      final int itemPrice = (doc.data() as Map<String, dynamic>)["price"];
-      //変数に記録
-      resItemName = itemName;
-      resItemPrice = itemPrice;
-
-      //合計金額に加算
-      _totalAmount += itemPrice * qty;
-      // print("$itemPrice * $qty  : $_totalAmount");
-    });
-
-    //オプション詳細を取得
-    for (final optionDocRef in optionDocRefList) {
-      await optionDocRef.get().then((DocumentSnapshot doc) {
-        final String optionName = doc.id;
-        final int optionPrice = (doc.data() as Map<String, dynamic>)["price"];
-        //オプションをリストに追加
-        resOptionList.add(
-            OptionObject(
-                optionName: optionName,
-                optionPrice: optionPrice
-            )
-        );
-        //合計金額に加算
-        _totalAmount += optionPrice * qty;
-        print("$optionPrice * $qty  : $_totalAmount");
-      });
-    }
-
-    //値オブジェクトで返却
-    return OrderObject(
-      itemName: resItemName,
-      itemPrice: resItemPrice,
-      itemQty: resItemQty,
-      optionList: resOptionList
-    );
-  }
-
-
-
 
   ///ビルド
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //合計金額変数を初期化
+    initTotalAmount();
     //注文番号
     final orderNum = ref.read(selectedOrderNumProvider);
     //注文詳細リスト
@@ -114,16 +39,18 @@ class ItemDetailsContext extends HookConsumerWidget {
     //注文番号から注文内容を呼び出す
     //orderCollection(querySnapshot)には複数の商品ドキュメントが格納されている
     final getOrderObjListFuture = orderCollection.get().then((querySnapshot) async {
+      //合計金額変数を初期化
+      initTotalAmount();
       //ローディング開始
       showProgressDialog(context);
       //State更新用の注文詳細リストを作成
       final List<OrderObject> tmpOrderObjList = (await Future.wait(querySnapshot
-          .docs.map((doc) => _convertDocToObjFuture(doc, ref)))) //商品ドキュメントを値オブジェクトに変換
+          .docs.map((doc) => convertDocToObjFuture(doc)))) //商品ドキュメントを値オブジェクトに変換
           .toList();
       //合計金額をプロバイダーに登録&初期化
-      ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = _totalAmount;
+      ref.read(variousAmountsProviderFamily(VariousAmounts.totalAmount).notifier).state = getTotalAmount();
       ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier).state = 0;
-      ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -_totalAmount;
+      ref.read(variousAmountsProviderFamily(VariousAmounts.changeAmount).notifier).state = -getTotalAmount();
       //貨幣の枚数も初期化
       for (String moneyId in moneyIdList) {
         ref.read(moneyCountProviderFamily(moneyId).notifier).state = 0;
@@ -141,7 +68,6 @@ class ItemDetailsContext extends HookConsumerWidget {
       //Future処理完了
       return tmpOrderObjList;
     });
-
 
 
     //return Widget//

@@ -26,21 +26,21 @@ class NextBtn extends StatelessWidget {
 
   ///次ページへ遷移
   void _moveNextPage(context) async {
-  //確認ダイアログ非表示
-  if (alertDialogTexts == null) {
-  moveNextPageFunc();
-  return;
-  }
-  //確認ダイアログ表示
-  final isMoveNextPage = await showDialog(
-  context: context,
-  builder: (content) => DefaultAlertDialog(
-    alertDialogTexts: alertDialogTexts ?? AlertDialogTexts(title: const Text(""), content: const Text("")),
-  )
-  ) ?? false;
+    //確認ダイアログ非表示
+    if (alertDialogTexts == null) {
+    moveNextPageFunc();
+    return;
+    }
+    //確認ダイアログ表示
+    final isMoveNextPage = await showDialog(
+      context: context,
+      builder: (content) => DefaultAlertDialog(
+        alertDialogTexts: alertDialogTexts ?? AlertDialogTexts(title: const Text(""), content: const Text("")),
+      )
+    ) ?? false;
 
-  if (!context.mounted) return;
-  if (isMoveNextPage) moveNextPageFunc();
+    if (!context.mounted) return;
+    if (isMoveNextPage) moveNextPageFunc();
   }
 
 
