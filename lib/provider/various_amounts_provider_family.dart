@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'money_count_provider_family.dart';
 
 //"100円": 5(枚)
-final variousAmountsProviderFamily = StateProviderFamily<int, VariousAmounts>((ref, id) {
+final variousAmountsProviderFamily = StateProvider.family<int, VariousAmounts>((ref, id) {
   return 0; // 初期値を設定
 });
 

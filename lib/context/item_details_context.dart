@@ -24,6 +24,8 @@ class ItemDetailsContext extends HookConsumerWidget {
   ///ビルド
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //合計金額変数を初期化
+    initTotalAmount();
     //注文番号
     final orderNum = ref.read(selectedOrderNumProvider);
     //注文詳細リスト
@@ -37,6 +39,8 @@ class ItemDetailsContext extends HookConsumerWidget {
     //注文番号から注文内容を呼び出す
     //orderCollection(querySnapshot)には複数の商品ドキュメントが格納されている
     final getOrderObjListFuture = orderCollection.get().then((querySnapshot) async {
+      //合計金額変数を初期化
+      initTotalAmount();
       //ローディング開始
       showProgressDialog(context);
       //State更新用の注文詳細リストを作成
