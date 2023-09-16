@@ -4,6 +4,7 @@ import 'package:cash_register_app/component/default_app_bar.dart';
 import 'package:cash_register_app/context/order_num_list.dart';
 import 'package:cash_register_app/page/cash_count_manager_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

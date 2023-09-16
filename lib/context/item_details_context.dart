@@ -66,7 +66,6 @@ class ItemDetailsContext extends HookConsumerWidget {
     });
 
 
-
     //return Widget//
     return FutureBuilder(
         future: getOrderObjListFuture, //Futureを監視
