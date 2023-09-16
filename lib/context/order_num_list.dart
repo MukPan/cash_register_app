@@ -39,6 +39,20 @@ class OrderNumList extends HookConsumerWidget {
             .toList(growable: false)
             ?? <int>[];
 
+
+        //リストが空のとき
+        if (currentOrderNumList.isEmpty) {
+          return const Center(
+              child: Text(
+                "新しい注文はありません。",
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.grey
+                ),
+              )
+          );
+        }
+
         //Widget返却
         return Container(
           margin: const EdgeInsets.all(10),
@@ -50,13 +64,16 @@ class OrderNumList extends HookConsumerWidget {
             ),
             itemCount: currentOrderNumList.length,
             //指定した要素の数分を生成
-            itemBuilder: (context, index) => TextButton(
-                onPressed: () { moveConfirmOrderPage(context, ref, currentOrderNumList[index]); },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
-                ),
-                child: OrderNum(orderNum: currentOrderNumList[index])
-            ),
+            itemBuilder: (context, index) {
+              return TextButton(
+                  onPressed: () { moveConfirmOrderPage(context, ref, currentOrderNumList[index]); },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
+                  ),
+                  child: OrderNum(orderNum: currentOrderNumList[index])
+              );
+            }
+
           ),
         );
       }, //snapshotのstream
