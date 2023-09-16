@@ -21,7 +21,7 @@ class CallingDetailsPage extends StatelessWidget {
       body: RealtimeOrderList(
         orderNumListProvider: completedNumListProvider,
         subStateWidgetFunc: _getGaveBtn,
-
+        emptyText: "お渡し待ちの商品はありません。",
       ),
     );
   }

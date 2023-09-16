@@ -40,9 +40,10 @@ class VariousAmountsContext extends HookConsumerWidget {
     return Center(
         child: Column(children: [ //various_amounts_context
           RichText(
-            text: TextSpan(children: [
+            text: TextSpan(
+                children: [
                   const TextSpan(text: "合計 : \n", style: TextStyle(fontSize: 20)),
-                  TextSpan(text: totalAmountStr, style: const TextStyle(fontSize: 80)),
+                  TextSpan(text: totalAmountStr, style: const TextStyle(fontSize: 80, height: 1)),
                   const TextSpan(text: " 円", style: TextStyle(fontSize: 30))
                 ]
             ),
@@ -51,7 +52,7 @@ class VariousAmountsContext extends HookConsumerWidget {
           RichText(
             text: TextSpan(children: [
                   const TextSpan(text: "お預り : \n", style: TextStyle(fontSize: 20)),
-                  TextSpan(text: depositAmountStr, style: const TextStyle(fontSize: 80)),
+                  TextSpan(text: depositAmountStr, style: const TextStyle(fontSize: 80, height: 1)),
                   const TextSpan(text: " 円", style: TextStyle(fontSize: 30))
                 ]
             ),
@@ -60,7 +61,7 @@ class VariousAmountsContext extends HookConsumerWidget {
           RichText(
             text: TextSpan(children: [
                   const TextSpan(text: "お釣り(差分) : \n", style: TextStyle(fontSize: 20)),
-                  TextSpan(text: changeAmountStr, style: TextStyle(fontSize: 80, color: changeDisplayColor)),
+                  TextSpan(text: changeAmountStr, style: TextStyle(fontSize: 80, height: 1, color: changeDisplayColor)),
                   TextSpan(text: " 円", style: TextStyle(fontSize: 30, color: changeDisplayColor))
                 ]
             ),

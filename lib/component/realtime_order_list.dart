@@ -6,12 +6,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../context/item_tile.dart';
 
 class RealtimeOrderList extends HookConsumerWidget {
-  const RealtimeOrderList({Key? key, required this.orderNumListProvider, required this.subStateWidgetFunc}) : super(key: key);
+  const RealtimeOrderList({
+    Key? key,
+    required this.orderNumListProvider,
+    required this.subStateWidgetFunc,
+    required this.emptyText
+  }) : super(key: key);
 
-  //表示するリストのプロバイダー
+  ///表示するリストのプロバイダー
   final AutoDisposeStreamProvider<List<int>> orderNumListProvider;
-  //注文番号に働きかけるボタンsubStateWidgetFunc
+  ///注文番号に働きかけるボタンsubStateWidgetFunc
   final Widget Function(int orderNum) subStateWidgetFunc;
+  ///リストが空のときに表示するテキスト
+  final String emptyText;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +30,18 @@ class RealtimeOrderList extends HookConsumerWidget {
         loading: () => const CircularProgressIndicator(),
         error: (error, stackTrace) => Text(error.toString()),
         data: (orderNumList) {
-          if (orderNumList.isEmpty) return Container();
+          //リストが空のとき
+          if (orderNumList.isEmpty) {
+            return Center(
+              child: Text(
+                emptyText,
+                style: const TextStyle(
+                  fontSize: 30,
+                  color: Colors.grey
+                ),
+              )
+            );
+          }
           return ListView.separated(
             itemCount: orderNumList.length,
             separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black,),
@@ -46,7 +64,10 @@ class RealtimeOrderList extends HookConsumerWidget {
                           child: Column(
                             children: [
                               OrderNum(orderNum: orderNum),
-                              subStateWidgetFunc(orderNumList[orderNumIndex])
+                              Container(
+                                margin: const EdgeInsets.only(top: 10),
+                                child: subStateWidgetFunc(orderNumList[orderNumIndex]),
+                              ),
                             ],
                           ),
                         ),
