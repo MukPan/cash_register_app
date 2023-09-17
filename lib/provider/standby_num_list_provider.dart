@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final standbyNumListProvider = StreamProvider.autoDispose<List<int>>((ref) async* {
+final standbyNumListProvider = StreamProvider<List<int>>((ref) async* {
   //インスタンスの初期化
   final db = FirebaseFirestore.instance;
 
