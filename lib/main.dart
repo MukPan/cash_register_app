@@ -2,7 +2,10 @@ import 'dart:math' as math;
 
 import 'package:cash_register_app/component/default_app_bar.dart';
 import 'package:cash_register_app/context/order_num_list.dart';
+import 'package:cash_register_app/object/denominations.dart';
 import 'package:cash_register_app/page/cash_count_manager_page.dart';
+import 'package:cash_register_app/provider/cash_count_family.dart';
+import 'package:cash_register_app/provider/sales_count_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,6 +28,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  //デバッグ用
   // debugRepaintRainbowEnabled = true;
 
   runApp(
@@ -32,11 +36,32 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
+
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    //キャッシュカウント初期化
+    db.collection("moneyCountCollection")
+      .doc("moneyCountDoc")
+      .get()
+      .then((docRef) {
+        final totalCountMap = docRef.data()?["totalCountMap"] as Map<String, dynamic>;
+        final tmpTotalCountMap = docRef.data()?["tmpTotalCountMap"] as Map<String, dynamic>;
+
+        //プロバイダー初期化
+        for (final info in denominationInfoList) {
+          ref.read(cashCountFamily(info.denominationType).notifier)
+              .state = totalCountMap[info.name]!;
+          ref.read(salesCountFamily(info.denominationType).notifier)
+              .state = tmpTotalCountMap[info.name]!;
+        }
+      });
+
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

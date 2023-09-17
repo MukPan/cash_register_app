@@ -3,6 +3,7 @@ import 'package:cash_register_app/context/menu_drawer.dart';
 import 'package:flutter/material.dart';
 
 import '../context/cash_count_table.dart';
+import '../context/reset_sales_amount_btn.dart';
 
 class CashCountManagerPage extends StatelessWidget {
   const CashCountManagerPage({Key? key}) : super(key: key);
@@ -12,7 +13,13 @@ class CashCountManagerPage extends StatelessWidget {
     return const Scaffold(
       appBar: DefaultAppBar(title: "貨幣枚数管理"),
       drawer: MenuDrawer(),
-      body: CashCountTable(),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: CashCountTable()),
+          ResetSalesAmountBtn(),
+        ],
+      ),
     );
   }
 }
