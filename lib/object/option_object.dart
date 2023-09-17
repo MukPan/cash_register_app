@@ -8,3 +8,4 @@ class OptionObject {
   //オプション値段
   final int optionPrice;
 }
+

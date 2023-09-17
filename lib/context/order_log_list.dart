@@ -82,7 +82,7 @@ class OrderLogList extends HookConsumerWidget {
                                   //1つの注文番号の注文リスト
                                   final orderObj = orderList[index];
 
-                                  return ItemTile(orderObj: orderObj);
+                                  return ItemTile(orderObj: orderObj, displayPrice: true);
                                 },
                               ),
                             )
