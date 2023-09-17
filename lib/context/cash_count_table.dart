@@ -42,7 +42,7 @@ class CashCountTable extends HookConsumerWidget {
     
     return denominationInfoList.map((info) {
         final int count = ref.watch(cashCountFamily(info.denominationType));
-        final int salesCount = ref.read(salesCountFamily(info.denominationType));
+        final int salesCount = ref.watch(salesCountFamily(info.denominationType));
         //編集中が有効か
         final bool isEdittingTotal = ref.watch(isEdittingTotalFamily(info.denominationType));
         return DataRow(
@@ -104,14 +104,10 @@ class CashCountTable extends HookConsumerWidget {
   }
 
 
-  ///累計枚数を編集する
-
-  ///売上枚数を編集する
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: const EdgeInsets.only(left: 20),
+      margin: const EdgeInsets.only(left: 20, right: 20),
       child: SingleChildScrollView(
         child: DataTable(
           columns: const [
