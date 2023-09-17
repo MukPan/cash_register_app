@@ -4,12 +4,25 @@ import 'package:flutter/material.dart';
 import '../component/item_img.dart';
 
 class ItemTile extends StatelessWidget {
-  const ItemTile({Key? key, required this.orderObj}) : super(key: key);
+  const ItemTile({Key? key, required this.orderObj, this.displayPrice = false}) : super(key: key);
 
   final OrderObject orderObj;
 
+  ///価格を表示するか
+  final bool displayPrice;
+
   @override
   Widget build(BuildContext context) {
+    final int optionAmount = (orderObj.optionList.isNotEmpty)
+        ? orderObj.optionList
+            .map((opt) => opt.optionPrice)
+            .reduce((sum, price) => sum + price)
+        : 0;
+
+    final int totalAmount = orderObj.itemQty * (orderObj.itemPrice + optionAmount);
+
+    // print(totalAmount);
+
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Row(
@@ -30,7 +43,14 @@ class ItemTile extends StatelessWidget {
                       fontSize: 40
                   ),
                 ),
-                //2行目以降
+                //2行目
+                if (displayPrice) Text(
+                  "${totalAmount.toString()}円",
+                  style: const TextStyle(
+                    fontSize: 40
+                  ),
+                ),
+                //3行目以降
                 ListView.builder(
                   shrinkWrap: true, //TODO: いる？
                   physics: const NeverScrollableScrollPhysics(),
