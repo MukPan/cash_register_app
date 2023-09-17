@@ -15,6 +15,8 @@ import '../provider/money_count_provider_family.dart';
 import '../provider/various_amounts_provider_family.dart';
 import '../provider/cash_count_family.dart';
 
+final db = FirebaseFirestore.instance;
+
 class MoveSettlementCompletePageBtn extends HookConsumerWidget {
   const MoveSettlementCompletePageBtn({Key? key}) : super(key: key);
 
@@ -33,6 +35,7 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
     final int changeAmount = ref.read(
         variousAmountsProviderFamily(VariousAmounts.changeAmount));
     int remainder = changeAmount; //残量初期化
+    
 
     for (DenominationInfo info in denominationInfoList.reversed.toList()) {
       //お預り枚数
@@ -51,6 +54,19 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
       ref.read(salesCountFamily(info.denominationType).notifier) //キャッシュ累積
           .state += (receivedCount - changeCount);
     }
+
+    //データベース用のMapを作成、1円から10000円までの枚数を記録
+    final Map<String, int> totalCountMap = {};
+    final Map<String, int> tmpTotalCountMap = {}; //一時的
+    for (final info in denominationInfoList) {
+      totalCountMap.addAll({"totalCountMap.${info.name}": ref.read(cashCountFamily(info.denominationType))});
+      tmpTotalCountMap.addAll({"tmpTotalCountMap.${info.name}": ref.read(salesCountFamily(info.denominationType))});
+    }
+
+    // データベース更新
+    db.collection("moneyCountCollection")
+      .doc("moneyCountDoc")
+      .update(totalCountMap..addAll(tmpTotalCountMap));
   }
 
   ///firestoreに支払済みであることを伝えるメソッド
