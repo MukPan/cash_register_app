@@ -8,6 +8,7 @@ import '../context/item_details_context.dart';
 import '../context/selected_no_context.dart';
 import '../context/total_amount_context.dart';
 import '../database/order_list_family.dart';
+import '../object/order_params.dart';
 import '../provider/selected_order_num_notifier.dart';
 import 'cash_register_page.dart';
 
@@ -29,36 +30,49 @@ class ConfirmOrderPage extends HookConsumerWidget {
     //注文リストAsyVal
     final orderListAsyVal = ref.watch(orderListFamily(orderNum));
 
-    return Scaffold(
-        appBar: const DefaultAppBar(title: "注文内容の確認"),
-        body: Row(
-          children: [
-            //注文内容
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                height: double.infinity,
-                child: ItemDetailsContext(orderListAsyVal: orderListAsyVal) //ItemDetailsContext()
-              )
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                height: double.infinity,
-                child: Column(
-                  children: [
-                    //1:注文番号
-                    const SelectedNoContext(),
-                    //2:合計金額
-                    TotalAmountContext(orderListAsyVal: orderListAsyVal),
-                    //3:次へ
-                    NextBtn(moveNextPageFunc: () {moveCashRegisterPage(context);}),
-                  ],
+    return orderListAsyVal.when(
+      loading: () => const CircularProgressIndicator(),
+      error: (error, stackTrace) => Text(error.toString()),
+      data: (event) {
+        //注文リスト(複数の注文がリストになっている)
+        final orderListSnap = event.snapshot.children.toList();
+        //合計金額を計算
+        final int total = orderListSnap
+            .map((orderSnap) => OrderParams.getInstance(orderSnap).subtotal)
+            .reduce((sum, price) => sum + price);
+
+        return Scaffold(
+            appBar: const DefaultAppBar(title: "注文内容の確認"),
+            body: Row(
+              children: [
+                //注文内容
+                Expanded(
+                    child: Container(
+                        margin: const EdgeInsets.all(10),
+                        height: double.infinity,
+                        child: ItemDetailsContext(orderListSnap: orderListSnap) //ItemDetailsContext()
+                    )
+                ),
+                Expanded(
+                    child: Container(
+                        margin: const EdgeInsets.all(10),
+                        height: double.infinity,
+                        child: Column(
+                          children: [
+                            //1:注文番号
+                            const SelectedNoContext(),
+                            //2:合計金額
+                            TotalAmountContext(total: total),
+                            //3:次へ
+                            NextBtn(moveNextPageFunc: () {moveCashRegisterPage(context);}),
+                          ],
+                        )
+                    )
                 )
-              )
+              ],
             )
-          ],
-        )
+        );
+      }
     );
   }
 }
