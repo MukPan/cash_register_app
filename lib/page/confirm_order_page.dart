@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../component/default_app_bar.dart';
 import '../component/next_btn.dart';
 import '../context/item_details_context.dart';
-import '../context/new_item_details_context.dart';
 import '../context/selected_no_context.dart';
 import '../context/total_amount_context.dart';
 import '../database/order_list_family.dart';
@@ -39,7 +38,7 @@ class ConfirmOrderPage extends HookConsumerWidget {
               child: Container(
                 margin: const EdgeInsets.all(10),
                 height: double.infinity,
-                child: NewItemDetailsContext(orderListAsyVal: orderListAsyVal) //ItemDetailsContext()
+                child: ItemDetailsContext(orderListAsyVal: orderListAsyVal) //ItemDetailsContext()
               )
             ),
             Expanded(
