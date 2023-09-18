@@ -1,0 +1,133 @@
+{
+  "items": {
+    "唐揚げ": {
+      "price": 300,
+      "options": [
+        "焼きチーズ",
+        "マヨネーズ",
+        "ケチャップ"
+      ]
+    },
+    "ポテト": {
+      "price": 200,
+      "options": [
+        "マヨネーズ",
+        "ケチャップ"
+      ]
+    },
+    "たこ焼き": {
+      "price": 300,
+      "options": [
+        "焼きチーズ",
+        "ソース",
+        "青のり",
+        "マヨネーズ"
+      ]
+    }
+  },
+  "options": {
+    "マヨネーズ": {
+      "price": 0
+    },
+    "ケチャップ": {
+      "price": 0
+    },
+    "マヨネーズ&ケチャップ": {
+      "price": 0
+    },
+    "塩": {
+      "price": 0
+    },
+    "ソース": {
+      "price": 0
+    },
+    "青のり": {
+      "price": 0
+    },
+    "焼きチーズ": {
+      "price": 100
+    }
+  },
+  "orderNums": {
+    "132": {
+      "isCompleted": false,
+      "isGave": false,
+      "isPaid": false,
+      "orderList": [
+        {
+          "item": "唐揚げ",
+          "qty": 1,
+          "options": [
+            "焼きチーズ"
+          ]
+        }
+      ]
+    },
+    "134": {
+      "isCompleted": false,
+      "isGave": false,
+      "isPaid": false,
+      "orderList": [
+        {
+          "item": "ポテト",
+          "qty": 3,
+          "options": [
+            "焼きチーズ",
+            "塩"
+          ]
+        },
+        {
+          "item": "ポテト",
+          "qty": 2,
+          "options": [
+            "塩"
+          ]
+        }
+      ]
+    },
+    "621": {
+      "isCompleted": false,
+      "isGave": false,
+      "isPaid": false,
+      "orderList": [
+        {
+          "item": "たこ焼き",
+          "qty": 3,
+          "options": [
+            "ソース",
+            "青のり",
+            "焼きチーズ"
+          ]
+        },
+        {
+          "item": "たこ焼き",
+          "qty": 1,
+          "options": [
+            "ソース",
+            "青のり"
+          ]
+        },
+        {
+          "item": "唐揚げ",
+          "qty": 2,
+          "options": [
+            "マヨネーズ"
+          ]
+        }
+      ]
+    },
+    "622": {
+      "isCompleted": false,
+      "isGave": false,
+      "isPaid": false,
+      "orderList": [
+        {
+          "item": "唐揚げ",
+          "qty": 2,
+          "options": [
+          ]
+        }
+      ]
+    }
+  }
+}

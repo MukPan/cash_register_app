@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '729459310329',
     projectId: 'simplified-ordering-system',
     authDomain: 'simplified-ordering-system.firebaseapp.com',
+    databaseURL: 'https://simplified-ordering-system-default-rtdb.firebaseio.com',
     storageBucket: 'simplified-ordering-system.appspot.com',
     measurementId: 'G-8M6QRCMJYN',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:729459310329:android:60d4942089d3ffdd1aec28',
     messagingSenderId: '729459310329',
     projectId: 'simplified-ordering-system',
+    databaseURL: 'https://simplified-ordering-system-default-rtdb.firebaseio.com',
     storageBucket: 'simplified-ordering-system.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:729459310329:ios:bc4a627f4a93f47b1aec28',
     messagingSenderId: '729459310329',
     projectId: 'simplified-ordering-system',
+    databaseURL: 'https://simplified-ordering-system-default-rtdb.firebaseio.com',
     storageBucket: 'simplified-ordering-system.appspot.com',
     iosClientId: '729459310329-968e1hf7ti9sfq28u97ummq0dp27l329.apps.googleusercontent.com',
     iosBundleId: 'com.example.cashRegisterApp',
@@ -76,6 +79,7 @@ class DefaultFirebaseOptions {
     appId: '1:729459310329:ios:853a0f487ae52b591aec28',
     messagingSenderId: '729459310329',
     projectId: 'simplified-ordering-system',
+    databaseURL: 'https://simplified-ordering-system-default-rtdb.firebaseio.com',
     storageBucket: 'simplified-ordering-system.appspot.com',
     iosClientId: '729459310329-t4bkevoh23ubmm6rtr5ku3fav60bep6i.apps.googleusercontent.com',
     iosBundleId: 'com.example.cashRegisterApp.RunnerTests',

@@ -14,9 +14,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'context/menu_drawer.dart';
 import 'firebase_options.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 ///Firestoreインスタンス
 final db = FirebaseFirestore.instance;
+///RealtimeDatabaseインスタンス
+FirebaseDatabase database = FirebaseDatabase.instance;
 
 //TODO: 選択した注文番号のプロバイダーを作る
 

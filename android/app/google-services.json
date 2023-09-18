@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "729459310329",
+    "firebase_url": "https://simplified-ordering-system-default-rtdb.firebaseio.com",
     "project_id": "simplified-ordering-system",
     "storage_bucket": "simplified-ordering-system.appspot.com"
   },
@@ -29,6 +30,49 @@
             {
               "client_id": "729459310329-fl7nnjjksdebvje5h5gsrajqausslska.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "729459310329-968e1hf7ti9sfq28u97ummq0dp27l329.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cashRegisterApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729459310329:android:1bf2579c423d1eac1aec28",
+        "android_client_info": {
+          "package_name": "com.example.ordering_system_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729459310329-fl7nnjjksdebvje5h5gsrajqausslska.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfT_7V9laOVbeMZMbMwn8DCBo_Y-1TsrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729459310329-fl7nnjjksdebvje5h5gsrajqausslska.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "729459310329-968e1hf7ti9sfq28u97ummq0dp27l329.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cashRegisterApp"
+              }
             }
           ]
         }
