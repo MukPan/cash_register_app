@@ -5,25 +5,25 @@ import '../dialog/remove_item_alert_dialog.dart';
 import '../provider/item_count_family.dart';
 
 class ItemCounter extends HookConsumerWidget {
-  const ItemCounter({Key? key, required this.index}) : super(key: key); //required this.index
+  const ItemCounter({Key? key, required this.qty}) : super(key: key); //required this.index
 
   ///行番号
-  final int index;
+  final int qty;
 
   ///個数増加
-  void _increaseCount(WidgetRef ref) {
-    ref.read(itemCountFamily(index).notifier).state++; //書込
-  }
+  // void _increaseCount(WidgetRef ref) {
+  //   ref.read(itemCountFamily(index).notifier).state++; //書込
+  // }
 
   ///個数減少
-  void _decreaseCount(WidgetRef ref) {
-    ref.read(itemCountFamily(index).notifier).state--; //書込
-  }
+  // void _decreaseCount(WidgetRef ref) {
+  //   ref.read(itemCountFamily(index).notifier).state--; //書込
+  // }
 
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  final int count = ref.watch(itemCountFamily(index)); //読取
+  // final int count = ref.watch(itemCountFamily(index)); //読取
   const bool countBtnIsEnabled = false;
 
     return Container(
@@ -37,25 +37,25 @@ class ItemCounter extends HookConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-            onPressed: (count <= 0 || !countBtnIsEnabled) ? null : () async {
+            onPressed: (qty <= 0 || !countBtnIsEnabled) ? null : () async {
               //カウントが1のとき
               bool isRemove = false;
-              if (count == 1) {
+              if (qty == 1) {
                 isRemove = await showDialog(
                     context: context,
                     builder: (content) => const RemoveItemAlertDialog()
                 ) ?? false;
               }
 
-              if (count > 1 || isRemove) _decreaseCount(ref);
+              // if (qty > 1 || isRemove) _decreaseCount(ref);
 
             },
-            icon: (count <= 1) ? const Icon(Icons.delete) : const Icon(Icons.remove)
+            icon: (qty <= 1) ? const Icon(Icons.delete) : const Icon(Icons.remove)
         ),
-        Text(count.toString()),
+        Text(qty.toString()),
         IconButton(
-            onPressed: (count >= 5 || !countBtnIsEnabled) ? null : () { //上限を設ける
-              _increaseCount(ref);
+            onPressed: (qty >= 5 || !countBtnIsEnabled) ? null : () { //上限を設ける
+              // _increaseCount(ref);
             },
             icon: const Icon(Icons.add)
         ),

@@ -6,7 +6,7 @@ import '../component/order_num.dart';
 import '../main.dart';
 import '../page/confirm_order_page.dart';
 import '../provider/selected_order_num_notifier.dart';
-import '../provider/temp_order_list_provider.dart';
+import '../database/temp_order_num_list_provider.dart';
 
 final db2 = FirebaseDatabase.instance;
 
@@ -30,8 +30,8 @@ class OrderNumList extends HookConsumerWidget {
   //onValue
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-  final tempOrderListAsyncVal = ref.watch(tempOrderListProvider);
+  //dbから仮注文番号リストを取得
+  final tempOrderListAsyncVal = ref.watch(tempOrderNumListProvider);
 
 
   return tempOrderListAsyncVal.when(

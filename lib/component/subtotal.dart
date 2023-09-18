@@ -10,31 +10,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../provider/item_count_family.dart';
 
 class Subtotal extends HookConsumerWidget {
-  const Subtotal({Key? key, required this.orderObj}) : super(key: key);
+  const Subtotal({Key? key, required this.subtotal}) : super(key: key);
 
   ///商品値オブジェクト
-  final OrderObject orderObj;
+  final int subtotal;
 
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // if (orderObj.optionList.isEmpty) return Container();
-
-    //オブジェクトからパラメータを取り出す
-    final int qty = orderObj.itemQty;
-    final int itemPrice = orderObj.itemPrice;
-    int optionsPrice = 0;
-
-    if (orderObj.optionList.isNotEmpty) { //オプションが空でないとき
-      optionsPrice = orderObj
-        .optionList
-        .map((optObj) => optObj.optionPrice)
-        .reduce((sum, price) => sum + price);
-    }
-
-
-    //小計 = 個数 * (商品価格 + オプション価格)
-    final int subtotal = qty * (itemPrice + optionsPrice);
 
     return Container(
       margin: const EdgeInsets.only(top: 10, right: 10),

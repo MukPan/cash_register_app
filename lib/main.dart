@@ -13,8 +13,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'context/menu_drawer.dart';
+import 'database/opt_infos.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
+
+import 'database/item_infos.dart';
 
 ///Firestoreインスタンス
 final db = FirebaseFirestore.instance;
@@ -30,6 +33,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  //参照用データ初期化
+  itemInfos.fetchData();
+  optInfos.fetchData();
 
   //デバッグ用
   // debugRepaintRainbowEnabled = true;
