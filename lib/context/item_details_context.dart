@@ -24,7 +24,7 @@ class ItemDetailsContext extends HookConsumerWidget {
         itemBuilder: (_, index) {
           final orderSnap = orderListSnap[index];
           //各パラメータ取り出し
-          final orderParams = OrderParams.getInstance(orderSnap);
+          final orderParams = OrderParams.getInstanceFromSnap(orderSnap);
           final String itemName = orderParams.itemName; //"唐揚げ"
           final int qty = orderParams.qty; //3(個)
           final List<String> optNameList = orderParams.optNameList; //["焼きチーズ", "ケチャップ"]

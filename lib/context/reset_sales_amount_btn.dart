@@ -8,7 +8,6 @@ import '../dialog/alert_dialog_texts.dart';
 import '../dialog/default_alert_dialog.dart';
 import '../object/denominations.dart';
 
-final db = FirebaseFirestore.instance;
 final db2 = FirebaseDatabase.instance;
 
 class ResetSalesAmountBtn extends HookConsumerWidget {
@@ -42,13 +41,6 @@ class ResetSalesAmountBtn extends HookConsumerWidget {
     //データベース更新
     db2.ref("moneyCount/tmpTotalCountMap/")
       .update(initTmpTotalCountMap);
-
-    // db.collection("moneyCountCollection")
-    //     .doc("moneyCountDoc")
-    //     .get()
-    //     .then((docRef) {
-    //       docRef.reference.update(initTmpTotalCountMap);
-    // });
   }
 
   @override

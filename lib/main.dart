@@ -67,26 +67,9 @@ class MyApp extends HookConsumerWidget {
                 .state = totalCountMap[info.name];
             ref.read(salesCountFamily(info.denominationType).notifier)
                 .state = tmpTotalCountMap[info.name];
-            print("キャッシュカウント用プロバイダ初期化完了");
           }
+          print("キャッシュカウント用プロバイダ初期化完了");
         });
-    // db.collection("moneyCountCollection")
-    //   .doc("moneyCountDoc")
-    //   .get()
-    //   .then((docRef) {
-    //     final totalCountMap = docRef.data()?["totalCountMap"] as Map<String, dynamic>;
-    //     final tmpTotalCountMap = docRef.data()?["tmpTotalCountMap"] as Map<String, dynamic>;
-    //
-    //     //プロバイダー初期化
-    //     for (final info in denominationInfoList) {
-    //       ref.read(cashCountFamily(info.denominationType).notifier)
-    //           .state = totalCountMap[info.name]!;
-    //       ref.read(salesCountFamily(info.denominationType).notifier)
-    //           .state = tmpTotalCountMap[info.name]!;
-    //     }
-    //   });
-
-
 
 
 

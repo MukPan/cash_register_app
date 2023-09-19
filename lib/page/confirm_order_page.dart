@@ -53,7 +53,7 @@ class ConfirmOrderPage extends HookConsumerWidget {
         final orderListSnap = event.snapshot.children.toList();
         //合計金額を計算
         final int total = orderListSnap
-            .map((orderSnap) => OrderParams.getInstance(orderSnap).subtotal)
+            .map((orderSnap) => OrderParams.getInstanceFromSnap(orderSnap).subtotal)
             .reduce((sum, price) => sum + price);
 
         return Scaffold(

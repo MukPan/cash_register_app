@@ -1,6 +1,5 @@
 import 'package:cash_register_app/component/order_num.dart';
 import 'package:cash_register_app/context/order_status_mark.dart';
-import 'package:cash_register_app/provider/order_list_family.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';

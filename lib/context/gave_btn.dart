@@ -8,7 +8,6 @@ import '../dialog/default_alert_dialog.dart';
 
 //インスタンス初期化
 final db2 = FirebaseDatabase.instance;
-final db = FirebaseFirestore.instance;
 
 class GaveBtn extends StatelessWidget {
   const GaveBtn({Key? key, required this.orderNum}) : super(key: key);
@@ -34,14 +33,6 @@ class GaveBtn extends StatelessWidget {
     //データベース更新
     db2.ref("orderNums/${orderNum.toString()}/")
         .update({"orderStatus": OrderStatus.gave.name});
-
-    // db.collection("orderNumCollection")
-    //     .doc(orderNum.toString())
-    //     .get()
-    //     .then((docRef) {
-    //   docRef.reference
-    //       .update({"isGave": true});
-    // });
   }
 
   @override

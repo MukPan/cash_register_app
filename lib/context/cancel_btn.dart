@@ -1,7 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import '../database/order_status.dart';
 import '../dialog/alert_dialog_texts.dart';
 import '../dialog/default_alert_dialog.dart';
 

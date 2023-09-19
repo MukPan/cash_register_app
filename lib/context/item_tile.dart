@@ -1,27 +1,29 @@
+import 'package:cash_register_app/database/item_infos.dart';
+import 'package:cash_register_app/database/opt_infos.dart';
 import 'package:cash_register_app/object/order_object.dart';
 import 'package:flutter/material.dart';
 
 import '../component/item_img.dart';
+import '../object/order_params.dart';
 
 class ItemTile extends StatelessWidget {
-  const ItemTile({Key? key, required this.orderObj, this.displayPrice = false}) : super(key: key);
+  const ItemTile({Key? key, required this.orderParams, this.displayPrice = false}) : super(key: key);
 
-  final OrderObject orderObj;
+  final OrderParams orderParams;
 
   ///価格を表示するか
   final bool displayPrice;
 
   @override
   Widget build(BuildContext context) {
-    final int optionAmount = (orderObj.optionList.isNotEmpty)
-        ? orderObj.optionList
-            .map((opt) => opt.optionPrice)
-            .reduce((sum, price) => sum + price)
-        : 0;
+    //各パラメータ取り出し
+    final String itemName = orderParams.itemName; //"唐揚げ"
+    final int qty = orderParams.qty; //3(個)
+    final List<String> optNameList = orderParams.optNameList; //["焼きチーズ", "ケチャップ"]
+    final int subtotal = orderParams.subtotal; //1200(円)
 
-    final int totalAmount = orderObj.itemQty * (orderObj.itemPrice + optionAmount);
 
-    // print(totalAmount);
+
 
     return Padding(
       padding: const EdgeInsets.all(15),
@@ -37,7 +39,7 @@ class ItemTile extends StatelessWidget {
               children: [
                 //1行目
                 Text(
-                  "${orderObj.itemName}  ×${orderObj.itemQty.toString()}",
+                  "$itemName  ×${qty.toString()}",
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 40
@@ -45,20 +47,20 @@ class ItemTile extends StatelessWidget {
                 ),
                 //2行目
                 if (displayPrice) Text(
-                  "${totalAmount.toString()}円",
+                  "${subtotal.toString()}円",
                   style: const TextStyle(
                     fontSize: 40
                   ),
                 ),
                 //3行目以降
                 ListView.builder(
-                  shrinkWrap: true, //TODO: いる？
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: orderObj.optionList.length,
+                  itemCount: optNameList.length,
                   //Widget返却
                   itemBuilder: (BuildContext context, int optIndex) {
                     return Text(
-                      "・${orderObj.optionList[optIndex].optionName}",
+                      "・${optNameList[optIndex]}",
                       style: const TextStyle(
                         fontSize: 30,
                       ),
@@ -71,7 +73,7 @@ class ItemTile extends StatelessWidget {
           //右寄り
           Container(
             margin: const EdgeInsets.only(right: 15),
-            child: ItemImg(itemName: orderObj.itemName, size: 100),
+            child: ItemImg(itemName: itemName, size: 100),
           )
         ],
       ),

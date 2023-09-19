@@ -1,10 +1,12 @@
 import 'package:cash_register_app/component/order_num.dart';
-import 'package:cash_register_app/provider/order_list_family.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../context/item_tile.dart';
+import '../database/order_list_family.dart';
+import '../object/order_params.dart';
 
 class RealtimeOrderList extends HookConsumerWidget {
   const RealtimeOrderList({
@@ -30,12 +32,10 @@ class RealtimeOrderList extends HookConsumerWidget {
         loading: () => const CircularProgressIndicator(),
         error: (error, stackTrace) => Text(error.toString()),
         data: (event) {
-          //データベースから注文番号リストの取得
-          final List<int> orderNums = event.snapshot.children //親：orderNums
-              .map((childSnapshot) => int.parse(childSnapshot.key ?? "0")) //132, 134...
-              .toList();
+          //注文番号リスト
+          final orderNumListSnap = event.snapshot.children.toList();
           //リストが空のとき
-          if (orderNums.isEmpty) {
+          if (orderNumListSnap.isEmpty) {
             return Center(
               child: Text(
                 emptyText,
@@ -46,60 +46,122 @@ class RealtimeOrderList extends HookConsumerWidget {
               )
             );
           }
+
           return ListView.separated(
-            itemCount: orderNums.length,
-            separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black,),
-            itemBuilder: (parentContext, orderNumIndex) {
-              //注文番号リストに更新が入った分だけ新しい項目を作成する
-              final orderListAsyncVal = ref.watch(orderListFamily(orderNums[orderNumIndex]));
+              itemCount: orderNumListSnap.length,
+              separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black,),
+              itemBuilder: (_, orderNumIndex) {
+                //1つの注文番号の複数の注文ドキュメント
+                final orderNumSnap = orderNumListSnap[orderNumIndex];
+                final orderNum = int.parse(orderNumSnap.key ?? "0");
+                final mapInOrderNum = orderNumSnap.value as Map<String, dynamic>; //{orderList: [{},{},{}], orderStatus: gave}
+                final orderList = mapInOrderNum["orderList"] as List<dynamic>; //[{},{},{}]
 
-              return orderListAsyncVal.when(
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) => Text(error.toString()),
-                  data: (orderList) {
-                    //注文番号
-                    final orderNum = orderNums[orderNumIndex];
-                    return Row(
-                      children: [
-                        //注文番号(左)
-                        Container(
-                          margin: const EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              OrderNum(orderNum: orderNum),
-                              Container(
-                                margin: const EdgeInsets.only(top: 10),
-                                child: subStateWidgetFunc(orderNums[orderNumIndex]),
-                              ),
-                            ],
+                return Row(
+                  children: [
+                    //注文番号(左)
+                    Container(
+                      margin: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          OrderNum(orderNum: orderNum),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            child: subStateWidgetFunc(orderNum),
                           ),
-                        ),
-                        //オーダー一覧(右)
-                        Expanded(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(left: BorderSide(color: Colors.grey)),
-                              ),
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: orderList.length,
-                                separatorBuilder: (context, index) => const Divider(height: 0),
-                                itemBuilder: (context, index) {
-                                  //1つの注文番号の注文リスト
-                                  final orderObj = orderList[index];
-
-                                  return ItemTile(orderObj: orderObj);
-                                },
-                              ),
-                            )
-                        ),
-                      ],
-                    );
-                  }
-              );
-            },
+                        ],
+                      ),
+                    ),
+                    //オーダー一覧(右)
+                    Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            border: Border(left: BorderSide(color: Colors.grey)),
+                          ),
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: orderList.length,
+                            separatorBuilder: (context, index) => const Divider(height: 0),
+                            itemBuilder: (context, index) {
+                              //1つの注文番号の1つの注文ドキュメント
+                              final orderMap = orderList[index] as Map<String, dynamic>;
+                              final orderParams = OrderParams.getInstance(orderMap);
+                              // return Text("nu");
+                              return ItemTile(orderParams: orderParams);
+                            },
+                          ),
+                        )
+                    ),
+                  ],
+                );
+              }
           );
+
+
+          // return ListView.separated(
+          //   itemCount: orderNumListSnap.length,
+          //   separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black,),
+          //   itemBuilder: (_, index) {
+          //     final orderSnap = orderNumListSnap[index];
+          //     //各パラメータ取り出し
+          //     final orderParams = OrderParams.getInstance(orderSnap); //各種データ
+          //     final int orderNum = orderParams.orderNum; //132
+          //
+          //     return Row(
+          //       children: [
+          //         //注文番号(左)
+          //         Container(
+          //           margin: const EdgeInsets.all(20),
+          //           child: Column(
+          //             children: [
+          //               OrderNum(orderNum: orderNum),
+          //               Container(
+          //                 margin: const EdgeInsets.only(top: 10),
+          //                 child: subStateWidgetFunc(orderNum),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         //オーダー一覧(右)
+          //         Expanded(
+          //             child: Container(
+          //               decoration: const BoxDecoration(
+          //                 border: Border(left: BorderSide(color: Colors.grey)),
+          //               ),
+          //               child: ListView.separated(
+          //                 shrinkWrap: true,
+          //                 physics: const NeverScrollableScrollPhysics(),
+          //                 itemCount: orderList.length,
+          //                 separatorBuilder: (context, index) => const Divider(height: 0),
+          //                 itemBuilder: (context, index) {
+          //                   //1つの注文番号の注文リスト
+          //                   final orderObj = orderList[index];
+          //
+          //                   return ItemTile(orderObj: orderObj);
+          //                 },
+          //               ),
+          //             )
+          //         ),
+          //       ],
+          //     );
+          //     //注文番号リストに更新が入った分だけ新しい項目を作成する
+          //     // final orderListAsyncVal = ref.watch(orderListFamily(orderNums[orderNumIndex]));
+          //
+          //     return orderListAsyncVal.when(
+          //         loading: () => const CircularProgressIndicator(),
+          //         error: (error, stackTrace) => Text(error.toString()),
+          //         data: (event) {
+          //           //注文リスト(複数の注文がリストになっている)
+          //           final orderListSnap = event.snapshot.children.toList();
+          //
+          //           //注文番号
+          //           final orderNum = orderNums[orderNumIndex];
+          //
+          //         }
+          //     );
+          //   },
+          // );
         }
     );
   }

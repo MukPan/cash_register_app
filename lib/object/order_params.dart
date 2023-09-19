@@ -13,6 +13,7 @@ class OrderParams {
     required this.subtotal
   });
 
+
   ///商品名
   final String itemName;
   ///個数
@@ -22,8 +23,19 @@ class OrderParams {
   ///(オプション含めた)小計
   final int subtotal;
 
-  static OrderParams getInstance(DataSnapshot orderSnap) {
+
+  ///DataSnapshotからインスタンス作成
+  ///orderSnap.valueが
+  ///{item: たこ焼き, options: [ソース, 青のり, 焼きチーズ], qty: 3}の形
+  static OrderParams getInstanceFromSnap(DataSnapshot orderSnap) {
     final orderMap = orderSnap.value as Map<String, dynamic>; //Object?型を変換
+
+    return getInstance(orderMap);
+  }
+
+  ///Mapからインスタンス作成
+  ///{item: たこ焼き, options: [ソース, 青のり, 焼きチーズ], qty: 3}の形
+  static OrderParams getInstance(Map<String, dynamic> orderMap) {
     //各パラメータ取り出し
     final String itemName = orderMap["item"]; //"唐揚げ"
     final int qty = orderMap["qty"]; //3(個)
@@ -33,8 +45,8 @@ class OrderParams {
     final int itemPrice = itemInfos.itemPriceMap[itemName] ?? 0;
     final int optsPrice = (optNameList.isNotEmpty)
         ? optNameList
-            .map((optName) => optInfos.optPriceMap[optName] ?? 0)
-            .reduce((sum, price) => sum + price)
+        .map((optName) => optInfos.optPriceMap[optName] ?? 0)
+        .reduce((sum, price) => sum + price)
         : 0;
     final int subtotal = qty * (itemPrice + optsPrice);
 
@@ -43,6 +55,6 @@ class OrderParams {
         qty: qty,
         optNameList: optNameList,
         subtotal: subtotal
-      );
+    );
   }
 }
