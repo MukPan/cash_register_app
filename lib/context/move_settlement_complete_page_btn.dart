@@ -81,6 +81,18 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
       .update({"isPaid": true});
   }
 
+  ///プロバイダーを初期化する
+  void _initProviderState(WidgetRef ref) {
+    //お預り金額
+    ref.read(variousAmountsProviderFamily(VariousAmounts.depositAmount).notifier)
+      .state = 0;
+    //レジの貨幣枚数カウント
+    for (final moneyId in moneyIdList) {
+      ref.read(moneyCountProviderFamily(moneyId).notifier)
+        .state = 0;
+    }
+  }
+
   ///Widget返却
     @override
     Widget build(BuildContext context, WidgetRef ref) {
@@ -94,6 +106,8 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
             _updatePaidIsTrue(context, ref);
             //キャッシュ状態更新
             _updateCashCountState(ref);
+            //お預り金額と初期化
+            _initProviderState(ref);
             //ページ遷移
             _moveSettlementCompletePage(context);
           },
