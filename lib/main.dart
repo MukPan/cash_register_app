@@ -14,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'context/menu_drawer.dart';
 import 'database/opt_infos.dart';
+import 'database/order_status.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -121,9 +122,7 @@ class MyHomePage extends StatelessWidget {
           for (final orderNum in ["132", "134", "621", "622"]) {
             db2.ref("orderNums/$orderNum/")
               .update({
-                "isPaid": false,
-                "isCompleted": false,
-                "isGave": false,
+                "orderStatus": OrderStatus.temp.name
               });
           }
           // db.collection("orderNumCollection").get().then((querySnapshot) {

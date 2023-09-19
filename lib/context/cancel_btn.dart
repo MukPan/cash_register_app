@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -6,12 +5,10 @@ import '../database/order_status.dart';
 import '../dialog/alert_dialog_texts.dart';
 import '../dialog/default_alert_dialog.dart';
 
-//インスタンス初期化
 final db2 = FirebaseDatabase.instance;
-final db = FirebaseFirestore.instance;
 
-class GaveBtn extends StatelessWidget {
-  const GaveBtn({Key? key, required this.orderNum}) : super(key: key);
+class CancelBtn extends StatelessWidget {
+  const CancelBtn({Key? key, required this.orderNum}) : super(key: key);
 
   ///注文番号
   final int orderNum;
@@ -23,8 +20,8 @@ class GaveBtn extends StatelessWidget {
         context: context,
         builder: (content) => DefaultAlertDialog(
           alertDialogTexts: AlertDialogTexts(
-            title: const Text("お渡し確認"),
-            content: const Text("この注文番号のお渡しは完了しましたか。\nこの操作は取り消すことができません。")),
+              title: const Text("取消確認"),
+              content: const Text("この注文を取り消しますか。\nこの操作を行った後に払い戻しを行ってください。\nこの操作は取り消すことができません。\n(キャッシュカウントの更新とデータベース上から注文番号が削除されるのは未実装)")),
         )
     ) ?? false;
 
@@ -32,8 +29,8 @@ class GaveBtn extends StatelessWidget {
     if (!isAllReady) return;
 
     //データベース更新
-    db2.ref("orderNums/${orderNum.toString()}/")
-        .update({"orderStatus": OrderStatus.gave.name});
+    // db2.ref("orderNums/${orderNum.toString()}/")
+    //     .update({"orderStatus": OrderStatus.gave.name});
 
     // db.collection("orderNumCollection")
     //     .doc(orderNum.toString())
@@ -50,9 +47,9 @@ class GaveBtn extends StatelessWidget {
       onPressed: () { _delFromCallingList(context); },
       style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
-          backgroundColor: Colors.green
+          backgroundColor: Colors.grey
       ),
-      child: const Text("お渡し"),
+      child: const Text("取消"),
     );
   }
 }

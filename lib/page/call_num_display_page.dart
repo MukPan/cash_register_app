@@ -1,5 +1,5 @@
 import 'package:cash_register_app/component/default_app_bar.dart';
-import 'package:cash_register_app/context/completed_num_list.dart';
+import 'package:cash_register_app/context/made_num_list.dart';
 import 'package:flutter/material.dart';
 
 import '../context/menu_drawer.dart';
@@ -22,7 +22,7 @@ class CallNumDisplayPage extends StatelessWidget {
           VerticalDivider(width: 0, color: Colors.black),
           //右
           Expanded(
-            child: CompletedNumList(),
+            child: MadeNumList(),
           )
         ],
       ),

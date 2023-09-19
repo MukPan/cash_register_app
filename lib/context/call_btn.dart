@@ -1,11 +1,14 @@
+import 'package:cash_register_app/database/order_status.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../dialog/alert_dialog_texts.dart';
 import '../dialog/default_alert_dialog.dart';
 
 //インスタンス初期化
-final db = FirebaseFirestore.instance;
+final db2 = FirebaseDatabase.instance;
+// final db = FirebaseFirestore.instance;
 
 class CallBtn extends StatelessWidget {
   const CallBtn({Key? key, required this.orderNum}) : super(key: key);
@@ -30,13 +33,18 @@ class CallBtn extends StatelessWidget {
     if (!isAllReady) return;
 
     //データベース更新
-    db.collection("orderNumCollection")
-        .doc(orderNum.toString())
-        .get()
-        .then((docRef) {
-          docRef.reference
-            .update({"isCompleted": true,});
-        });
+    db2.ref("orderNums/${orderNum.toString()}/")
+      .update({"orderStatus": OrderStatus.made.name});
+
+    // db.collection("orderNumCollection")
+    //     .doc(orderNum.toString())
+    //     .get()
+    //     .then((docRef) {
+    //       docRef.reference
+    //         .update({"isCompleted": true,});
+    //     });
+
+
   }
 
   @override

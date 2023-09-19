@@ -1,5 +1,6 @@
 import 'package:cash_register_app/component/order_num.dart';
 import 'package:cash_register_app/provider/order_list_family.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -14,7 +15,7 @@ class RealtimeOrderList extends HookConsumerWidget {
   }) : super(key: key);
 
   ///表示するリストのプロバイダー
-  final StreamProvider<List<int>> orderNumListProvider;
+  final StreamProvider<DatabaseEvent> orderNumListProvider;
   ///注文番号に働きかけるボタンsubStateWidgetFunc
   final Widget Function(int orderNum) subStateWidgetFunc;
   ///リストが空のときに表示するテキスト
@@ -24,14 +25,17 @@ class RealtimeOrderList extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //注文番号リスト
     final orderNumListAsyncVal = ref.watch(orderNumListProvider);
-    //表示するボタン
 
     return orderNumListAsyncVal.when( //注文番号を監視
         loading: () => const CircularProgressIndicator(),
         error: (error, stackTrace) => Text(error.toString()),
-        data: (orderNumList) {
+        data: (event) {
+          //データベースから注文番号リストの取得
+          final List<int> orderNums = event.snapshot.children //親：orderNums
+              .map((childSnapshot) => int.parse(childSnapshot.key ?? "0")) //132, 134...
+              .toList();
           //リストが空のとき
-          if (orderNumList.isEmpty) {
+          if (orderNums.isEmpty) {
             return Center(
               child: Text(
                 emptyText,
@@ -43,18 +47,18 @@ class RealtimeOrderList extends HookConsumerWidget {
             );
           }
           return ListView.separated(
-            itemCount: orderNumList.length,
+            itemCount: orderNums.length,
             separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black,),
             itemBuilder: (parentContext, orderNumIndex) {
               //注文番号リストに更新が入った分だけ新しい項目を作成する
-              final orderListAsyncVal = ref.watch(orderListFamily(orderNumList[orderNumIndex]));
+              final orderListAsyncVal = ref.watch(orderListFamily(orderNums[orderNumIndex]));
 
               return orderListAsyncVal.when(
                   loading: () => const CircularProgressIndicator(),
                   error: (error, stackTrace) => Text(error.toString()),
                   data: (orderList) {
                     //注文番号
-                    final orderNum = orderNumList[orderNumIndex];
+                    final orderNum = orderNums[orderNumIndex];
                     return Row(
                       children: [
                         //注文番号(左)
@@ -65,7 +69,7 @@ class RealtimeOrderList extends HookConsumerWidget {
                               OrderNum(orderNum: orderNum),
                               Container(
                                 margin: const EdgeInsets.only(top: 10),
-                                child: subStateWidgetFunc(orderNumList[orderNumIndex]),
+                                child: subStateWidgetFunc(orderNums[orderNumIndex]),
                               ),
                             ],
                           ),

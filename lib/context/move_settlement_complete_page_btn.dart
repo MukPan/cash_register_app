@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../component/next_btn.dart';
+import '../database/order_status.dart';
 import '../dialog/alert_dialog_texts.dart';
 import '../object/denomination_info.dart';
 import '../object/denominations.dart';
@@ -82,7 +83,7 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
     //処理中の注文番号管理をプロバイダーから取得
     final orderNumStr = ref.read(selectedOrderNumProvider).toString();
     db2.ref("orderNums/$orderNumStr/")
-        .update({"isPaid": true});
+        .update({"orderStatus": OrderStatus.paid.name});
     //データベース更新
     // db.collection("orderNumCollection")
     //   .doc(orderNumStr)

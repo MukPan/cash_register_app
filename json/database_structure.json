@@ -50,9 +50,7 @@
   },
   "orderNums": {
     "132": {
-      "isCompleted": false,
-      "isGave": false,
-      "isPaid": false,
+      "orderStatus": "temp",
       "orderList": [
         {
           "item": "唐揚げ",
@@ -64,9 +62,7 @@
       ]
     },
     "134": {
-      "isCompleted": false,
-      "isGave": false,
-      "isPaid": false,
+      "orderStatus": "temp",
       "orderList": [
         {
           "item": "ポテト",
@@ -86,9 +82,7 @@
       ]
     },
     "621": {
-      "isCompleted": false,
-      "isGave": false,
-      "isPaid": false,
+      "orderStatus": "temp",
       "orderList": [
         {
           "item": "たこ焼き",
@@ -117,9 +111,7 @@
       ]
     },
     "622": {
-      "isCompleted": false,
-      "isGave": false,
-      "isPaid": false,
+      "orderStatus": "temp",
       "orderList": [
         {
           "item": "唐揚げ",
