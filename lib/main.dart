@@ -20,9 +20,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'database/item_infos.dart';
 
 ///Firestoreインスタンス
-final db = FirebaseFirestore.instance;
+// final db = FirebaseFirestore.instance;
 ///RealtimeDatabaseインスタンス
-FirebaseDatabase database = FirebaseDatabase.instance;
+FirebaseDatabase db2 = FirebaseDatabase.instance;
 
 //TODO: 選択した注文番号のプロバイダーを作る
 
@@ -54,21 +54,39 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //キャッシュカウント初期化
-    db.collection("moneyCountCollection")
-      .doc("moneyCountDoc")
-      .get()
-      .then((docRef) {
-        final totalCountMap = docRef.data()?["totalCountMap"] as Map<String, dynamic>;
-        final tmpTotalCountMap = docRef.data()?["tmpTotalCountMap"] as Map<String, dynamic>;
+    db2.ref("moneyCount")
+        .once() //1度だけ(Future)
+        .then((event) {
+          final moneyCountMap = event.snapshot.value as Map<String, dynamic>;
+          final totalCountMap = moneyCountMap["totalCountMap"] as Map<String, dynamic>;
+          final tmpTotalCountMap = moneyCountMap["tmpTotalCountMap"] as Map<String, dynamic>;
+          //プロバイダー初期化
+          for (final info in denominationInfoList) {
+            ref.read(cashCountFamily(info.denominationType).notifier)
+                .state = totalCountMap[info.name];
+            ref.read(salesCountFamily(info.denominationType).notifier)
+                .state = tmpTotalCountMap[info.name];
+            print("キャッシュカウント用プロバイダ初期化完了");
+          }
+        });
+    // db.collection("moneyCountCollection")
+    //   .doc("moneyCountDoc")
+    //   .get()
+    //   .then((docRef) {
+    //     final totalCountMap = docRef.data()?["totalCountMap"] as Map<String, dynamic>;
+    //     final tmpTotalCountMap = docRef.data()?["tmpTotalCountMap"] as Map<String, dynamic>;
+    //
+    //     //プロバイダー初期化
+    //     for (final info in denominationInfoList) {
+    //       ref.read(cashCountFamily(info.denominationType).notifier)
+    //           .state = totalCountMap[info.name]!;
+    //       ref.read(salesCountFamily(info.denominationType).notifier)
+    //           .state = tmpTotalCountMap[info.name]!;
+    //     }
+    //   });
 
-        //プロバイダー初期化
-        for (final info in denominationInfoList) {
-          ref.read(cashCountFamily(info.denominationType).notifier)
-              .state = totalCountMap[info.name]!;
-          ref.read(salesCountFamily(info.denominationType).notifier)
-              .state = tmpTotalCountMap[info.name]!;
-        }
-      });
+
+
 
 
 
@@ -100,17 +118,26 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
         onPressed: () {
-          db.collection("orderNumCollection").get().then((querySnapshot) {
-            querySnapshot.docs
-                .map((doc) => doc.reference)
-                .forEach((docRef) {
-                  docRef.update({
-                    "isPaid": false,
-                    "isCompleted": false,
-                    "isGave": false,
-                  });
-            });
-          });
+          for (final orderNum in ["132", "134", "621", "622"]) {
+            db2.ref("orderNums/$orderNum/")
+              .update({
+                "isPaid": false,
+                "isCompleted": false,
+                "isGave": false,
+              });
+          }
+          // db.collection("orderNumCollection").get().then((querySnapshot) {
+          //   querySnapshot.docs
+          //       .map((doc) => doc.reference)
+          //       .forEach((docRef) {
+          //         docRef.update({
+          //           "isPaid": false,
+          //           "isCompleted": false,
+          //           "isGave": false,
+          //         });
+          //   });
+          // });
+
 
         },
         child: const Icon(Icons.cached, color: Colors.white),

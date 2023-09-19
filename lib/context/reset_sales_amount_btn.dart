@@ -1,5 +1,6 @@
 import 'package:cash_register_app/provider/sales_count_family.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,6 +9,7 @@ import '../dialog/default_alert_dialog.dart';
 import '../object/denominations.dart';
 
 final db = FirebaseFirestore.instance;
+final db2 = FirebaseDatabase.instance;
 
 class ResetSalesAmountBtn extends HookConsumerWidget {
   const ResetSalesAmountBtn({Key? key}) : super(key: key);
@@ -31,19 +33,22 @@ class ResetSalesAmountBtn extends HookConsumerWidget {
     //売上初期化用Map
     final Map<String, int> initTmpTotalCountMap = {};
     for(final info in denominationInfoList) {
-      initTmpTotalCountMap.addAll({"tmpTotalCountMap.${info.name}": 0});
+      initTmpTotalCountMap.addAll({info.name: 0});
       //プロバイダーも初期化
       ref.read(salesCountFamily(info.denominationType).notifier)
           .state = 0;
     }
 
     //データベース更新
-    db.collection("moneyCountCollection")
-        .doc("moneyCountDoc")
-        .get()
-        .then((docRef) {
-          docRef.reference.update(initTmpTotalCountMap);
-    });
+    db2.ref("moneyCount/tmpTotalCountMap/")
+      .update(initTmpTotalCountMap);
+
+    // db.collection("moneyCountCollection")
+    //     .doc("moneyCountDoc")
+    //     .get()
+    //     .then((docRef) {
+    //       docRef.reference.update(initTmpTotalCountMap);
+    // });
   }
 
   @override

@@ -80,58 +80,5 @@ class OrderNumList extends HookConsumerWidget {
       );
     }
   );
-
-    return StreamBuilder(
-      stream: db.collection("orderNumCollection")
-        .where("isPaid", isEqualTo: false) //会計未完了
-        .where("isCompleted", isEqualTo: false) //お渡し前
-        .where("isGave", isEqualTo: false) //お渡し前
-        .snapshots(), //snapshotのstream
-      builder: (context, snapshot) {
-        //データベースから注文番号リストの取得
-        final List<int> currentOrderNumList = snapshot.data?.docs
-            .map((doc) => int.parse(doc.id))
-            .toList(growable: false)
-            ?? <int>[];
-
-
-        //リストが空のとき
-        if (currentOrderNumList.isEmpty) {
-          return const Center(
-              child: Text(
-                "新しい注文はありません。",
-                style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.grey
-                ),
-              )
-          );
-        }
-
-        //Widget返却
-        return Container(
-          margin: const EdgeInsets.all(10),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 10,     //ボックス左右間のスペース
-              mainAxisSpacing: 10,      //ボックス上下間のスペース
-              crossAxisCount: 4,        //ボックスを横に並べる数
-            ),
-            itemCount: currentOrderNumList.length,
-            //指定した要素の数分を生成
-            itemBuilder: (context, index) {
-              return TextButton(
-                  onPressed: () { moveConfirmOrderPage(context, ref, currentOrderNumList[index]); },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
-                  ),
-                  child: OrderNum(orderNum: currentOrderNumList[index])
-              );
-            }
-
-          ),
-        );
-      }, //snapshotのstream
-    );
   }
 }
