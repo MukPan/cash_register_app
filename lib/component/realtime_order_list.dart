@@ -13,7 +13,8 @@ class RealtimeOrderList extends HookConsumerWidget {
     Key? key,
     required this.orderNumListProvider,
     required this.subStateWidgetFunc,
-    required this.emptyText
+    required this.emptyText,
+    this.displayPrice = false,
   }) : super(key: key);
 
   ///表示するリストのプロバイダー
@@ -22,6 +23,8 @@ class RealtimeOrderList extends HookConsumerWidget {
   final Widget Function(int orderNum) subStateWidgetFunc;
   ///リストが空のときに表示するテキスト
   final String emptyText;
+  ///価格の表示
+  final bool displayPrice;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -88,7 +91,7 @@ class RealtimeOrderList extends HookConsumerWidget {
                               final orderMap = orderList[index] as Map<String, dynamic>;
                               final orderParams = OrderParams.getInstance(orderMap);
                               // return Text("nu");
-                              return ItemTile(orderParams: orderParams);
+                              return ItemTile(orderParams: orderParams ,displayPrice: displayPrice);
                             },
                           ),
                         )

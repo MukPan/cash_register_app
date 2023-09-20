@@ -24,6 +24,7 @@ class GaveLogPage extends StatelessWidget {
         orderNumListProvider: gaveNumListProvider,
         subStateWidgetFunc: _getCancelBtn,
         emptyText: "注文履歴はありません。",
+        displayPrice: true,
       ),
     );
   }
