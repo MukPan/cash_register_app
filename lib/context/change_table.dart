@@ -32,6 +32,7 @@ class ChangeTable extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //お釣りが0ではないときに表を表示
     return (denominationInfoList.any((info) => ref.read(changeMoneyCountFamily(info.denominationType)) != 0))
       ? SizedBox(
       width: double.infinity,

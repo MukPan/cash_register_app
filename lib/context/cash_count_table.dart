@@ -34,12 +34,12 @@ class CashCountTable extends HookConsumerWidget {
   List<DataRow> _getCashCountDataRows(WidgetRef ref) {
     //合計金額を算出
     num totalAmount = denominationInfoList
-        .map((info) => info.amount * ref.read(cashCountFamily(info.denominationType)))
+        .map((info) => info.amount * ref.watch(cashCountFamily(info.denominationType)))
         .reduce((sum, amount) => sum + amount);
 
     //合計売上額を算出
     num totalSalesAmount = denominationInfoList
-        .map((info) => info.amount * ref.read(salesCountFamily(info.denominationType)))
+        .map((info) => info.amount * ref.watch(salesCountFamily(info.denominationType)))
         .reduce((sum, amount) => sum + amount);
     
     return denominationInfoList.map((info) {

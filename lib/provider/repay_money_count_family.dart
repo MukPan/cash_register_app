@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../object/denominations.dart';
 
-//お釣り
-final changeMoneyCountFamily = StateProvider.family<int, Denominations>((ref, id) {
+//払い戻し枚数
+final repayMoneyCountFamily = StateProvider.family<int, Denominations>((ref, id) {
   return 0;
 });
 
