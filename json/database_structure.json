@@ -1,6 +1,7 @@
 {
   "items": {
     "唐揚げ": {
+      "category": "food",
       "price": 300,
       "options": [
         "焼きチーズ",
@@ -9,6 +10,7 @@
       ]
     },
     "ポテト": {
+      "category": "food",
       "price": 200,
       "options": [
         "マヨネーズ",
@@ -16,6 +18,7 @@
       ]
     },
     "たこ焼き": {
+      "category": "food",
       "price": 300,
       "options": [
         "焼きチーズ",
@@ -23,6 +26,11 @@
         "青のり",
         "マヨネーズ"
       ]
+    },
+    "コーラ": {
+      "category": "drink",
+      "price": 200,
+      "options": []
     }
   },
   "options": {
