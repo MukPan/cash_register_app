@@ -20,7 +20,7 @@ class OrderProgressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DefaultAppBar(title: "調理内容管理"),
+      appBar: const DefaultAppBar(title: "注文進行状況"),
       drawer: const MenuDrawer(),
       body: Row(
         children: [
@@ -30,6 +30,18 @@ class OrderProgressPage extends StatelessWidget {
                 subStateWidgetFunc: _getCallBtn,
                 emptyText: "新しい注文はありません。",
                 stackImage: true,
+                titleWidget: Container(
+                  width: double.infinity,
+                  color: Colors.grey,
+                  child: const Text(
+                    "調理中",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
             ),
           ),
           const VerticalDivider(width: 0, color: Colors.black),
@@ -39,6 +51,18 @@ class OrderProgressPage extends StatelessWidget {
                 subStateWidgetFunc: _getGaveBtn,
                 emptyText: "お渡し待ちの商品はありません。",
                 stackImage: true,
+                titleWidget: Container(
+                  width: double.infinity,
+                  color: Colors.indigo,
+                  child: const Text(
+                    "受取待ち",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
             ),
           )
         ],

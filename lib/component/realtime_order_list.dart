@@ -17,6 +17,7 @@ class RealtimeOrderList extends HookConsumerWidget {
     required this.emptyText,
     this.displayPrice = false,
     this.stackImage = false,
+    this.titleWidget,
   }) : super(key: key);
 
   ///表示するリストのプロバイダー
@@ -29,6 +30,8 @@ class RealtimeOrderList extends HookConsumerWidget {
   final bool displayPrice;
   ///画像を重ねる
   final bool stackImage;
+  ///タイトルWidget
+  final Widget? titleWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,28 +49,33 @@ class RealtimeOrderList extends HookConsumerWidget {
                 final int timestamp2 = (orderNumSnap2.value as Map<String, dynamic>)["timestamp"];
                 return timestamp1 - timestamp2;
               });
-          // print(event.snapshot.children[0]);
           //リストが空のとき
-          if (orderNumListSnap.isEmpty) {
-            return Center(
-              child: Text(
-                emptyText,
-                style: const TextStyle(
-                  fontSize: 30,
-                  color: Colors.grey
-                ),
-              )
-            );
-          }
+          // if (orderNumListSnap.isEmpty) {
+          //   return Center(
+          //     child: Text(
+          //       emptyText,
+          //       style: const TextStyle(
+          //         fontSize: 30,
+          //         color: Colors.grey
+          //       ),
+          //     )
+          //   );
+          // }
 
           return ListView.separated(
-              itemCount: orderNumListSnap.length + 1,
+              itemCount: orderNumListSnap.length + 2,
               separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black),
               itemBuilder: (context, orderNumIndex) {
                 //最後の線
-                if (orderNumIndex == orderNumListSnap.length) {
+                if (orderNumIndex == orderNumListSnap.length + 1) {
                   return Container();
                 }
+                //最初のタイトルWidget
+                if (orderNumIndex == 0) {
+                  return titleWidget;
+                }
+                orderNumIndex--; //タイトル分
+
                 //1つの注文番号の複数の注文ドキュメント
                 final orderNumSnap = orderNumListSnap[orderNumIndex];
                 final orderNum = int.parse(orderNumSnap.key ?? "0");

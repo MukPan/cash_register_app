@@ -13,22 +13,18 @@ class MenuDrawer extends StatelessWidget {
 
   static const _titles = [
     Text("会計管理"),
-    Text("貨幣枚数管理"),
-    Text("呼び出し番号管理"),
-    Text("調理内容管理"),
-    Text("お渡し状況管理"),
+    Text("キャッシュカウント"),
+    Text("呼出番号一覧"),
+    Text("注文進行状況"),
     Text("お渡し履歴"),
-    Text("注文進行状況")
   ];
 
   static const _nextPages = [
     MyHomePage(),
     CashCountManagerPage(),
     CallNumDisplayPage(),
-    CookingDetailsPage(),
-    CallingDetailsPage(),
+    OrderProgressPage(),
     GaveLogPage(),
-    OrderProgressPage()
   ];
 
   @override
