@@ -42,7 +42,6 @@ class RealtimeOrderList extends HookConsumerWidget {
                 final mapInOrderNum2 = orderNumSnap2.value as Map<String, dynamic>;
                 final int timestamp1 = mapInOrderNum1["timestamp"];
                 final int timestamp2 = mapInOrderNum2["timestamp"];
-                print("$timestamp1, $timestamp2");
                 return timestamp1 - timestamp2;
               });
           // print(event.snapshot.children[0]);
