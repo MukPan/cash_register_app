@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../page/call_num_display_page.dart';
 import '../page/calling_details_page.dart';
+import '../page/order_progress_page.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class MenuDrawer extends StatelessWidget {
     Text("調理内容管理"),
     Text("お渡し状況管理"),
     Text("お渡し履歴"),
+    Text("注文進行状況")
   ];
 
   static const _nextPages = [
@@ -26,6 +28,7 @@ class MenuDrawer extends StatelessWidget {
     CookingDetailsPage(),
     CallingDetailsPage(),
     GaveLogPage(),
+    OrderProgressPage()
   ];
 
   @override

@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../context/item_tile.dart';
 import '../database/order_list_family.dart';
 import '../object/order_params.dart';
+import 'stack_item_tile.dart';
 
 class RealtimeOrderList extends HookConsumerWidget {
   const RealtimeOrderList({
@@ -15,6 +16,7 @@ class RealtimeOrderList extends HookConsumerWidget {
     required this.subStateWidgetFunc,
     required this.emptyText,
     this.displayPrice = false,
+    this.stackImage = false,
   }) : super(key: key);
 
   ///表示するリストのプロバイダー
@@ -25,6 +27,8 @@ class RealtimeOrderList extends HookConsumerWidget {
   final String emptyText;
   ///価格の表示
   final bool displayPrice;
+  ///画像を重ねる
+  final bool stackImage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,10 +42,8 @@ class RealtimeOrderList extends HookConsumerWidget {
           //注文番号リスト
           final orderNumListSnap = event.snapshot.children.toList()
               ..sort((orderNumSnap1, orderNumSnap2) { //timestamp昇順でソート
-                final mapInOrderNum1 = orderNumSnap1.value as Map<String, dynamic>;
-                final mapInOrderNum2 = orderNumSnap2.value as Map<String, dynamic>;
-                final int timestamp1 = mapInOrderNum1["timestamp"];
-                final int timestamp2 = mapInOrderNum2["timestamp"];
+                final int timestamp1 = (orderNumSnap1.value as Map<String, dynamic>)["timestamp"];
+                final int timestamp2 = (orderNumSnap2.value as Map<String, dynamic>)["timestamp"];
                 return timestamp1 - timestamp2;
               });
           // print(event.snapshot.children[0]);
@@ -59,14 +61,19 @@ class RealtimeOrderList extends HookConsumerWidget {
           }
 
           return ListView.separated(
-              itemCount: orderNumListSnap.length,
-              separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black,),
-              itemBuilder: (_, orderNumIndex) {
+              itemCount: orderNumListSnap.length + 1,
+              separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black),
+              itemBuilder: (context, orderNumIndex) {
+                //最後の線
+                if (orderNumIndex == orderNumListSnap.length) {
+                  return Container();
+                }
                 //1つの注文番号の複数の注文ドキュメント
                 final orderNumSnap = orderNumListSnap[orderNumIndex];
                 final orderNum = int.parse(orderNumSnap.key ?? "0");
                 final mapInOrderNum = orderNumSnap.value as Map<String, dynamic>; //{orderList: [{},{},{}], orderStatus: gave}
                 final orderList = mapInOrderNum["orderList"] as List<dynamic>; //[{},{},{}]
+
 
                 return Row(
                   children: [
@@ -98,7 +105,8 @@ class RealtimeOrderList extends HookConsumerWidget {
                               //1つの注文番号の1つの注文ドキュメント
                               final orderMap = orderList[index] as Map<String, dynamic>;
                               final orderParams = OrderParams.getInstance(orderMap);
-                              // return Text("nu");
+
+                              if (stackImage) return StackItemTile(orderParams: orderParams ,displayPrice: displayPrice);
                               return ItemTile(orderParams: orderParams ,displayPrice: displayPrice);
                             },
                           ),

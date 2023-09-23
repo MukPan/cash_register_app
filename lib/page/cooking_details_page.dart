@@ -14,7 +14,7 @@ class CookingDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: const DefaultAppBar(title: "調理内容管理"),
       drawer: const MenuDrawer(),
       body: RealtimeOrderList(
