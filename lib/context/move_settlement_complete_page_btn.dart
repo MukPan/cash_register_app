@@ -78,12 +78,16 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
   }
 
   ///firestoreに支払済みであることを伝えるメソッド
+  ///timestampを押す
   void _updatePaidIsTrue(BuildContext context, WidgetRef ref) {
 
     //処理中の注文番号管理をプロバイダーから取得
     final orderNumStr = ref.read(selectedOrderNumProvider).toString();
     db2.ref("orderNums/$orderNumStr/")
-        .update({"orderStatus": OrderStatus.paid.name});
+        .update({
+      "orderStatus": OrderStatus.paid.name,
+      "timestamp": ServerValue.timestamp,
+    });
     //データベース更新
     // db.collection("orderNumCollection")
     //   .doc(orderNumStr)
@@ -102,6 +106,8 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
     }
   }
 
+
+
   ///Widget返却
     @override
     Widget build(BuildContext context, WidgetRef ref) {
@@ -111,7 +117,7 @@ class MoveSettlementCompletePageBtn extends HookConsumerWidget {
 
       return NextBtn(
           moveNextPageFunc: () {
-            //データベース更新
+            //データベース更新(paidとtimestamp)
             _updatePaidIsTrue(context, ref);
             //キャッシュ状態更新
             _updateCashCountState(ref);

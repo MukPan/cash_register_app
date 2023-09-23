@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import '../component/realtime_order_list.dart';
 import '../context/cancel_btn.dart';
 import '../database/gave_num_list_provider.dart';
-import '../provider/all_order_num_docs_provider.dart';
 
 class GaveLogPage extends StatelessWidget {
   const GaveLogPage({Key? key}) : super(key: key);
