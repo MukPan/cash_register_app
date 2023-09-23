@@ -1,10 +1,10 @@
 import 'package:cash_register_app/component/default_app_bar.dart';
 import 'package:cash_register_app/context/call_btn.dart';
 import 'package:cash_register_app/context/menu_drawer.dart';
-import 'package:cash_register_app/provider/paid_num_list_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../component/realtime_order_list.dart';
+import '../database/paid_num_list_provider.dart';
 
 class CookingDetailsPage extends StatelessWidget {
   const CookingDetailsPage({Key? key}) : super(key: key);

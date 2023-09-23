@@ -1,5 +1,6 @@
 import 'package:cash_register_app/object/denomination_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,7 +11,8 @@ import '../provider/cash_count_family.dart';
 import '../provider/is_editting_total_family.dart';
 import '../provider/sales_count_family.dart';
 
-final db = FirebaseFirestore.instance;
+// final db = FirebaseFirestore.instance;
+final db2 = FirebaseDatabase.instance;
 
 class CashCountTable extends HookConsumerWidget {
   const CashCountTable({Key? key}) : super(key: key);
@@ -32,12 +34,12 @@ class CashCountTable extends HookConsumerWidget {
   List<DataRow> _getCashCountDataRows(WidgetRef ref) {
     //合計金額を算出
     num totalAmount = denominationInfoList
-        .map((info) => info.amount * ref.read(cashCountFamily(info.denominationType)) )
+        .map((info) => info.amount * ref.watch(cashCountFamily(info.denominationType)))
         .reduce((sum, amount) => sum + amount);
 
     //合計売上額を算出
     num totalSalesAmount = denominationInfoList
-        .map((info) => info.amount * ref.read(salesCountFamily(info.denominationType)))
+        .map((info) => info.amount * ref.watch(salesCountFamily(info.denominationType)))
         .reduce((sum, amount) => sum + amount);
     
     return denominationInfoList.map((info) {
@@ -66,14 +68,16 @@ class CashCountTable extends HookConsumerWidget {
                         ref.read(isEdittingTotalFamily(info.denominationType).notifier)
                             .state = false;
                         //データベース更新
-                        db.collection("moneyCountCollection")
-                          .doc("moneyCountDoc")
-                          .get()
-                          .then((docRef) {
-                            docRef.reference.update({
-                              "totalCountMap.${info.name}": newTotalCount
-                            });
-                          });
+                        db2.ref("moneyCount/totalCountMap/")
+                            .update({info.name: newTotalCount});
+                        // db.collection("moneyCountCollection")
+                        //   .doc("moneyCountDoc")
+                        //   .get()
+                        //   .then((docRef) {
+                        //     docRef.reference.update({
+                        //       "totalCountMap.${info.name}": newTotalCount
+                        //     });
+                        //   });
                       }
                     )
                     : Text(count.toString()),

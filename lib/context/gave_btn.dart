@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../database/order_status.dart';
 import '../dialog/alert_dialog_texts.dart';
 import '../dialog/default_alert_dialog.dart';
 
 //インスタンス初期化
-final db = FirebaseFirestore.instance;
+final db2 = FirebaseDatabase.instance;
 
 class GaveBtn extends StatelessWidget {
   const GaveBtn({Key? key, required this.orderNum}) : super(key: key);
@@ -29,13 +31,8 @@ class GaveBtn extends StatelessWidget {
     if (!isAllReady) return;
 
     //データベース更新
-    db.collection("orderNumCollection")
-        .doc(orderNum.toString())
-        .get()
-        .then((docRef) {
-      docRef.reference
-          .update({"isGave": true});
-    });
+    db2.ref("orderNums/${orderNum.toString()}/")
+        .update({"orderStatus": OrderStatus.gave.name});
   }
 
   @override

@@ -1,23 +1,27 @@
 import 'package:cash_register_app/object/option_object.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../database/opt_infos.dart';
+
 
 class OptionNames extends StatelessWidget {
-  const OptionNames({Key? key, required this.optList}) : super(key: key);
+  const OptionNames({Key? key, required this.optNameList}) : super(key: key);
 
-  ///オプションリスト
-  final List<OptionObject> optList;
+  ///オプション名前リスト
+  final List<String> optNameList;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true, //TODO: いる？
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: optList.length,
+      itemCount: optNameList.length,
       //Widget返却
-      itemBuilder: (BuildContext context, int optIndex) {
+      itemBuilder: (BuildContext context, int index) {
+        final String optName = optNameList[index];
+        // final int optPrice = optInfos.optPriceMap[optName] ?? 0;
         return Text(
-          optList[optIndex].optionName,
+          optName,
           style: const TextStyle(
               fontSize: 15.0,
               color: CupertinoColors.systemGrey

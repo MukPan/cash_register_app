@@ -1,4 +1,4 @@
-import 'package:cash_register_app/provider/standby_num_list_provider.dart';
+import 'package:cash_register_app/database/paid_num_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,19 +7,25 @@ class StandbyNumList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final standbyNumListStream = ref.watch(standbyNumListProvider);
+    final paidNumListAsyVal = ref.watch(paidNumListProvider);
 
-    standbyNumListStream.value;
 
-    return standbyNumListStream.when(
+    return paidNumListAsyVal.when(
       loading: () => const CircularProgressIndicator(),
       error: (error, stackTrace) => Text(error.toString()),
-      data: (standbyNumList) {
+      data: (event) {
+        //データベースから注文番号リストの取得
+        final List<int> paidOrderNums = event.snapshot.children //親：orderNums
+            .map((childSnapshot) => int.parse(childSnapshot.key ?? "0")) //132, 134...
+            .toList();
+
+
+
         return ListView.separated(
-          itemCount: standbyNumList.length + 2,
+          itemCount: paidOrderNums.length + 2,
           separatorBuilder: (context, index) => const Divider(height: 0),
           itemBuilder: (context, index) {
-            if (index == standbyNumList.length + 1) return Container();
+            if (index == paidOrderNums.length + 1) return Container();
             if (index == 0) {
               return Container(
                 width: double.infinity,
@@ -37,7 +43,7 @@ class StandbyNumList extends HookConsumerWidget {
             index--; //タイトルの分
             return Center(
               child: Text(
-                standbyNumList[index].toString(),
+                paidOrderNums[index].toString(),
                 style: const TextStyle(
                     fontSize: 45,
                     fontWeight: FontWeight.bold
@@ -48,5 +54,43 @@ class StandbyNumList extends HookConsumerWidget {
         );
       }
     );
+
+    // return standbyNumListStream.when(
+    //   loading: () => const CircularProgressIndicator(),
+    //   error: (error, stackTrace) => Text(error.toString()),
+    //   data: (standbyNumList) {
+    //     return ListView.separated(
+    //       itemCount: standbyNumList.length + 2,
+    //       separatorBuilder: (context, index) => const Divider(height: 0),
+    //       itemBuilder: (context, index) {
+    //         if (index == standbyNumList.length + 1) return Container();
+    //         if (index == 0) {
+    //           return Container(
+    //             width: double.infinity,
+    //             color: Colors.grey,
+    //             child: const Text(
+    //               "お作り中の番号",
+    //               textAlign: TextAlign.center,
+    //               style: TextStyle(
+    //                 fontSize: 55,
+    //                 color: Colors.white,
+    //               ),
+    //             ),
+    //           );
+    //         }
+    //         index--; //タイトルの分
+    //         return Center(
+    //           child: Text(
+    //             standbyNumList[index].toString(),
+    //             style: const TextStyle(
+    //                 fontSize: 45,
+    //                 fontWeight: FontWeight.bold
+    //             ),
+    //           ),
+    //         );
+    //       },
+    //     );
+    //   }
+    // );
   }
 }

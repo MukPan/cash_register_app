@@ -13,10 +13,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'context/menu_drawer.dart';
+import 'database/opt_infos.dart';
+import 'database/order_status.dart';
 import 'firebase_options.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+import 'database/item_infos.dart';
 
 ///Firestoreインスタンス
-final db = FirebaseFirestore.instance;
+// final db = FirebaseFirestore.instance;
+///RealtimeDatabaseインスタンス
+FirebaseDatabase db2 = FirebaseDatabase.instance;
 
 //TODO: 選択した注文番号のプロバイダーを作る
 
@@ -27,6 +34,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  //参照用データ初期化
+  itemInfos.fetchData();
+  optInfos.fetchData();
 
   //デバッグ用
   // debugRepaintRainbowEnabled = true;
@@ -44,21 +55,22 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //キャッシュカウント初期化
-    db.collection("moneyCountCollection")
-      .doc("moneyCountDoc")
-      .get()
-      .then((docRef) {
-        final totalCountMap = docRef.data()?["totalCountMap"] as Map<String, dynamic>;
-        final tmpTotalCountMap = docRef.data()?["tmpTotalCountMap"] as Map<String, dynamic>;
+    db2.ref("moneyCount")
+        .once() //1度だけ(Future)
+        .then((event) {
+          final moneyCountMap = event.snapshot.value as Map<String, dynamic>;
+          final totalCountMap = moneyCountMap["totalCountMap"] as Map<String, dynamic>;
+          final tmpTotalCountMap = moneyCountMap["tmpTotalCountMap"] as Map<String, dynamic>;
+          //プロバイダー初期化
+          for (final info in denominationInfoList) {
+            ref.read(cashCountFamily(info.denominationType).notifier)
+                .state = totalCountMap[info.name];
+            ref.read(salesCountFamily(info.denominationType).notifier)
+                .state = tmpTotalCountMap[info.name];
+          }
+          print("キャッシュカウント用プロバイダ初期化完了");
+        });
 
-        //プロバイダー初期化
-        for (final info in denominationInfoList) {
-          ref.read(cashCountFamily(info.denominationType).notifier)
-              .state = totalCountMap[info.name]!;
-          ref.read(salesCountFamily(info.denominationType).notifier)
-              .state = tmpTotalCountMap[info.name]!;
-        }
-      });
 
 
 
@@ -90,17 +102,24 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
         onPressed: () {
-          db.collection("orderNumCollection").get().then((querySnapshot) {
-            querySnapshot.docs
-                .map((doc) => doc.reference)
-                .forEach((docRef) {
-                  docRef.update({
-                    "isPaid": false,
-                    "isCompleted": false,
-                    "isGave": false,
-                  });
-            });
-          });
+          for (final orderNum in ["132", "134", "621", "622"]) {
+            db2.ref("orderNums/$orderNum/")
+              .update({
+                "orderStatus": OrderStatus.temp.name
+              });
+          }
+          // db.collection("orderNumCollection").get().then((querySnapshot) {
+          //   querySnapshot.docs
+          //       .map((doc) => doc.reference)
+          //       .forEach((docRef) {
+          //         docRef.update({
+          //           "isPaid": false,
+          //           "isCompleted": false,
+          //           "isGave": false,
+          //         });
+          //   });
+          // });
+
 
         },
         child: const Icon(Icons.cached, color: Colors.white),
