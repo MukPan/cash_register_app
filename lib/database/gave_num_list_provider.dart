@@ -9,10 +9,12 @@ import 'order_status.dart';
 //インスタンス初期化
 final db2 = FirebaseDatabase.instance;
 
+//TODO: .familyにしてユーザが表示個数を変えられるようにする
 ///受取番号リストStream
 final gaveNumListProvider = StreamProvider<DatabaseEvent>((ref) async* {
   final gaveNumListStream = db2.ref("orderNums")
       .orderByChild("orderStatus").equalTo(OrderStatus.gave.name)
+      .limitToLast(30) //表示個数
       .onValue;
 
   yield* gaveNumListStream;
