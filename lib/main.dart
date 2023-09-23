@@ -40,7 +40,7 @@ void main() async {
   optInfos.fetchData();
 
   //デバッグ用
-  // debugRepaintRainbowEnabled = true;
+  debugRepaintRainbowEnabled = true;
 
   runApp(
       const ProviderScope(child: MyApp())

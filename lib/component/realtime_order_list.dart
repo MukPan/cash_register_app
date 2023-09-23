@@ -36,7 +36,16 @@ class RealtimeOrderList extends HookConsumerWidget {
         error: (error, stackTrace) => Text(error.toString()),
         data: (event) {
           //注文番号リスト
-          final orderNumListSnap = event.snapshot.children.toList();
+          final orderNumListSnap = event.snapshot.children.toList()
+              ..sort((orderNumSnap1, orderNumSnap2) { //timestamp昇順でソート
+                final mapInOrderNum1 = orderNumSnap1.value as Map<String, dynamic>;
+                final mapInOrderNum2 = orderNumSnap2.value as Map<String, dynamic>;
+                final int timestamp1 = mapInOrderNum1["timestamp"];
+                final int timestamp2 = mapInOrderNum2["timestamp"];
+                print("$timestamp1, $timestamp2");
+                return timestamp1 - timestamp2;
+              });
+          // print(event.snapshot.children[0]);
           //リストが空のとき
           if (orderNumListSnap.isEmpty) {
             return Center(
