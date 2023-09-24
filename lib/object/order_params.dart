@@ -10,7 +10,8 @@ class OrderParams {
     required this.itemName,
     required this.qty,
     required this.optNameList,
-    required this.subtotal
+    required this.amountPerItem,
+    required this.subtotal,
   });
 
 
@@ -20,8 +21,11 @@ class OrderParams {
   final int qty;
   ///オプションリスト
   final List<String> optNameList;
+  ///一個当たりの値段
+  final int amountPerItem;
   ///(オプション含めた)小計
   final int subtotal;
+
 
 
   ///DataSnapshotからインスタンス作成
@@ -54,13 +58,14 @@ class OrderParams {
         .map((optName) => optInfos.optPriceMap[optName] ?? 0)
         .reduce((sum, price) => sum + price)
         : 0;
-
-    final int subtotal = qty * (itemPrice + optsPrice);
+    final int amountPerItem = itemPrice + optsPrice;
+    final int subtotal = qty * amountPerItem;
 
     return OrderParams(
         itemName: itemName,
         qty: qty,
         optNameList: optNameList,
+        amountPerItem: amountPerItem,
         subtotal: subtotal
     );
   }

@@ -2,7 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../component/item_counter.dart';
+import 'item_counter.dart';
 import '../component/item_img.dart';
 import '../component/item_name.dart';
 import '../component/option_names.dart';
@@ -47,8 +47,8 @@ class ItemDetailsContext extends HookConsumerWidget {
                       Row(
                         children: [
                           ItemName(itemName: itemName),
-                          IconButton(
-                            onPressed: () { showEditOrderDialog(context, orderParams); }, //編集ダイアログを表示
+                          IconButton( //編集ダイアログを表示
+                            onPressed: () { showEditOrderDialog(context, ref, orderParams); },
                             icon: const Icon(Icons.edit)
                           ) //編集ボタン
                         ],
@@ -56,7 +56,15 @@ class ItemDetailsContext extends HookConsumerWidget {
                       //2行目以降
                       OptionNames(optNameList: optNameList),
                       //カウンタ
-                      ItemCounter(qty: qty)
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          "個数: $qty",
+                          style: const TextStyle(
+                              fontSize: 20
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
