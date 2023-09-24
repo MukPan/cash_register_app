@@ -14,13 +14,13 @@ class CookingDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: const DefaultAppBar(title: "調理内容管理"),
       drawer: const MenuDrawer(),
       body: RealtimeOrderList(
         orderNumListProvider: paidNumListProvider,
         subStateWidgetFunc: _getCallBtn,
-        emptyText: "新しい注文はありません。"
+        emptyText: "新しい注文はありません。",
       ),
     );
   }

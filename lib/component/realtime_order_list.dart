@@ -1,12 +1,15 @@
 import 'package:cash_register_app/component/order_num.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../context/item_tile.dart';
 import '../database/order_list_family.dart';
+import '../database/order_status.dart';
 import '../object/order_params.dart';
+import 'stack_item_tile.dart';
 
 class RealtimeOrderList extends HookConsumerWidget {
   const RealtimeOrderList({
@@ -15,6 +18,9 @@ class RealtimeOrderList extends HookConsumerWidget {
     required this.subStateWidgetFunc,
     required this.emptyText,
     this.displayPrice = false,
+    this.stackImage = false,
+    this.titleWidget,
+    this.beforeStatus,
   }) : super(key: key);
 
   ///表示するリストのプロバイダー
@@ -25,6 +31,12 @@ class RealtimeOrderList extends HookConsumerWidget {
   final String emptyText;
   ///価格の表示
   final bool displayPrice;
+  ///画像を重ねる
+  final bool stackImage;
+  ///タイトルWidget
+  final Widget? titleWidget;
+  ///取り消した時の注文ステータス
+  final OrderStatus? beforeStatus;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,35 +50,47 @@ class RealtimeOrderList extends HookConsumerWidget {
           //注文番号リスト
           final orderNumListSnap = event.snapshot.children.toList()
               ..sort((orderNumSnap1, orderNumSnap2) { //timestamp昇順でソート
-                final mapInOrderNum1 = orderNumSnap1.value as Map<String, dynamic>;
-                final mapInOrderNum2 = orderNumSnap2.value as Map<String, dynamic>;
-                final int timestamp1 = mapInOrderNum1["timestamp"];
-                final int timestamp2 = mapInOrderNum2["timestamp"];
+                final int timestamp1 = (orderNumSnap1.value as Map<String, dynamic>)["timestamp"];
+                final int timestamp2 = (orderNumSnap2.value as Map<String, dynamic>)["timestamp"];
                 return timestamp1 - timestamp2;
               });
-          // print(event.snapshot.children[0]);
           //リストが空のとき
-          if (orderNumListSnap.isEmpty) {
-            return Center(
-              child: Text(
-                emptyText,
-                style: const TextStyle(
-                  fontSize: 30,
-                  color: Colors.grey
-                ),
-              )
-            );
-          }
+          // if (orderNumListSnap.isEmpty) {
+          //   return Center(
+          //     child: Text(
+          //       emptyText,
+          //       style: const TextStyle(
+          //         fontSize: 30,
+          //         color: Colors.grey
+          //       ),
+          //     )
+          //   );
+          // }
 
           return ListView.separated(
-              itemCount: orderNumListSnap.length,
-              separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black,),
-              itemBuilder: (_, orderNumIndex) {
+              itemCount: orderNumListSnap.length + 2,
+              separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black),
+              itemBuilder: (context, orderNumIndex) {
+                print(orderNumIndex);
+                //最後の線
+                if (orderNumIndex == orderNumListSnap.length + 1) {
+                  return Container();
+                }
+                //最初のタイトルWidget
+                if (orderNumIndex == 0 && titleWidget == null) {
+                  return Container();
+                }
+                if (orderNumIndex == 0) {
+                  return titleWidget;
+                }
+                orderNumIndex--; //タイトル分
+
                 //1つの注文番号の複数の注文ドキュメント
                 final orderNumSnap = orderNumListSnap[orderNumIndex];
                 final orderNum = int.parse(orderNumSnap.key ?? "0");
                 final mapInOrderNum = orderNumSnap.value as Map<String, dynamic>; //{orderList: [{},{},{}], orderStatus: gave}
                 final orderList = mapInOrderNum["orderList"] as List<dynamic>; //[{},{},{}]
+
 
                 return Row(
                   children: [
@@ -78,8 +102,17 @@ class RealtimeOrderList extends HookConsumerWidget {
                           OrderNum(orderNum: orderNum),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
-                            child: subStateWidgetFunc(orderNum),
+                            child: subStateWidgetFunc(orderNum), //nextBtn
                           ),
+                          if (beforeStatus != null) IconButton(
+                            onPressed: () {
+                              //データベース取り消し
+                              db2.ref("orderNums/$orderNum/")
+                                  .update({"orderStatus": beforeStatus?.name});
+                            },
+                            icon: const Icon(CupertinoIcons.backward_fill),
+
+                          )
                         ],
                       ),
                     ),
@@ -98,8 +131,9 @@ class RealtimeOrderList extends HookConsumerWidget {
                               //1つの注文番号の1つの注文ドキュメント
                               final orderMap = orderList[index] as Map<String, dynamic>;
                               final orderParams = OrderParams.getInstance(orderMap);
-                              // return Text("nu");
-                              return ItemTile(orderParams: orderParams ,displayPrice: displayPrice);
+
+                              if (stackImage) return StackItemTile(orderParams: orderParams, displayPrice: displayPrice);
+                              return ItemTile(orderParams: orderParams, displayPrice: displayPrice);
                             },
                           ),
                         )

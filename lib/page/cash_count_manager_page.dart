@@ -11,7 +11,7 @@ class CashCountManagerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: DefaultAppBar(title: "貨幣枚数管理"),
+      appBar: DefaultAppBar(title: "キャッシュカウント"),
       drawer: MenuDrawer(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

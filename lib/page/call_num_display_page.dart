@@ -11,7 +11,7 @@ class CallNumDisplayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: DefaultAppBar(title: "お呼び出し番号管理"),
+      appBar: DefaultAppBar(title: "呼出番号一覧"),
       drawer: MenuDrawer(),
       body: Row(
         children: [
