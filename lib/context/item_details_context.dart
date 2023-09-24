@@ -7,6 +7,7 @@ import '../component/item_img.dart';
 import '../component/item_name.dart';
 import '../component/option_names.dart';
 import '../component/subtotal.dart';
+import '../dialog/edit_order_dialog.dart';
 import '../object/order_params.dart';
 
 class ItemDetailsContext extends HookConsumerWidget {
@@ -43,7 +44,15 @@ class ItemDetailsContext extends HookConsumerWidget {
                     textDirection: TextDirection.ltr, //L→R 指定しないとツールでエラー
                     children: [
                       //1行目
-                      ItemName(itemName: itemName),
+                      Row(
+                        children: [
+                          ItemName(itemName: itemName),
+                          IconButton(
+                            onPressed: () { showEditOrderDialog(context, orderParams); }, //編集ダイアログを表示
+                            icon: const Icon(Icons.edit)
+                          ) //編集ボタン
+                        ],
+                      ),
                       //2行目以降
                       OptionNames(optNameList: optNameList),
                       //カウンタ
