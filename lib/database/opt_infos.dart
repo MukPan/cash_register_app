@@ -7,6 +7,7 @@ final db2 = FirebaseDatabase.instance;
 //グローバル変数に設定
 final OptInfos optInfos = OptInfos();
 
+///オプション群単体のデータベースからのデータ
 class OptInfos {
   ///オプション名と価格を関連付ける
   late Map<String, int> optPriceMap; //Map<String, int>
