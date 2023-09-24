@@ -1,11 +1,13 @@
 import 'package:cash_register_app/component/order_num.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../context/item_tile.dart';
 import '../database/order_list_family.dart';
+import '../database/order_status.dart';
 import '../object/order_params.dart';
 import 'stack_item_tile.dart';
 
@@ -18,6 +20,7 @@ class RealtimeOrderList extends HookConsumerWidget {
     this.displayPrice = false,
     this.stackImage = false,
     this.titleWidget,
+    this.beforeStatus,
   }) : super(key: key);
 
   ///表示するリストのプロバイダー
@@ -32,6 +35,8 @@ class RealtimeOrderList extends HookConsumerWidget {
   final bool stackImage;
   ///タイトルWidget
   final Widget? titleWidget;
+  ///取り消した時の注文ステータス
+  final OrderStatus? beforeStatus;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,11 +71,15 @@ class RealtimeOrderList extends HookConsumerWidget {
               itemCount: orderNumListSnap.length + 2,
               separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black),
               itemBuilder: (context, orderNumIndex) {
+                print(orderNumIndex);
                 //最後の線
                 if (orderNumIndex == orderNumListSnap.length + 1) {
                   return Container();
                 }
                 //最初のタイトルWidget
+                if (orderNumIndex == 0 && titleWidget == null) {
+                  return Container();
+                }
                 if (orderNumIndex == 0) {
                   return titleWidget;
                 }
@@ -93,8 +102,17 @@ class RealtimeOrderList extends HookConsumerWidget {
                           OrderNum(orderNum: orderNum),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
-                            child: subStateWidgetFunc(orderNum),
+                            child: subStateWidgetFunc(orderNum), //nextBtn
                           ),
+                          if (beforeStatus != null) IconButton(
+                            onPressed: () {
+                              //データベース取り消し
+                              db2.ref("orderNums/$orderNum/")
+                                  .update({"orderStatus": beforeStatus?.name});
+                            },
+                            icon: const Icon(CupertinoIcons.backward_fill),
+
+                          )
                         ],
                       ),
                     ),
@@ -114,8 +132,8 @@ class RealtimeOrderList extends HookConsumerWidget {
                               final orderMap = orderList[index] as Map<String, dynamic>;
                               final orderParams = OrderParams.getInstance(orderMap);
 
-                              if (stackImage) return StackItemTile(orderParams: orderParams ,displayPrice: displayPrice);
-                              return ItemTile(orderParams: orderParams ,displayPrice: displayPrice);
+                              if (stackImage) return StackItemTile(orderParams: orderParams, displayPrice: displayPrice);
+                              return ItemTile(orderParams: orderParams, displayPrice: displayPrice);
                             },
                           ),
                         )

@@ -1,3 +1,4 @@
+import 'package:cash_register_app/database/order_status.dart';
 import 'package:flutter/material.dart';
 
 import '../component/default_app_bar.dart';
@@ -51,6 +52,7 @@ class OrderProgressPage extends StatelessWidget {
                 subStateWidgetFunc: _getGaveBtn,
                 emptyText: "お渡し待ちの商品はありません。",
                 stackImage: true,
+                beforeStatus: OrderStatus.paid,
                 titleWidget: Container(
                   width: double.infinity,
                   color: Colors.indigo,

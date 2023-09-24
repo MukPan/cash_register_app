@@ -20,7 +20,7 @@ class CookingDetailsPage extends StatelessWidget {
       body: RealtimeOrderList(
         orderNumListProvider: paidNumListProvider,
         subStateWidgetFunc: _getCallBtn,
-        emptyText: "新しい注文はありません。"
+        emptyText: "新しい注文はありません。",
       ),
     );
   }
