@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../database/item_infos.dart';
+import '../dialog/alert_dialog_texts.dart';
+import '../dialog/default_alert_dialog.dart';
 
 final db2 = FirebaseDatabase.instance;
 
@@ -34,8 +36,19 @@ class OrderUpdateBtn extends HookConsumerWidget {
           backgroundColor: Colors.orange,
           padding: const EdgeInsets.fromLTRB(30, 20, 30, 20)
       ),
-      onPressed: () {
+      onPressed: () async {
         //確認ダイアログを表示
+        final isAllReady = await showDialog(
+            context: context,
+            builder: (content) => DefaultAlertDialog(
+              alertDialogTexts: AlertDialogTexts(
+                  title: const Text("注文の更新"),
+                  content: const Text("注文を更新しますか。\n更新前の注文情報は上書きされます。")),
+            )
+        ) ?? false;
+
+        //いいえなら編集画面に戻るだけ
+        if (!isAllReady) return;
 
         //DBを更新
         db2.ref("orderNums/$orderNum/orderList/$columnIndex")
@@ -43,8 +56,10 @@ class OrderUpdateBtn extends HookConsumerWidget {
             "options": options,
             "qty": qty,
           });
-        //ダイアログを(2回)閉じる
-        Navigator.of(context).pop();
+        //ダイアログを閉じる
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
       },
       child: const Text(
         '注文を更新',
