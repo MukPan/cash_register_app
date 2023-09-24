@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../component/item_img.dart';
 import '../context/option_tile.dart';
+import '../context/order_update_btn.dart';
 import '../context/subtotal_in_editting.dart';
 import '../object/order_params.dart';
 import '../provider/amount_per_item_provider.dart';
 
 ///注文編集ダイアログ
-void showEditOrderDialog(BuildContext context, WidgetRef ref, OrderParams orderParams) {
+void showEditOrderDialog(BuildContext context, WidgetRef ref, OrderParams orderParams, int columnIndex) {
   //画面サイズ取得
   final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
@@ -102,11 +103,10 @@ void showEditOrderDialog(BuildContext context, WidgetRef ref, OrderParams orderP
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('閉じる'),
+          OrderUpdateBtn(
+            columnIndex: columnIndex,
+            targetOptInfoList: targetOptInfoList,
+
           ),
         ],
       );

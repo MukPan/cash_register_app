@@ -1,0 +1,57 @@
+import 'package:cash_register_app/provider/item_count_provider.dart';
+import 'package:cash_register_app/provider/opt_is_enabled_family.dart';
+import 'package:cash_register_app/provider/selected_order_num_notifier.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../database/item_infos.dart';
+
+final db2 = FirebaseDatabase.instance;
+
+class OrderUpdateBtn extends HookConsumerWidget {
+  const OrderUpdateBtn({Key? key, required this.columnIndex, required this.targetOptInfoList}) : super(key: key);
+
+  ///列番号
+  final int columnIndex;
+  ///オプション候補
+  final List<OptInfo> targetOptInfoList;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    //注文番号
+    final int orderNum = ref.read(selectedOrderNumProvider);
+    //有効なオプション
+    final options = targetOptInfoList.map((optInfo) => optInfo.optName)
+        .where((optName) => ref.watch(optIsEnabledFamily(optName)) == true) //有効なオプションのみ
+        .toList();
+    //個数
+    final qty = ref.watch(itemCountProvider);
+
+    return TextButton(
+      style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white, //押したときの波動色
+          backgroundColor: Colors.orange,
+          padding: const EdgeInsets.fromLTRB(30, 20, 30, 20)
+      ),
+      onPressed: () {
+        //確認ダイアログを表示
+
+        //DBを更新
+        db2.ref("orderNums/$orderNum/orderList/$columnIndex")
+          .update({
+            "options": options,
+            "qty": qty,
+          });
+        //ダイアログを(2回)閉じる
+        Navigator.of(context).pop();
+      },
+      child: const Text(
+        '注文を更新',
+        style: TextStyle(
+            fontSize: 20
+        ),
+      ),
+    );
+  }
+}

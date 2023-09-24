@@ -48,7 +48,7 @@ class ItemDetailsContext extends HookConsumerWidget {
                         children: [
                           ItemName(itemName: itemName),
                           IconButton( //編集ダイアログを表示
-                            onPressed: () { showEditOrderDialog(context, ref, orderParams); },
+                            onPressed: () { showEditOrderDialog(context, ref, orderParams, index); },
                             icon: const Icon(Icons.edit)
                           ) //編集ボタン
                         ],
