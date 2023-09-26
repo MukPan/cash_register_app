@@ -2,11 +2,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../component/item_counter.dart';
+import 'item_counter.dart';
 import '../component/item_img.dart';
 import '../component/item_name.dart';
 import '../component/option_names.dart';
 import '../component/subtotal.dart';
+import '../dialog/edit_order_dialog.dart';
 import '../object/order_params.dart';
 
 class ItemDetailsContext extends HookConsumerWidget {
@@ -43,11 +44,27 @@ class ItemDetailsContext extends HookConsumerWidget {
                     textDirection: TextDirection.ltr, //L→R 指定しないとツールでエラー
                     children: [
                       //1行目
-                      ItemName(itemName: itemName),
+                      Row(
+                        children: [
+                          ItemName(itemName: itemName),
+                          IconButton( //編集ダイアログを表示
+                            onPressed: () { showEditOrderDialog(context, ref, orderParams, index); },
+                            icon: const Icon(Icons.edit)
+                          ) //編集ボタン
+                        ],
+                      ),
                       //2行目以降
                       OptionNames(optNameList: optNameList),
                       //カウンタ
-                      ItemCounter(qty: qty)
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          "個数: $qty",
+                          style: const TextStyle(
+                              fontSize: 20
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
