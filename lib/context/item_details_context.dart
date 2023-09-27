@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../dialog/add_order_dialog.dart';
+import '../provider/will_add_index_provider.dart';
 import 'item_counter.dart';
 import '../component/item_img.dart';
 import '../component/item_name.dart';
@@ -34,7 +35,12 @@ class ItemDetailsContext extends HookConsumerWidget {
                   border: Border.all(color: Colors.grey),
                 ),
                 child: IconButton(
-                  onPressed: () { addEditOrderDialog(context, ref); },
+                  onPressed: () {
+                    //注文追加ダイアログを開く
+                    addOrderDialog(context, ref);
+                    //最後尾のindexを登録
+                    ref.read(wiiAddIndexProvider.notifier).state = index;
+                  },
                   icon: const Icon(Icons.add),
                 ),
               ),

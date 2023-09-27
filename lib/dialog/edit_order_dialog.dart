@@ -106,7 +106,6 @@ void showEditOrderDialog(BuildContext context, WidgetRef ref, OrderParams orderP
           OrderUpdateBtn(
             columnIndex: columnIndex,
             targetOptInfoList: targetOptInfoList,
-
           ),
         ],
       );

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../component/item_img.dart';
 import '../context/option_tile.dart';
+import '../context/order_add_btn.dart';
 import '../context/order_update_btn.dart';
 import '../context/subtotal_in_editting.dart';
 import '../object/order_params.dart';
@@ -20,17 +21,9 @@ void showCustomItemDialog(BuildContext context, WidgetRef ref, ItemInfo itemInfo
   //各パラメータ取り出し
   final String itemName = itemInfo.itemName; //"唐揚げ"
   final List<OptInfo> optInfoList = itemInfo.optInfoList; //["焼きチーズ", "ケチャップ"]
+  final optNameList = optInfoList.map((optInfo) => optInfo.optName).toList();
   final int amountPerItem = itemInfo.itemPrice; //初期の値段(オプションなし)
 
-  final optNameList = optInfoList.map((optInfo) => optInfo.optName).toList();
-  //参照情報からitemNameを使用して取得
-  // final ItemInfo targetItemInfo = itemInfos.getList()
-  //     .where((itemInfo) => itemInfo.itemName == itemName)
-  //     .first;
-  //オプション候補
-  // final targetOptInfoList = targetItemInfo.optInfoList;
-
-  //プロバイダーを初期化(全てのオプションを無効"false")
   for (final optName in optNameList) {
     ref.read(optIsEnabledFamily(optName).notifier).state = false;
   }
@@ -99,11 +92,11 @@ void showCustomItemDialog(BuildContext context, WidgetRef ref, ItemInfo itemInfo
           ),
         ),
         actions: [
-          //OrderAddBtn 商品を新しく追加する
-          // OrderUpdateBtn(
-          //   columnIndex: columnIndex,
-          //   targetOptInfoList: targetOptInfoList,
-          // ),
+          // OrderAddBtn 商品を新しく追加する
+          OrderAddBtn(
+            optInfoList: optInfoList,
+            itemName: itemName,
+          ),
         ],
       );
     },
