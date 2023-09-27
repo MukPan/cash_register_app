@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../context/item_tile.dart';
 import '../database/order_list_family.dart';
-import '../database/order_status.dart';
+import '../object/order_status.dart';
 import '../object/order_params.dart';
 import 'stack_item_tile.dart';
 
@@ -89,7 +89,8 @@ class RealtimeOrderList extends HookConsumerWidget {
                 final orderNumSnap = orderNumListSnap[orderNumIndex];
                 final orderNum = int.parse(orderNumSnap.key ?? "0");
                 final mapInOrderNum = orderNumSnap.value as Map<String, dynamic>; //{orderList: [{},{},{}], orderStatus: gave}
-                final orderList = mapInOrderNum["orderList"] as List<dynamic>; //[{},{},{}]
+                final orderMap = mapInOrderNum["orderList"] as Map<String, dynamic>; //{"uuid":{},"uuid":{},"uuid":{}}
+                final List<dynamic> orderList = orderMap.values.toList(); //[{},{},{}] //uuidを排除
 
 
                 return Row(

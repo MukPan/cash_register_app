@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'order_status.dart';
+import '../object/order_status.dart';
 
 //インスタンス初期化
 final db2 = FirebaseDatabase.instance;

@@ -1,4 +1,4 @@
-import 'package:cash_register_app/database/order_status.dart';
+import 'package:cash_register_app/object/order_status.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
