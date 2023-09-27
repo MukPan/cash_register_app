@@ -1,15 +1,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../dialog/remove_item_alert_dialog.dart';
+import '../dialog/alert_dialog_texts.dart';
+import '../dialog/default_alert_dialog.dart';
 import '../provider/item_count_provider.dart';
-import '../provider/subtotal_provider.dart';
 
 class ItemCounter extends HookConsumerWidget {
-  const ItemCounter({Key? key, required this.amountPerItem}) : super(key: key); //required this.index
+  const ItemCounter({Key? key, required this.amountPerItem, this.deleteItem = true}) : super(key: key); //required this.index
 
   ///一個あたりの値段
   final int amountPerItem;
+  ///0個表示をするか
+  final bool deleteItem;
 
   ///個数増加
   void _increaseCount(WidgetRef ref) {
@@ -37,16 +39,19 @@ class ItemCounter extends HookConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          onPressed: (count > 0) ? () async { //qty <= 0 || !countBtnIsEnabled
+          onPressed: ((deleteItem && count > 0) || count > 1) ? () async { //qty <= 0 || !countBtnIsEnabled
             //カウントが1のとき
             bool isRemove = false;
             if (count == 1) {
               isRemove = await showDialog(
                 context: context,
-                builder: (content) => const RemoveItemAlertDialog()
+                builder: (content) => DefaultAlertDialog(
+                  alertDialogTexts: AlertDialogTexts(
+                    title: const Text("商品の削除"),
+                    content: const Text("注文リストに登録した商品を削除しますか。\n注文の更新時にこの注文が削除されます。")),
+                )
               ) ?? false;
             }
-
             //更新
             if (count > 1 || isRemove) {
               _decreaseCount(ref);

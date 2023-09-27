@@ -43,12 +43,26 @@ class OrderUpdateBtn extends HookConsumerWidget {
             builder: (content) => DefaultAlertDialog(
               alertDialogTexts: AlertDialogTexts(
                   title: const Text("注文の更新"),
-                  content: const Text("注文を更新しますか。\n更新前の注文情報は上書きされます。")),
+                  content: const Text("注文を更新しますか。\n更新前の注文情報は上書きされます。\n"
+                      "また、個数が0に設定されている場合、この注文は削除されます。")),
             )
         ) ?? false;
 
         //いいえなら編集画面に戻るだけ
         if (!isAllReady) return;
+
+        //ダイアログを閉じる
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
+
+        //0個のときDBから削除
+        //TODO: ListをMapに変換する
+        // if (qty == 0) {
+        //   db2.ref("orderNums/$orderNum/orderList/$columnIndex")
+        //       .remove();
+        //   return;
+        // }
 
         //DBを更新
         db2.ref("orderNums/$orderNum/orderList/$columnIndex")
@@ -56,10 +70,7 @@ class OrderUpdateBtn extends HookConsumerWidget {
             "options": options,
             "qty": qty,
           });
-        //ダイアログを閉じる
-        if (context.mounted) {
-          Navigator.of(context).pop();
-        }
+
       },
       child: const Text(
         '注文を更新',

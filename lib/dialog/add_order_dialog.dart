@@ -73,15 +73,15 @@ void showAddOrderDialog(BuildContext context, WidgetRef ref, ItemInfo itemInfo) 
                   ],
                 ),
               ),
-              //カウンター
               const Divider(),
+              //カウンター
               Container(
                 margin: const EdgeInsets.only(left: 10, right: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween, // これで両端に寄せる
                   children: [
                     //カウンター
-                    ItemCounter(amountPerItem: amountPerItem),
+                    ItemCounter(amountPerItem: amountPerItem, deleteItem: false),
                     //小計
                     const SubtotalInEditting()
                   ],
