@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../component/item_img.dart';
 import '../database/item_infos.dart';
-import '../dialog/custom_item_dialog.dart';
+import '../dialog/add_order_dialog.dart';
 
 ///メニューのタイル
 class MenuTile extends HookConsumerWidget {
@@ -28,7 +28,7 @@ class MenuTile extends HookConsumerWidget {
           ),
           onPressed: () {
             //商品詳細ダイアログを表示
-            showCustomItemDialog(context, ref, itemInfo);
+            showAddOrderDialog(context, ref, itemInfo);
           }, //押下時ポップアップ
           child: Column(
             children: [

@@ -12,6 +12,7 @@ import '../provider/will_add_index_provider.dart';
 
 final db2 = FirebaseDatabase.instance;
 
+//注文の追加を確定させるボタン
 class OrderAddBtn extends HookConsumerWidget {
   const OrderAddBtn({Key? key, required this.optInfoList, required this.itemName}) : super(key: key);
 
@@ -63,6 +64,7 @@ class OrderAddBtn extends HookConsumerWidget {
         //ダイアログを閉じる
         if (context.mounted) {
           Navigator.of(context).pop();
+          Navigator.of(context).pop(); //2回閉じる
         }
       },
       child: const Text(
