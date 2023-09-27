@@ -81,7 +81,7 @@ class CashCountTable extends HookConsumerWidget {
                       }
                     )
                     : Text(count.toString()),
-                  onDoubleTap: () {
+                  onTap: () {
                     //編集中プロバイダー更新
                     ref.read(isEdittingTotalFamily(info.denominationType).notifier)
                         .state = true;
