@@ -52,69 +52,53 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //キャッシュカウント初期化
-    // db2.ref("moneyCount")
-    //     .once() //1度だけ(Future)
-    //     .then((event) {
-    //       final moneyCountMap = event.snapshot.value as Map<String, dynamic>;
-    //       final totalCountMap = moneyCountMap["totalCountMap"] as Map<String, dynamic>;
-    //       final tmpTotalCountMap = moneyCountMap["tmpTotalCountMap"] as Map<String, dynamic>;
-    //       //プロバイダー初期化
-    //       for (final info in denominationInfoList) {
-    //         ref.read(cashCountFamily(info.denominationType).notifier)
-    //             .state = totalCountMap[info.name];
-    //         ref.read(salesCountFamily(info.denominationType).notifier)
-    //             .state = tmpTotalCountMap[info.name];
-    //       }
-    //       print("キャッシュカウント用プロバイダ初期化完了");
-    //     });
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
-        scaffoldBackgroundColor: Colors.white,
-        highlightColor: Colors.white,
-        indicatorColor: Colors.white,
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
+    //初回のみロード
+    return FutureBuilder(
+      future: initMoneyCountState(ref),
+      builder: (context, snapshot) {
+        //ロード未完了
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const CircularProgressIndicator();
+        }
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+            scaffoldBackgroundColor: Colors.white,
+            highlightColor: Colors.white,
+            indicatorColor: Colors.white,
+            useMaterial3: true,
+          ),
+          home: const MyHomePage(),
+        );
+      },
     );
   }
 }
 
 ///ホーム
-class MyHomePage extends HookConsumerWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder(
-    future: initMoneyCountState(ref),
-    builder: (context, snapshot) {
-      //ロード未完了
-      if (snapshot.connectionState != ConnectionState.done) {
-        return const CircularProgressIndicator();
-      }
-
-      return Scaffold(
-        appBar: const DefaultAppBar(title: "注文番号の選択"),
-        drawer: const MenuDrawer(),
-        body: const OrderNumList(),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.orange,
-          onPressed: () {
-            for (final orderNum in ["132", "134", "621", "622"]) {
-              db2.ref("orderNums/$orderNum/")
-                  .update({
-                "orderStatus": OrderStatus.temp.name
-              });
-            }
-          },
-          child: const Icon(Icons.cached, color: Colors.white),
-        ),
-      );
-    }
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const DefaultAppBar(title: "注文番号の選択"),
+      drawer: const MenuDrawer(),
+      body: const OrderNumList(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orange,
+        onPressed: () {
+          for (final orderNum in ["132", "134", "621", "622"]) {
+            db2.ref("orderNums/$orderNum/")
+                .update({
+              "orderStatus": OrderStatus.temp.name
+            });
+          }
+        },
+        child: const Icon(Icons.cached, color: Colors.white),
+      ),
     );
   }
 }
