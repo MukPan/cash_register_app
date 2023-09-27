@@ -50,7 +50,7 @@ class MenuTile extends HookConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(bottom: 10),
                 child: Text(
-                  "${itemInfo.itemPrice}円",
+                  "${itemInfo.itemPrice}円〜",
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20,

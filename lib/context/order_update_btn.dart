@@ -12,13 +12,14 @@ import '../dialog/default_alert_dialog.dart';
 final db2 = FirebaseDatabase.instance;
 
 class OrderUpdateBtn extends HookConsumerWidget {
-  const OrderUpdateBtn({Key? key, required this.columnIndex, required this.targetOptInfoList}) : super(key: key);
+  const OrderUpdateBtn({Key? key, required this.columnIndex, required this.targetOptInfoList, required this.orderUuid}) : super(key: key);
 
   ///列番号
   final int columnIndex;
   ///オプション候補
   final List<OptInfo> targetOptInfoList;
-
+  ///注文uuid
+  final String orderUuid;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //注文番号
@@ -56,16 +57,16 @@ class OrderUpdateBtn extends HookConsumerWidget {
           Navigator.of(context).pop();
         }
 
+        ///uuidを取得する///////////////////////
         //0個のときDBから削除
-        //TODO: ListをMapに変換する
-        // if (qty == 0) {
-        //   db2.ref("orderNums/$orderNum/orderList/$columnIndex")
-        //       .remove();
-        //   return;
-        // }
+        if (qty == 0) {
+          db2.ref("orderNums/$orderNum/orderList/$orderUuid")
+              .remove();
+          return;
+        }
 
         //DBを更新
-        db2.ref("orderNums/$orderNum/orderList/$columnIndex")
+        db2.ref("orderNums/$orderNum/orderList/$orderUuid")
           .update({
             "options": options,
             "qty": qty,

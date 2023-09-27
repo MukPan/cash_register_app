@@ -47,6 +47,7 @@ class ItemDetailsContext extends HookConsumerWidget {
             );
           }
           final orderSnap = orderListSnap[index];
+          final orderUuid = orderSnap.key ?? ""; //更新ダイアログに必要
           //各パラメータ取り出し
           final orderParams = OrderParams.getInstanceFromSnap(orderSnap);
           final String itemName = orderParams.itemName; //"唐揚げ"
@@ -72,7 +73,15 @@ class ItemDetailsContext extends HookConsumerWidget {
                         children: [
                           ItemName(itemName: itemName),
                           IconButton( //編集ダイアログを表示
-                            onPressed: () { showEditOrderDialog(context, ref, orderParams, index); },
+                            onPressed: () {
+                                showEditOrderDialog(
+                                  context: context,
+                                  ref: ref,
+                                  orderParams: orderParams,
+                                  columnIndex: index,
+                                  orderUuid: orderUuid
+                                );
+                              },
                             icon: const Icon(Icons.edit)
                           ) //編集ボタン
                         ],

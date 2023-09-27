@@ -55,8 +55,8 @@ class OrderAddBtn extends HookConsumerWidget {
         if (!isAllReady) return;
 
         //DBに追加
-        db2.ref("orderNums/$orderNum/orderList/$orderListEndIndex/") //db2.ref("orderNums/$orderNum/orderList/$columnIndex")
-            .set({
+        db2.ref("orderNums/$orderNum/orderList/") //db2.ref("orderNums/$orderNum/orderList/$columnIndex")
+            .push().set({ //uuidを生成してそこに格納
           "item": itemName,
           "options": options,
           "qty": qty,
