@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../page/call_num_display_page.dart';
 import '../page/calling_details_page.dart';
+import '../page/custom_menu_page.dart';
 import '../page/order_progress_page.dart';
 
 class MenuDrawer extends StatelessWidget {
@@ -17,6 +18,7 @@ class MenuDrawer extends StatelessWidget {
     Text("呼出番号一覧"),
     Text("注文進行状況"),
     Text("お渡し履歴"),
+    Text("メニュー編集")
   ];
 
   static const _nextPages = [
@@ -25,6 +27,7 @@ class MenuDrawer extends StatelessWidget {
     CallNumDisplayPage(),
     OrderProgressPage(),
     GaveLogPage(),
+    CustomMenuPage(),
   ];
 
   @override
