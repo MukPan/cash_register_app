@@ -12,7 +12,12 @@ import '../object/order_params.dart';
 import '../provider/amount_per_item_provider.dart';
 
 ///注文編集ダイアログ
-void showEditOrderDialog(BuildContext context, WidgetRef ref, OrderParams orderParams, int columnIndex) {
+void showEditOrderDialog({
+    required BuildContext context,
+    required WidgetRef ref,
+    required OrderParams orderParams,
+    required int columnIndex,
+    required String orderUuid}) {
   //画面サイズ取得
   final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
@@ -106,7 +111,7 @@ void showEditOrderDialog(BuildContext context, WidgetRef ref, OrderParams orderP
           OrderUpdateBtn(
             columnIndex: columnIndex,
             targetOptInfoList: targetOptInfoList,
-
+            orderUuid: orderUuid,
           ),
         ],
       );

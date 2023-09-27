@@ -2,7 +2,7 @@ import 'package:cash_register_app/component/default_app_bar.dart';
 import 'package:cash_register_app/context/call_btn.dart';
 import 'package:cash_register_app/context/menu_drawer.dart';
 import 'package:cash_register_app/context/gave_log_list.dart';
-import 'package:cash_register_app/database/order_status.dart';
+import 'package:cash_register_app/object/order_status.dart';
 import 'package:flutter/material.dart';
 
 import '../component/realtime_order_list.dart';

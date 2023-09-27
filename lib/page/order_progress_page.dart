@@ -1,4 +1,4 @@
-import 'package:cash_register_app/database/order_status.dart';
+import 'package:cash_register_app/object/order_status.dart';
 import 'package:flutter/material.dart';
 
 import '../component/default_app_bar.dart';

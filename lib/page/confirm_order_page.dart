@@ -52,9 +52,11 @@ class ConfirmOrderPage extends HookConsumerWidget {
         //注文リスト(複数の注文がリストになっている)
         final orderListSnap = event.snapshot.children.toList();
         //合計金額を計算
-        final int total = orderListSnap
-            .map((orderSnap) => OrderParams.getInstanceFromSnap(orderSnap).subtotal)
-            .reduce((sum, price) => sum + price);
+        final int total = (orderListSnap.isNotEmpty)
+        ? orderListSnap
+          .map((orderSnap) => OrderParams.getInstanceFromSnap(orderSnap).subtotal)
+          .reduce((sum, price) => sum + price)
+        : 0;
 
         return Scaffold(
             appBar: const DefaultAppBar(title: "注文内容の確認"),
