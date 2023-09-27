@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../component/item_img.dart';
 import '../database/item_infos.dart';
+import '../dialog/custom_item_dialog.dart';
 
 ///メニューのタイル
-class MenuTile extends StatelessWidget {
+class MenuTile extends HookConsumerWidget {
   const MenuTile({Key? key, required this.itemInfo}) : super(key: key);
 
   //商品情報
   final ItemInfo itemInfo;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.all(10), //これがないとボタン外の影が消えてしまう
       child: ElevatedButton(
@@ -25,7 +27,8 @@ class MenuTile extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            // showCustomDialog(context);
+            //商品詳細ダイアログを表示
+            showCustomItemDialog(context, ref, itemInfo);
           }, //押下時ポップアップ
           child: Column(
             children: [
@@ -45,7 +48,7 @@ class MenuTile extends StatelessWidget {
               const Spacer(),
               //価格
               Container(
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 child: Text(
                   "${itemInfo.itemPrice}円",
                   style: const TextStyle(
