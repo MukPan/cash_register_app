@@ -50,30 +50,24 @@ void main() async {
 class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
-
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //キャッシュカウント初期化
-    db2.ref("moneyCount")
-        .once() //1度だけ(Future)
-        .then((event) {
-          final moneyCountMap = event.snapshot.value as Map<String, dynamic>;
-          final totalCountMap = moneyCountMap["totalCountMap"] as Map<String, dynamic>;
-          final tmpTotalCountMap = moneyCountMap["tmpTotalCountMap"] as Map<String, dynamic>;
-          //プロバイダー初期化
-          for (final info in denominationInfoList) {
-            ref.read(cashCountFamily(info.denominationType).notifier)
-                .state = totalCountMap[info.name];
-            ref.read(salesCountFamily(info.denominationType).notifier)
-                .state = tmpTotalCountMap[info.name];
-          }
-          print("キャッシュカウント用プロバイダ初期化完了");
-        });
-
-
-
-
+    // db2.ref("moneyCount")
+    //     .once() //1度だけ(Future)
+    //     .then((event) {
+    //       final moneyCountMap = event.snapshot.value as Map<String, dynamic>;
+    //       final totalCountMap = moneyCountMap["totalCountMap"] as Map<String, dynamic>;
+    //       final tmpTotalCountMap = moneyCountMap["tmpTotalCountMap"] as Map<String, dynamic>;
+    //       //プロバイダー初期化
+    //       for (final info in denominationInfoList) {
+    //         ref.read(cashCountFamily(info.denominationType).notifier)
+    //             .state = totalCountMap[info.name];
+    //         ref.read(salesCountFamily(info.denominationType).notifier)
+    //             .state = tmpTotalCountMap[info.name];
+    //       }
+    //       print("キャッシュカウント用プロバイダ初期化完了");
+    //     });
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -90,63 +84,59 @@ class MyApp extends HookConsumerWidget {
 }
 
 ///ホーム
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends HookConsumerWidget {
   const MyHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const DefaultAppBar(title: "注文番号の選択"),
-      drawer: const MenuDrawer(),
-      body: const OrderNumList(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        onPressed: () {
-          for (final orderNum in ["132", "134", "621", "622"]) {
-            db2.ref("orderNums/$orderNum/")
-              .update({
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder(
+    future: initMoneyCountState(ref),
+    builder: (context, snapshot) {
+      //ロード未完了
+      if (snapshot.connectionState != ConnectionState.done) {
+        return const CircularProgressIndicator();
+      }
+
+      return Scaffold(
+        appBar: const DefaultAppBar(title: "注文番号の選択"),
+        drawer: const MenuDrawer(),
+        body: const OrderNumList(),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.orange,
+          onPressed: () {
+            for (final orderNum in ["132", "134", "621", "622"]) {
+              db2.ref("orderNums/$orderNum/")
+                  .update({
                 "orderStatus": OrderStatus.temp.name
               });
-          }
-          // db.collection("orderNumCollection").get().then((querySnapshot) {
-          //   querySnapshot.docs
-          //       .map((doc) => doc.reference)
-          //       .forEach((docRef) {
-          //         docRef.update({
-          //           "isPaid": false,
-          //           "isCompleted": false,
-          //           "isGave": false,
-          //         });
-          //   });
-          // });
-
-
-        },
-        child: const Icon(Icons.cached, color: Colors.white),
-      ),
+            }
+          },
+          child: const Icon(Icons.cached, color: Colors.white),
+        ),
+      );
+    }
     );
   }
 }
 
 
 
-// floatingActionButton: Consumer(
-// builder: (context, ref, child) {
-// //更新ボタン
-// return FloatingActionButton(
-// onPressed: () {
-// //注文番号コレクションを捜索
-// db.collection("orderNumCollection").get().then((querySnapshot) {
-// //データベースから注文番号の取得
-// List<int> currentOrderNumList = querySnapshot.docs
-//     .map((doc) => int.parse(doc.id))
-//     .toList(growable: false);
-//
-// //stateを更新
-// ref.read(orderNumListProvider.notifier)
-//     .changeState([...currentOrderNumList]);
-// });
-// },
-// child: const Icon(Icons.refresh));
-// },
-// ),
+///キャッシュカウントのプロバイダーを初期化する非同期メソッド
+Future<void> initMoneyCountState(WidgetRef ref) async {
+  //取得まで待機
+  final moneyCountEvent = await db2.ref("moneyCount").once();
+  //eventを使用
+  final moneyCountMap = moneyCountEvent.snapshot.value as Map<String, dynamic>;
+  final totalCountMap = moneyCountMap["totalCountMap"] as Map<String, dynamic>;
+  final tmpTotalCountMap = moneyCountMap["tmpTotalCountMap"] as Map<String, dynamic>;
+  //プロバイダー初期化
+  for (final info in denominationInfoList) {
+    ref.read(cashCountFamily(info.denominationType).notifier)
+        .state = totalCountMap[info.name];
+    ref.read(salesCountFamily(info.denominationType).notifier)
+        .state = tmpTotalCountMap[info.name];
+  }
+  print("キャッシュカウント用プロバイダ初期化完了");
+
+  return;
+}
