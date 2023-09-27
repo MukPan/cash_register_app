@@ -26,8 +26,8 @@ class ItemInfos {
       final String optName = optSnap.key ?? ""; //焼きチーズ
       final int optPrice = (optSnap.value as Map<String, dynamic>)["price"]; //100
       optNameToOptInfo.addAll({optName: OptInfo(
-          optName: optName,
-          optPrice: optPrice
+        optName: optName,
+        optPrice: optPrice
       )});
     }
 

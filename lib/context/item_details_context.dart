@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../dialog/add_order_dialog.dart';
 import 'item_counter.dart';
 import '../component/item_img.dart';
 import '../component/item_name.dart';
@@ -20,9 +21,25 @@ class ItemDetailsContext extends HookConsumerWidget {
 
     return ListView.separated(
         padding: const EdgeInsets.all(8),
-        itemCount: orderListSnap.length,
+        itemCount: orderListSnap.length + 1, //最後の行(追加ボタン)
         separatorBuilder: (BuildContext context, int index) => const Divider(),
         itemBuilder: (_, index) {
+          //最後の行
+          if (index == orderListSnap.length) {
+            return Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 20),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: IconButton(
+                  onPressed: () { addEditOrderDialog(context, ref); },
+                  icon: const Icon(Icons.add),
+                ),
+              ),
+            );
+          }
           final orderSnap = orderListSnap[index];
           //各パラメータ取り出し
           final orderParams = OrderParams.getInstanceFromSnap(orderSnap);
@@ -31,6 +48,7 @@ class ItemDetailsContext extends HookConsumerWidget {
           final List<String> optNameList = orderParams.optNameList; //["焼きチーズ", "ケチャップ"]
           final int subtotal = orderParams.subtotal; //1200(円)
 
+          //最後の行以外
           return Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
