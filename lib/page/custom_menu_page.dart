@@ -21,7 +21,7 @@ class CustomMenuPage extends StatelessWidget {
           Expanded(
               child: Container(
                 margin: const EdgeInsets.all(20),
-                child: CategoryGrid(),
+                child: CategoryGrid(imageSize: 150),
               )
           )
         ],

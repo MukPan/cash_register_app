@@ -6,7 +6,11 @@ import '../database/item_infos.dart';
 import 'menu_tile.dart';
 
 class CategoryGrid extends HookConsumerWidget {
-  CategoryGrid({Key? key}) : super(key: key);
+  CategoryGrid({Key? key, this.imageSize = 80}) : super(key: key);
+
+  //商品画像サイズ
+  final double imageSize;
+
 
   final List<String> _categoryStrArr = [
     "food",
@@ -32,7 +36,7 @@ class CategoryGrid extends HookConsumerWidget {
       itemCount: selectedInfoList.length, //要素数
       //指定した要素の数分を生成
       itemBuilder: (context, index) {
-        return MenuTile(itemInfo: selectedInfoList[index]);
+        return MenuTile(itemInfo: selectedInfoList[index], imageSize: imageSize);
       },
     );
   }

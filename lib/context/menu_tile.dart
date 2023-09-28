@@ -7,10 +7,12 @@ import '../dialog/add_order_dialog.dart';
 
 ///メニューのタイル
 class MenuTile extends HookConsumerWidget {
-  const MenuTile({Key? key, required this.itemInfo}) : super(key: key);
+  const MenuTile({Key? key, required this.itemInfo, required this.imageSize}) : super(key: key);
 
   //商品情報
   final ItemInfo itemInfo;
+  //商品画像サイズ
+  final double imageSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +37,7 @@ class MenuTile extends HookConsumerWidget {
               //商品画像
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 10),
-                child: ItemImg(itemName: itemInfo.itemName, size: 80),
+                child: ItemImg(itemName: itemInfo.itemName, size: imageSize),
               ),
               //商品名
               Text( //buttonの中身、商品名や画像、値段など
