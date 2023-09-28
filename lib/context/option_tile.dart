@@ -23,7 +23,7 @@ class OptionTile extends HookConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween, // これで両端に寄せる
       children: [
-        Text(optInfo.optName),
+        Text("$optName($optPrice円)"),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white, //押したときの波動色
