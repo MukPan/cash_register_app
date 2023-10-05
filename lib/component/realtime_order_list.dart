@@ -130,7 +130,15 @@ class RealtimeOrderList extends HookConsumerWidget {
                       }
                   ),
                 )
-                : Center(child: Text(emptyText, style: const TextStyle(color: Colors.grey),))
+                //注文がないときのメッセージ
+                : Expanded(
+                child: Center(
+                    child: Text(
+                      emptyText,
+                      style: const TextStyle(color: Colors.grey, fontSize: 20),
+                    )
+                ),
+              )
             ],
           );
 
