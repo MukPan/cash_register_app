@@ -28,7 +28,7 @@ class CancelBtn extends HookConsumerWidget {
         builder: (content) => DefaultAlertDialog(
           alertDialogTexts: AlertDialogTexts(
               title: const Text("取消確認"),
-              content: const Text("この注文を取り消しますか。\nこの操作を行った後に払い戻しを行ってください。\nこの操作は取り消すことができません。\n(データベース上から注文番号が削除されるのは未実装)")),
+              content: const Text("この注文を取り消しますか。\nこの操作を行った後に払い戻しを行ってください。\nこの操作は取り消すことができません。")),
         )
     ) ?? false;
 
@@ -88,16 +88,8 @@ class CancelBtn extends HookConsumerWidget {
 
     //TODO: ここでデータベースから注文番号データを削除する
     //データベース更新
-    // db2.ref("orderNums/${orderNum.toString()}/")
-    //     .update({"orderStatus": OrderStatus.gave.name});
-
-    // db.collection("orderNumCollection")
-    //     .doc(orderNum.toString())
-    //     .get()
-    //     .then((docRef) {
-    //   docRef.reference
-    //       .update({"isGave": true});
-    // });
+    db2.ref("orderNums/${orderNum.toString()}/")
+        .remove();
   }
 
   @override
