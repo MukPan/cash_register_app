@@ -89,7 +89,7 @@ void showEditOrderDialog({
                   ],
                 ),
               ),
-              //カウンター
+              //カウンターと小計
               const Divider(),
               Container(
                 margin: const EdgeInsets.only(left: 10, right: 30),
