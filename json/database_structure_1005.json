@@ -33,26 +33,29 @@
       "price": 300
     }
   },
+  "latestOrderNum": {
+    "639": "e1db37eb-adb3-4a82-b95d-70458ec235ef"
+  },
   "moneyCount": {
     "tmpTotalCountMap": {
-      "1,000円": 3,
+      "1,000円": 1,
       "10,000円": 0,
-      "100円": -5,
+      "100円": 2,
       "10円": 0,
       "1円": 0,
       "5,000円": 0,
-      "500円": 0,
+      "500円": 1,
       "50円": 0,
       "5円": 0
     },
     "totalCountMap": {
-      "1,000円": 3,
+      "1,000円": 4,
       "10,000円": 0,
-      "100円": -5,
+      "100円": 1,
       "10円": 0,
       "1円": 0,
       "5,000円": 0,
-      "500円": 0,
+      "500円": 1,
       "50円": 0,
       "5円": 0
     }
@@ -85,8 +88,8 @@
           "qty": 1
         }
       },
-      "orderStatus": "temp",
-      "timestamp": 1695790870570
+      "orderStatus": "paid",
+      "timestamp": 1696423706901
     },
     "134": {
       "orderList": {
@@ -110,8 +113,8 @@
           "qty": 1
         }
       },
-      "orderStatus": "temp",
-      "timestamp": 0
+      "orderStatus": "paid",
+      "timestamp": 1696449348493
     },
     "621": {
       "orderList": {
@@ -145,27 +148,96 @@
     },
     "622": {
       "orderList": {
-        "-NfKGu0UGIdwCNul8HsR": {
-          "item": "唐揚げ",
-          "qty": 3
-        },
-        "-NfKGxVsB7vxOL4PxZTT": {
-          "item": "たこ焼き",
+        "-NfuP0vZYAcRgktMVAOu": {
+          "item": "ポテト",
           "options": [
-            "青のり",
-            "マヨネーズ"
+            "マヨネーズ",
+            "ケチャップ"
+          ],
+          "qty": 1
+        }
+      },
+      "orderStatus": "temp",
+      "timestamp": 0
+    },
+    "625": {
+      "orderList": {
+        "-Nfv9NTXMiByK8ZQncEL": {
+          "item": "aaa",
+          "options": [
+            "aaa"
           ],
           "qty": 2
         }
       },
       "orderStatus": "temp",
+      "timestamp": 1696430917686
+    },
+    "635": {
+      "orderStatus": "temp",
       "timestamp": 0
+    },
+    "636": {
+      "orderList": {
+        "-Nfv9LcH3w2j9isAlg3D": {
+          "item": "たこ焼き",
+          "options": [
+            "ソース"
+          ],
+          "qty": 1
+        }
+      },
+      "orderStatus": "temp",
+      "timestamp": 0
+    },
+    "637": {
+      "orderList": {
+        "-Nfv9wIyzTdB0ADHwk6j": {
+          "item": "ポテト",
+          "options": [
+            "塩",
+            "マヨネーズ"
+          ],
+          "qty": 1
+        }
+      },
+      "orderStatus": "temp",
+      "timestamp": 0
+    },
+    "638": {
+      "orderList": {
+        "-NfvA8aCsep9tDujdTh9": {
+          "item": "ポテト",
+          "options": [
+            "焼きチーズ",
+            "塩"
+          ],
+          "qty": 1
+        }
+      },
+      "orderStatus": "temp",
+      "timestamp": 0
+    },
+    "639": {
+      "639": {
+        "orderStatus": "temp",
+        "timestamp": 0
+      },
+      "orderList": {
+        "-Nfxh8lQn7QJr5P__DuA": {
+          "item": "たこ焼き",
+          "qty": 1
+        }
+      }
     }
   },
   "orderNumsLogArr": [
     132,
     134,
     621,
-    622
+    622,
+    623,
+    624,
+    625
   ]
 }

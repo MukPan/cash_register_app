@@ -17,15 +17,20 @@ import 'database/opt_infos.dart';
 import 'object/order_status.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
-
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'database/item_infos.dart';
-
 ///Firestoreインスタンス
 // final db = FirebaseFirestore.instance;
 ///RealtimeDatabaseインスタンス
 FirebaseDatabase db2 = FirebaseDatabase.instance;
 
-//TODO: 選択した注文番号のプロバイダーを作る
+///ここを切り替えてエミュレーター起動
+///firebase emulators:start --import=./json --export-on-exit ./json
+const USE_DATABASE_EMULATOR = false;
+const emulatorPort = 9000;
+final emulatorHost = (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
+    ? '10.0.2.2'
+    : 'localhost';
 
 ///main関数
 void main() async {
@@ -34,6 +39,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //工科展用エミュレーター
+  if (USE_DATABASE_EMULATOR) {
+    FirebaseDatabase.instance.useDatabaseEmulator(emulatorHost, emulatorPort);
+  }
 
   //参照用データ初期化
   itemInfos.fetchData();
