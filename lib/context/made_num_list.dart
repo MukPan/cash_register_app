@@ -19,37 +19,41 @@ class MadeNumList extends HookConsumerWidget {
             .map((childSnapshot) => int.parse(childSnapshot.key ?? "0")) //132, 134...
             .toList();
 
-        return ListView.separated(
-          itemCount: madeOrderNums.length + 2,
-          separatorBuilder: (context, index) => const Divider(height: 0),
-          itemBuilder: (context, index) {
-            if (index == madeOrderNums.length + 1) return Container();
-            if (index == 0) {
-              return Container(
-                width: double.infinity,
-                color: Colors.indigo,
-                child: const Text(
-                  "受取待ち番号",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 55,
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            }
-            index--; //タイトルの分
-            print(madeOrderNums[index]);
-            return Center(
-              child: Text(
-                madeOrderNums[index].toString(),
-                style: const TextStyle(
-                  fontSize: 45,
-                  fontWeight: FontWeight.bold,
+        return Column(
+          children: [
+            //見出し
+            Container(
+              width: double.infinity,
+              color: Colors.indigo,
+              child: const Text(
+                "受取待ち番号",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 55,
+                  color: Colors.white,
                 ),
               ),
-            );
-          },
+            ),
+            //注文番号一覧
+            Expanded(
+              child: ListView.separated(
+                itemCount: madeOrderNums.length + 1,
+                separatorBuilder: (context, index) => const Divider(height: 0),
+                itemBuilder: (context, index) {
+                  if (index == madeOrderNums.length) return Container();
+                  return Center(
+                    child: Text(
+                      madeOrderNums[index].toString(),
+                      style: const TextStyle(
+                        fontSize: 45,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         );
       }
     );
