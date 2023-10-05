@@ -54,94 +54,92 @@ class RealtimeOrderList extends HookConsumerWidget {
                 final int timestamp2 = (orderNumSnap2.value as Map<String, dynamic>)["timestamp"];
                 return timestamp1 - timestamp2;
               });
-          //リストが空のとき
-          // if (orderNumListSnap.isEmpty) {
-          //   return Center(
-          //     child: Text(
-          //       emptyText,
-          //       style: const TextStyle(
-          //         fontSize: 30,
-          //         color: Colors.grey
-          //       ),
-          //     )
-          //   );
-          // }
 
-          return ListView.separated(
-              itemCount: orderNumListSnap.length + 2,
-              separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black),
-              itemBuilder: (context, orderNumIndex) {
-                print(orderNumIndex);
-                //最後の線
-                if (orderNumIndex == orderNumListSnap.length + 1) {
-                  return Container();
-                }
-                //最初のタイトルWidget
-                if (orderNumIndex == 0 && titleWidget == null) {
-                  return Container();
-                }
-                if (orderNumIndex == 0) {
-                  return titleWidget;
-                }
-                orderNumIndex--; //タイトル分
+          return Column(
+            children: [
+              //見出し
+              titleWidget ?? Container(),
+              //注文番号一覧
+              (orderNumListSnap.isNotEmpty)
+                ? Expanded(
+                  child: ListView.separated(
+                      itemCount: orderNumListSnap.length + 1,
+                      separatorBuilder: (context, index) => const Divider(height: 0, color: Colors.black),
+                      itemBuilder: (context, orderNumIndex) {
+                        print(orderNumIndex);
+                        //最後の線
+                        if (orderNumIndex == orderNumListSnap.length) {
+                          return Container();
+                        }
 
-                //1つの注文番号の複数の注文ドキュメント
-                final orderNumSnap = orderNumListSnap[orderNumIndex];
-                final orderNum = int.parse(orderNumSnap.key ?? "0");
-                final mapInOrderNum = orderNumSnap.value as Map<String, dynamic>; //{orderList: [{},{},{}], orderStatus: gave}
-                final orderMap = mapInOrderNum["orderList"] as Map<String, dynamic>; //{"uuid":{},"uuid":{},"uuid":{}}
-                final List<dynamic> orderList = orderMap.values.toList(); //[{},{},{}] //uuidを排除
+                        //1つの注文番号の複数の注文ドキュメント
+                        final orderNumSnap = orderNumListSnap[orderNumIndex];
+                        final orderNum = int.parse(orderNumSnap.key ?? "0");
+                        final mapInOrderNum = orderNumSnap.value as Map<String, dynamic>; //{orderList: [{},{},{}], orderStatus: gave}
+                        final orderMap = mapInOrderNum["orderList"] as Map<String, dynamic>; //{"uuid":{},"uuid":{},"uuid":{}}
+                        final List<dynamic> orderList = orderMap.values.toList(); //[{},{},{}] //uuidを排除
 
+                        return Row(
+                          children: [
+                            //注文番号(左)
+                            Container(
+                              margin: const EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  OrderNum(orderNum: orderNum),
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 10),
+                                    child: subStateWidgetFunc(orderNum), //nextBtn
+                                  ),
+                                  if (beforeStatus != null) IconButton(
+                                    onPressed: () {
+                                      //データベース取り消し
+                                      db2.ref("orderNums/$orderNum/")
+                                          .update({"orderStatus": beforeStatus?.name});
+                                    },
+                                    icon: const Icon(CupertinoIcons.backward_fill),
 
-                return Row(
-                  children: [
-                    //注文番号(左)
-                    Container(
-                      margin: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          OrderNum(orderNum: orderNum),
-                          Container(
-                            margin: const EdgeInsets.only(top: 10),
-                            child: subStateWidgetFunc(orderNum), //nextBtn
-                          ),
-                          if (beforeStatus != null) IconButton(
-                            onPressed: () {
-                              //データベース取り消し
-                              db2.ref("orderNums/$orderNum/")
-                                  .update({"orderStatus": beforeStatus?.name});
-                            },
-                            icon: const Icon(CupertinoIcons.backward_fill),
+                                  )
+                                ],
+                              ),
+                            ),
+                            //オーダー一覧(右)
+                            Expanded(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    border: Border(left: BorderSide(color: Colors.grey)),
+                                  ),
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: orderList.length,
+                                    separatorBuilder: (context, index) => const Divider(height: 0),
+                                    itemBuilder: (context, index) {
+                                      //1つの注文番号の1つの注文ドキュメント
+                                      final orderMap = orderList[index] as Map<String, dynamic>;
+                                      final orderParams = OrderParams.getInstance(orderMap);
 
-                          )
-                        ],
-                      ),
-                    ),
-                    //オーダー一覧(右)
-                    Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            border: Border(left: BorderSide(color: Colors.grey)),
-                          ),
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: orderList.length,
-                            separatorBuilder: (context, index) => const Divider(height: 0),
-                            itemBuilder: (context, index) {
-                              //1つの注文番号の1つの注文ドキュメント
-                              final orderMap = orderList[index] as Map<String, dynamic>;
-                              final orderParams = OrderParams.getInstance(orderMap);
-
-                              if (stackImage) return StackItemTile(orderParams: orderParams, displayPrice: displayPrice);
-                              return ItemTile(orderParams: orderParams, displayPrice: displayPrice);
-                            },
-                          ),
-                        )
-                    ),
-                  ],
-                );
-              }
+                                      if (stackImage) return StackItemTile(orderParams: orderParams, displayPrice: displayPrice);
+                                      return ItemTile(orderParams: orderParams, displayPrice: displayPrice);
+                                    },
+                                  ),
+                                )
+                            ),
+                          ],
+                        );
+                      }
+                  ),
+                )
+                //注文がないときのメッセージ
+                : Expanded(
+                child: Center(
+                    child: Text(
+                      emptyText,
+                      style: const TextStyle(color: Colors.grey, fontSize: 20),
+                    )
+                ),
+              )
+            ],
           );
 
 

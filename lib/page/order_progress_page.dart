@@ -25,6 +25,7 @@ class OrderProgressPage extends StatelessWidget {
       drawer: const MenuDrawer(),
       body: Row(
         children: [
+          //調理中
           Expanded(
             child: RealtimeOrderList(
                 orderNumListProvider: paidNumListProvider,
@@ -46,6 +47,7 @@ class OrderProgressPage extends StatelessWidget {
             ),
           ),
           const VerticalDivider(width: 0, color: Colors.black),
+          //受取待ち
           Expanded(
             child: RealtimeOrderList(
                 orderNumListProvider: madeNumListProvider,

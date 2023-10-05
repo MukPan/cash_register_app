@@ -92,22 +92,10 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const DefaultAppBar(title: "注文番号の選択"),
-      drawer: const MenuDrawer(),
-      body: const OrderNumList(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        onPressed: () {
-          for (final orderNum in ["132", "134", "621", "622"]) {
-            db2.ref("orderNums/$orderNum/")
-                .update({
-              "orderStatus": OrderStatus.temp.name
-            });
-          }
-        },
-        child: const Icon(Icons.cached, color: Colors.white),
-      ),
+    return const Scaffold(
+      appBar: DefaultAppBar(title: "注文番号の選択"),
+      drawer: MenuDrawer(),
+      body: OrderNumList(),
     );
   }
 }

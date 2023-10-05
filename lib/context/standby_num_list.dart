@@ -21,36 +21,41 @@ class StandbyNumList extends HookConsumerWidget {
 
 
 
-        return ListView.separated(
-          itemCount: paidOrderNums.length + 2,
-          separatorBuilder: (context, index) => const Divider(height: 0),
-          itemBuilder: (context, index) {
-            if (index == paidOrderNums.length + 1) return Container();
-            if (index == 0) {
-              return Container(
-                width: double.infinity,
-                color: Colors.grey,
-                child: const Text(
-                  "お作り中の番号",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 55,
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            }
-            index--; //タイトルの分
-            return Center(
-              child: Text(
-                paidOrderNums[index].toString(),
-                style: const TextStyle(
-                    fontSize: 45,
-                    fontWeight: FontWeight.bold
+        return Column(
+          children: [
+            //見出し
+            Container(
+              width: double.infinity,
+              color: Colors.grey,
+              child: const Text(
+                "お作り中の番号",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 55,
+                  color: Colors.white,
                 ),
               ),
-            );
-          },
+            ),
+            //注文番号一覧
+            Expanded(
+              child: ListView.separated(
+                itemCount: paidOrderNums.length + 1,
+                separatorBuilder: (context, index) => const Divider(height: 0),
+                itemBuilder: (context, index) {
+                  if (index == paidOrderNums.length) return Container();
+                  return Center(
+                    child: Text(
+                      paidOrderNums[index].toString(),
+                      style: const TextStyle(
+                        fontSize: 45,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         );
       }
     );
