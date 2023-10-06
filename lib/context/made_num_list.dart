@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../component/default_circular_progress_indicator.dart';
 import '../database/made_num_list_provider.dart';
 
 class MadeNumList extends HookConsumerWidget {
@@ -11,7 +12,7 @@ class MadeNumList extends HookConsumerWidget {
     final madeNumListStream = ref.watch(madeNumListProvider);
 
     return madeNumListStream.when(
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const DefaultCircularProgressIndicator(),
       error: (error, stackTrace) => Text(error.toString()),
       data: (event) {
         //データベースから注文番号リストの取得

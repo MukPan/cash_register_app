@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../component/default_circular_progress_indicator.dart';
 import '../component/order_num.dart';
 import '../main.dart';
 import '../page/confirm_order_page.dart';
@@ -35,7 +36,7 @@ class OrderNumList extends HookConsumerWidget {
 
 
   return tempOrderListAsyncVal.when(
-    loading: () => const CircularProgressIndicator(),
+    loading: () => const DefaultCircularProgressIndicator(),
     error: (error, stackTrace) => Text(error.toString()),
     data: (event) {
       //データベースから注文番号リストの取得

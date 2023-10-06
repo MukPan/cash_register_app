@@ -12,6 +12,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'component/default_circular_progress_indicator.dart';
 import 'context/menu_drawer.dart';
 import 'database/opt_infos.dart';
 import 'object/order_status.dart';
@@ -67,7 +68,7 @@ class MyApp extends HookConsumerWidget {
       builder: (context, snapshot) {
         //ロード未完了
         if (snapshot.connectionState != ConnectionState.done) {
-          return const CircularProgressIndicator();
+          return const DefaultCircularProgressIndicator();
         }
         return MaterialApp(
           debugShowCheckedModeBanner: false,

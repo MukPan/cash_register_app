@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../component/default_app_bar.dart';
+import '../component/default_circular_progress_indicator.dart';
 import '../component/next_btn.dart';
 import '../context/item_details_context.dart';
 import '../context/selected_no_context.dart';
@@ -46,7 +47,7 @@ class ConfirmOrderPage extends HookConsumerWidget {
     final orderListAsyVal = ref.watch(orderListFamily(orderNum));
 
     return orderListAsyVal.when(
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const DefaultCircularProgressIndicator(),
       error: (error, stackTrace) => Text(error.toString()),
       data: (event) {
         //注文リスト(複数の注文がリストになっている)
