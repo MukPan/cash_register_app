@@ -19,12 +19,12 @@ class ItemImg extends StatelessWidget {
   //TODO: 商品画像もfiresotreに置く
   static const _itemImgPathMap = {
     "唐揚げ" : "images/food/karaage.png",
-    "たこ焼き" : "images/food/takoyaki.png",
+    "揚げたこ焼き" : "images/food/takoyaki.png",
     "ポテト" : "images/food/potato.png",
     "コーラ" : "images/drink/cola.png",
     "ファンタオレンジ" : "images/drink/fanta_orange.png",
     "ファンタグレープ" : "images/drink/fanta_grape.png",
-    "レモンライムソーダ" : "images/drink/lemon_lime_soda.png",
+    "ソーダ" : "images/drink/soda.png",
     "緑茶" : "images/drink/green_tea.png",
     "麦茶" : "images/drink/barley_tea.png",
     "水" : "images/drink/water.png",
