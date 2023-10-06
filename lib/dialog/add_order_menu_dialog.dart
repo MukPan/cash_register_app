@@ -19,7 +19,7 @@ void addOrderMenuDialog(BuildContext context, WidgetRef ref) {
         surfaceTintColor: Colors.white,
         title: const Text("商品の追加"), //商品名
         content: SizedBox(
-          width: screenWidth * 0.7, //7割のサイズ
+          width: screenWidth * 0.9, //9割のサイズ
           height: screenHeight * 0.7, //7割のサイズ
           child: Row(
             children: [

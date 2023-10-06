@@ -42,7 +42,7 @@ class MenuTile extends HookConsumerWidget {
                 itemInfo.itemName,
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 20,
+                  fontSize: 15,
                 ),
               ),
               const Spacer(),
@@ -53,7 +53,7 @@ class MenuTile extends HookConsumerWidget {
                   "${itemInfo.itemPrice}円〜",
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
               )
