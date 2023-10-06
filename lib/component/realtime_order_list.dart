@@ -77,10 +77,12 @@ class RealtimeOrderList extends HookConsumerWidget {
                         final orderNumSnap = orderNumListSnap[orderNumIndex];
                         final orderNum = int.parse(orderNumSnap.key ?? "0");
                         final mapInOrderNum = orderNumSnap.value as Map<String, dynamic>; //{orderList: [{},{},{}], orderStatus: gave}
-                        final orderList = (mapInOrderNum["orderList"] as Map<String, dynamic>) //[{},{},{}]
-                            .entries
-                            .map((orderMap) => orderMap.value) //uuidであるkeyは捨てる
-                            .toList();
+                        final orderList = (mapInOrderNum["orderList"] != null)
+                            ? (mapInOrderNum["orderList"] as Map<String, dynamic>) //[{},{},{}]
+                              .entries
+                              .map((orderMap) => orderMap.value) //uuidであるkeyは捨てる
+                              .toList()
+                            : [];
 
 
                         return Row(
@@ -113,20 +115,22 @@ class RealtimeOrderList extends HookConsumerWidget {
                                   decoration: const BoxDecoration(
                                     border: Border(left: BorderSide(color: Colors.grey)),
                                   ),
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: orderList.length,
-                                    separatorBuilder: (context, index) => const Divider(height: 0),
-                                    itemBuilder: (context, index) {
-                                      //1つの注文番号の1つの注文ドキュメント
-                                      final orderMap = orderList[index] as Map<String, dynamic>;
-                                      final orderParams = OrderParams.getInstance(orderMap);
+                                  child: (orderList.isNotEmpty)
+                                      ? ListView.separated(
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemCount: orderList.length,
+                                        separatorBuilder: (context, index) => const Divider(height: 0),
+                                        itemBuilder: (context, index) {
+                                          //1つの注文番号の1つの注文ドキュメント
+                                          final orderMap = orderList[index] as Map<String, dynamic>;
+                                          final orderParams = OrderParams.getInstance(orderMap);
 
-                                      if (stackImage) return StackItemTile(orderParams: orderParams, displayPrice: displayPrice);
-                                      return ItemTile(orderParams: orderParams, displayPrice: displayPrice);
-                                    },
-                                  ),
+                                          if (stackImage) return StackItemTile(orderParams: orderParams, displayPrice: displayPrice);
+                                          return ItemTile(orderParams: orderParams, displayPrice: displayPrice);
+                                        },
+                                      )
+                                      : Container()
                                 )
                             ),
                           ],
