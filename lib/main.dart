@@ -62,6 +62,20 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        scaffoldBackgroundColor: Colors.white,
+        highlightColor: Colors.white,
+        indicatorColor: Colors.white,
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(),
+    );
+
     //初回のみロード
     return FutureBuilder(
       future: initMoneyCountState(ref),
@@ -88,15 +102,25 @@ class MyApp extends HookConsumerWidget {
 }
 
 ///ホーム
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends HookConsumerWidget {
   const MyHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: DefaultAppBar(title: "注文番号の選択"),
-      drawer: MenuDrawer(),
-      body: OrderNumList(),
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    return FutureBuilder(
+      future: initMoneyCountState(ref),
+      builder: (context, snapshot) {
+        //ロード未完了
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const DefaultCircularProgressIndicator();
+        }
+        return const Scaffold(
+          appBar: DefaultAppBar(title: "注文番号の選択"),
+          drawer: MenuDrawer(),
+          body: OrderNumList(),
+        );
+      },
     );
   }
 }
