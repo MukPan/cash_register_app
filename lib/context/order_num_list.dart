@@ -69,10 +69,15 @@ class OrderNumList extends HookConsumerWidget {
             itemCount: orderNums.length,
             //指定した要素の数分を生成
             itemBuilder: (context, index) {
-              return TextButton(
+              return ElevatedButton(
                   onPressed: () { moveConfirmOrderPage(context, ref, orderNums[index]); },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
+                  // style: ButtonStyle(
+                  //   backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
+                  //   backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
+                  // ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.white
                   ),
                   child: OrderNum(orderNum: orderNums[index])
               );
