@@ -71,10 +71,6 @@ class OrderNumList extends HookConsumerWidget {
             itemBuilder: (context, index) {
               return ElevatedButton(
                   onPressed: () { moveConfirmOrderPage(context, ref, orderNums[index]); },
-                  // style: ButtonStyle(
-                  //   backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
-                  //   backgroundColor: MaterialStateProperty.all(const Color(0x10000000)),
-                  // ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.white
