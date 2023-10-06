@@ -1,3 +1,4 @@
+import 'package:cash_register_app/component/title_and_close_dialog_btn.dart';
 import 'package:cash_register_app/provider/navigation_selected_index_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,7 +18,7 @@ void addOrderMenuDialog(BuildContext context, WidgetRef ref) {
       return AlertDialog(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title: const Text("商品の追加"), //商品名
+        title: const TitleAndCloseDialogBtn(title: "商品の追加"), //商品名
         content: SizedBox(
           width: screenWidth * 0.9, //9割のサイズ
           height: screenHeight * 0.7, //7割のサイズ
