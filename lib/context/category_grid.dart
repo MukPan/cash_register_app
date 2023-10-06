@@ -24,8 +24,8 @@ class CategoryGrid extends HookConsumerWidget {
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 30,     //ボックス左右間のスペース
-          mainAxisSpacing: 30,      //ボックス上下間のスペース
+          crossAxisSpacing: 20,     //ボックス左右間のスペース
+          mainAxisSpacing: 20,      //ボックス上下間のスペース
           crossAxisCount: 3,        //ボックスを横に並べる数
           childAspectRatio: 4 / 5   //横幅:高さ
       ),

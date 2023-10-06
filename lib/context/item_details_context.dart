@@ -102,16 +102,14 @@ class ItemDetailsContext extends HookConsumerWidget {
                   ),
                 ),
                 //右寄り
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end, //center
-                    textDirection: TextDirection.ltr,
-                    children: [
-                      ItemImg(itemName: itemName),
-                      Subtotal(subtotal: subtotal)
-                    ],
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end, //center
+                  textDirection: TextDirection.ltr,
+                  children: [
+                    ItemImg(itemName: itemName),
+                    Subtotal(subtotal: subtotal)
+                  ],
                 )
               ],
             ),
