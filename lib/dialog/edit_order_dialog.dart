@@ -1,3 +1,4 @@
+import 'package:cash_register_app/component/title_and_close_dialog_btn.dart';
 import 'package:cash_register_app/context/item_counter.dart';
 import 'package:cash_register_app/database/item_infos.dart';
 import 'package:cash_register_app/provider/item_count_provider.dart';
@@ -54,7 +55,7 @@ void showEditOrderDialog({
       return AlertDialog(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title: Text(itemName), //商品名
+        title: TitleAndCloseDialogBtn(title: itemName), //商品名
         content: SizedBox(
           width: screenWidth * 0.7, //7割のサイズ
           height: screenHeight * 0.5, //5割のサイズ
