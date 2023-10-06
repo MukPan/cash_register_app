@@ -2,6 +2,8 @@ import 'package:cash_register_app/database/paid_num_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../component/default_circular_progress_indicator.dart';
+
 class StandbyNumList extends HookConsumerWidget {
   const StandbyNumList({Key? key}) : super(key: key);
 
@@ -11,7 +13,7 @@ class StandbyNumList extends HookConsumerWidget {
 
 
     return paidNumListAsyVal.when(
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const DefaultCircularProgressIndicator(),
       error: (error, stackTrace) => Text(error.toString()),
       data: (event) {
         //データベースから注文番号リストの取得

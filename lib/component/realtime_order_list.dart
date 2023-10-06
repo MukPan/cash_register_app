@@ -9,6 +9,7 @@ import '../context/item_tile.dart';
 import '../database/order_list_family.dart';
 import '../object/order_status.dart';
 import '../object/order_params.dart';
+import 'default_circular_progress_indicator.dart';
 import 'stack_item_tile.dart';
 
 class RealtimeOrderList extends HookConsumerWidget {
@@ -44,7 +45,7 @@ class RealtimeOrderList extends HookConsumerWidget {
     final orderNumListAsyncVal = ref.watch(orderNumListProvider);
 
     return orderNumListAsyncVal.when( //注文番号を監視
-        loading: () => const CircularProgressIndicator(),
+        loading: () => const DefaultCircularProgressIndicator(),
         error: (error, stackTrace) => Text(error.toString()),
         data: (event) {
           //注文番号リスト
